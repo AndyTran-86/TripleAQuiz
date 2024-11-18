@@ -5,29 +5,15 @@ import java.awt.*;
 
 public class ClientGUI {
     JFrame frame;
-
     JPanel lobbyMainPanel;
-
     JPanel lobbyTopHeaderPanel;
-
     JPanel lobbyCenterPanel;
     JLabel lobbyGameTitleLabel;
     JLabel lobbyProfileIconLabel;
     JButton lobbyStartNewGameButton;
-
     JPanel lobbyBottomPanel;
     JLabel lobbyBottomHomeIcon;
     JLabel lobbyBottomFriendsIcon;
-
-
-
-
-
-
-
-
-
-
 
     public ClientGUI() {
         frame = new JFrame("Triple-A Quiz!");
@@ -37,19 +23,9 @@ public class ClientGUI {
         lobbyGameTitleLabel = new JLabel("                   Triple-A Quiz");
         lobbyProfileIconLabel = new JLabel(new ImageIcon("icons/lobby/user.png"));
         lobbyStartNewGameButton = new JButton("Start New Game");
-
         lobbyBottomPanel = new JPanel();
         lobbyBottomHomeIcon = new JLabel(new ImageIcon("icons/lobby/home.png"));
         lobbyBottomFriendsIcon = new JLabel(new ImageIcon("icons/lobby/friends.png"));
-
-
-
-
-
-
-
-
-
 
     }
     public void init() {
@@ -107,7 +83,9 @@ public class ClientGUI {
         lobbyBottomPanel.add(new JLabel());
         lobbyBottomPanel.add(new JLabel());
         lobbyBottomPanel.add(new JLabel("                  Friends"));
+    }
 
-
+    public JButton getLobbyStartNewGameButton() {
+        return lobbyStartNewGameButton;
     }
 }
