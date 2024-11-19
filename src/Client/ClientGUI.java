@@ -16,11 +16,11 @@ public class ClientGUI {
     JLabel lobbyBottomFriendsIcon;
 
     public ClientGUI() {
-        frame = new JFrame("Triple-A Quiz!");
+        frame = new JFrame("Triple-A Server.Quiz!");
         lobbyMainPanel = new JPanel();
         lobbyTopHeaderPanel = new JPanel();
         lobbyCenterPanel = new JPanel();
-        lobbyGameTitleLabel = new JLabel("                   Triple-A Quiz");
+        lobbyGameTitleLabel = new JLabel("                   Triple-A Server.Quiz");
         lobbyProfileIconLabel = new JLabel(new ImageIcon("icons/lobby/user.png"));
         lobbyStartNewGameButton = new JButton("Start New Game");
         lobbyBottomPanel = new JPanel();

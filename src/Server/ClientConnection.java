@@ -6,11 +6,13 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ClientConnection implements Runnable {
+    Database database;
     Socket socket;
     ObjectOutputStream out;
     ObjectInputStream in;
 
     public ClientConnection(Socket socket) {
+        database = new Database();
         this.socket = socket;
     }
 
@@ -19,12 +21,13 @@ public class ClientConnection implements Runnable {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
 
-            out.writeObject("You are connected to the server...");
+            out.writeObject(new Response(null, "You are connected."));
 
-            String fromClient;
+            Request fromClient;
 
-            while ((fromClient = (String) in.readObject()) != null) {
-                System.out.println("Message received: " + fromClient);
+            while ((fromClient = (Request) in.readObject()) != null) {
+                if (fromClient.quizQuestion == null)
+                    out.writeObject(new Response(database.quizQuestions.getFirst(), null));
             }
 
 
