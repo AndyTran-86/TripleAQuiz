@@ -23,6 +23,7 @@ public class Server implements Runnable{
             while (true) {
                 Socket clientCallingSocket = serverSocket.accept();
                 ClientConnection clientConnection = new ClientConnection(clientCallingSocket);
+                new Thread(clientConnection).start();
             }
         } catch (IOException e) {
             System.out.println("Error when connecting client");

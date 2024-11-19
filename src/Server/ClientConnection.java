@@ -19,11 +19,14 @@ public class ClientConnection implements Runnable {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
 
-            Object obj = in.readObject();
-
-            String message = (String) obj;
-            System.out.println("Message received: " + message);
             out.writeObject("You are connected to the server...");
+
+            String fromClient;
+
+            while ((fromClient = (String) in.readObject()) != null) {
+                System.out.println("Message received: " + fromClient);
+            }
+
 
         } catch (IOException e ) {
             System.out.println("IO ex");
