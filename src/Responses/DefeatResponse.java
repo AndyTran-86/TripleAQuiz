@@ -1,4 +1,6 @@
 package Responses;
 
-public class DefeatResponse extends Response {
+import java.io.Serializable;
+
+public class DefeatResponse extends Response implements Serializable {
 }

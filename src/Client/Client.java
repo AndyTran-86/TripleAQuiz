@@ -1,5 +1,7 @@
 package Client;
 
+import Requests.ListeningRequest;
+import Responses.*;
 import Server.QuizQuestion;
 import Server.Request;
 import Server.Response;
@@ -18,11 +20,13 @@ public class Client implements Runnable {
     ClientGUI gui;
     int port;
     InetAddress ip;
+    String username;
 
 
-    public Client(int port) {
+    public Client(int port, String username) {
         this.port = port;
         ip = InetAddress.getLoopbackAddress();
+        this.username = username;
     }
 
     private void connectToServer() {
@@ -30,17 +34,21 @@ public class Client implements Runnable {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
 
-            Response fromServer;
 
-            while ((fromServer = (Response) in.readObject()) != null) {
-                if (fromServer.getQuizQuestion() == null) {
-                    JOptionPane.showMessageDialog(null, fromServer.getMessage());
-                    out.writeObject(new Request(null, 0));
+            out.writeObject(new ListeningRequest(username));
+
+            Object unknownResponseFromServer;
+
+            while ((unknownResponseFromServer = in.readObject()) != null) {
+                switch (unknownResponseFromServer) {
+                    case ListeningResponse listeningResponse -> JOptionPane.showMessageDialog(gui.frame, "Listening connection established");
+                    case NewGameResponse newGameResponse -> JOptionPane.showMessageDialog(gui.frame, "New game response received");
+                    case RoundPlayedResponse roundPlayedResponse -> JOptionPane.showMessageDialog(gui.frame, "Round played response received");
+                    case VictoryResponse victoryResponse -> JOptionPane.showMessageDialog(gui.frame, "Victory response received");
+                    case DefeatResponse defeatResponse -> JOptionPane.showMessageDialog(gui.frame, "Defeat response received");
+                    default -> JOptionPane.showMessageDialog(gui.frame, "Unknown response received");
                 }
-                else {
-                    QuizQuestion question = fromServer.getQuizQuestion();
-                    JOptionPane.showMessageDialog(null, question.getQuestion());
-                }
+
 
             }
         } catch (ClassNotFoundException e) {

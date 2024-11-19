@@ -6,7 +6,7 @@ public class Main {
     }
 
     static void startNewClient() {
-        Client client = new Client(5555);
+        Client client = new Client(5555, "testUsername");
         new Thread(client).start();
     }
 }

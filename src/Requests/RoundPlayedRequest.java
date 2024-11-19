@@ -1,4 +1,6 @@
 package Requests;
 
-public class RoundPlayedRequest {
+import java.io.Serializable;
+
+public class RoundPlayedRequest extends Request implements Serializable {
 }

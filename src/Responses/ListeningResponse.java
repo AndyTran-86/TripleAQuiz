@@ -1,4 +1,6 @@
 package Responses;
 
-public class ListeningResponse extends Response {
+import java.io.Serializable;
+
+public class ListeningResponse extends Response implements Serializable {
 }
