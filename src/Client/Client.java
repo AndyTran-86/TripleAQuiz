@@ -1,5 +1,9 @@
 package Client;
 
+import Server.QuizQuestion;
+import Server.Request;
+import Server.Response;
+
 import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -26,10 +30,18 @@ public class Client implements Runnable {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
 
-            String fromServer;
+            Response fromServer;
 
-            while ((fromServer = (String) in.readObject()) != null) {
-                JOptionPane.showMessageDialog(null, fromServer);
+            while ((fromServer = (Response) in.readObject()) != null) {
+                if (fromServer.getQuizQuestion() == null) {
+                    JOptionPane.showMessageDialog(null, fromServer.getMessage());
+                    out.writeObject(new Request(null, 0));
+                }
+                else {
+                    QuizQuestion question = fromServer.getQuizQuestion();
+                    JOptionPane.showMessageDialog(null, question.getQuestion());
+                }
+
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
