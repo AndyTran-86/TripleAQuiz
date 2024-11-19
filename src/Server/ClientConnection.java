@@ -1,5 +1,8 @@
 package Server;
 
+import Requests.ListeningRequest;
+import Responses.ListeningResponse;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
