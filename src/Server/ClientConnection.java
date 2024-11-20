@@ -5,6 +5,8 @@ import Requests.RoundPlayedRequest;
 import Requests.StartNewGameRequest;
 import Requests.SurrenderRequest;
 import Responses.ListeningResponse;
+import Responses.NewGameResponse;
+import Responses.RoundPlayedResponse;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -30,9 +32,9 @@ public class ClientConnection implements Runnable {
             Object unknownRequestFromClient = in.readObject();
 
             switch (unknownRequestFromClient) {
-                case ListeningRequest listeningRequest -> out.writeObject(new ListeningResponse());
-                case StartNewGameRequest startNewGameRequest -> out.writeObject(new StartNewGameRequest());
-                case RoundPlayedRequest roundPlayedRequest -> out.writeObject(new RoundPlayedRequest());
+                case ListeningRequest listeningRequest -> out.writeObject(new ListeningResponse()); // spara denna clientconnection i en lista och hitta via ID
+                case StartNewGameRequest startNewGameRequest -> out.writeObject(new NewGameResponse());
+                case RoundPlayedRequest roundPlayedRequest -> out.writeObject(new RoundPlayedResponse());
                 case SurrenderRequest surrenderRequest -> out.writeObject(new SurrenderRequest());
                 default -> throw new UnsupportedOperationException("Unknown request");
             }
