@@ -1,6 +1,7 @@
 package Server.StateMachine;
 
 import Requests.Request;
+import Responses.ListeningResponse;
 import Server.ClientConnection;
 
 import java.io.IOException;
@@ -14,6 +15,6 @@ public class ListeningRequestHandlingState implements ServerState {
 
     @Override
     public void handleRequest(Request request) throws IOException, ClassNotFoundException {
-        System.out.println("Handling listening request");
+        connection.out.writeObject(new ListeningResponse());
     }
 }

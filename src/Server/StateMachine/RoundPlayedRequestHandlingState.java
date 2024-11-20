@@ -1,6 +1,7 @@
 package Server.StateMachine;
 
 import Requests.Request;
+import Responses.RoundPlayedResponse;
 import Server.ClientConnection;
 
 import java.io.IOException;
@@ -14,6 +15,6 @@ public class RoundPlayedRequestHandlingState implements ServerState {
 
     @Override
     public void handleRequest(Request request) throws IOException, ClassNotFoundException {
-        System.out.println("Handling round played request");
+        connection.out.writeObject(new RoundPlayedResponse());
     }
 }

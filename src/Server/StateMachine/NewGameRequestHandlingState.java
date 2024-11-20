@@ -1,6 +1,7 @@
 package Server.StateMachine;
 
 import Requests.Request;
+import Responses.NewGameResponse;
 import Server.ClientConnection;
 
 import java.io.IOException;
@@ -14,6 +15,6 @@ public class NewGameRequestHandlingState implements ServerState {
 
     @Override
     public void handleRequest(Request request) throws IOException, ClassNotFoundException {
-        System.out.println("Handling new game request");
+        connection.out.writeObject(new NewGameResponse());
     }
 }

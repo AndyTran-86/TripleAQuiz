@@ -7,6 +7,7 @@ import Requests.SurrenderRequest;
 import Responses.ListeningResponse;
 import Responses.NewGameResponse;
 import Responses.RoundPlayedResponse;
+import Server.StateMachine.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,12 +17,22 @@ import java.net.Socket;
 public class ClientConnection implements Runnable {
     Database database;
     Socket socket;
-    ObjectOutputStream out;
-    ObjectInputStream in;
+    public ObjectOutputStream out;
+    public ObjectInputStream in;
+
+    ServerState state;
+    ServerState handleListeningRequestState;
+    ServerState handleNewGameRequestState;
+    ServerState handleRoundPlayedRequestState;
+    ServerState handleSurrenderRequestState;
 
     public ClientConnection(Socket socket) {
         database = new Database();
         this.socket = socket;
+        handleListeningRequestState = new ListeningRequestHandlingState(this);
+        handleNewGameRequestState = new NewGameRequestHandlingState(this);
+        handleRoundPlayedRequestState = new RoundPlayedRequestHandlingState(this);
+        handleSurrenderRequestState = new SurrenderRequestHandlingState(this);
     }
 
     public void processRequest() {
@@ -32,10 +43,22 @@ public class ClientConnection implements Runnable {
             Object unknownRequestFromClient = in.readObject();
 
             switch (unknownRequestFromClient) {
-                case ListeningRequest listeningRequest -> out.writeObject(new ListeningResponse()); // spara denna clientconnection i en lista och hitta via ID
-                case StartNewGameRequest startNewGameRequest -> out.writeObject(new NewGameResponse());
-                case RoundPlayedRequest roundPlayedRequest -> out.writeObject(new RoundPlayedResponse());
-                case SurrenderRequest surrenderRequest -> out.writeObject(new SurrenderRequest());
+                case ListeningRequest listeningRequest -> {
+                    state = handleListeningRequestState;
+                    state.handleRequest(listeningRequest);
+                }
+                case StartNewGameRequest startNewGameRequest -> {
+                    state = handleNewGameRequestState;
+                    state.handleRequest(startNewGameRequest);
+                }
+                case RoundPlayedRequest roundPlayedRequest -> {
+                    state = handleRoundPlayedRequestState;
+                    state.handleRequest(roundPlayedRequest);
+                }
+                case SurrenderRequest surrenderRequest -> {
+                    state = handleSurrenderRequestState;
+                    state.handleRequest(surrenderRequest);
+                }
                 default -> throw new UnsupportedOperationException("Unknown request!");
             }
 

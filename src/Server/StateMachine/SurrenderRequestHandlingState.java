@@ -1,6 +1,7 @@
 package Server.StateMachine;
 
 import Requests.Request;
+import Requests.SurrenderRequest;
 import Server.ClientConnection;
 
 import java.io.IOException;
@@ -14,6 +15,6 @@ public class SurrenderRequestHandlingState implements ServerState {
 
     @Override
     public void handleRequest(Request request) throws IOException, ClassNotFoundException {
-        System.out.println("Handling surrender request");
+        connection.out.writeObject(new SurrenderRequest());
     }
 }
