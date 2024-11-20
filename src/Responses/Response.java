@@ -1,6 +1,8 @@
 package Responses;
 
-public abstract class Response {
+import java.io.Serializable;
+
+public abstract class Response implements Serializable {
     public Response() {
 
     }

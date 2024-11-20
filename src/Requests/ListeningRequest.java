@@ -1,6 +1,8 @@
 package Requests;
 
-public class ListeningRequest extends Request {
+import java.io.Serializable;
+
+public class ListeningRequest extends Request implements Serializable {
     String username;
 
     public ListeningRequest(String username) {

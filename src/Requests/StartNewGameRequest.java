@@ -1,4 +1,6 @@
 package Requests;
 
-public class StartNewGameRequest extends Request {
+import java.io.Serializable;
+
+public class StartNewGameRequest extends Request implements Serializable {
 }

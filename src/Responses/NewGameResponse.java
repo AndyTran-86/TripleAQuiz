@@ -1,4 +1,6 @@
 package Responses;
 
-public class NewGameResponse extends Response{
+import java.io.Serializable;
+
+public class NewGameResponse extends Response implements Serializable {
 }
