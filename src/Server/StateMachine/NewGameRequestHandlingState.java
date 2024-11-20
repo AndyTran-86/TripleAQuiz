@@ -2,6 +2,7 @@ package Server.StateMachine;
 
 import Requests.Request;
 import Responses.NewGameResponse;
+import Responses.RoundTurn;
 import Server.ClientConnection;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class NewGameRequestHandlingState implements ServerState {
 
     @Override
     public void handleRequest(Request request) throws IOException, ClassNotFoundException {
-        connection.out.writeObject(new NewGameResponse());
+        //TODO get actual gameinstanceID and turnToPlay and put here once its available
+        connection.out.writeObject(new NewGameResponse(15, RoundTurn.PLAYER_TURN));
     }
 }
