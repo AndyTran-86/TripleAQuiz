@@ -1,5 +1,6 @@
 package Client;
 
+import Client.StateMachine.*;
 import Requests.ListeningRequest;
 import Responses.*;
 import Server.QuizQuestion;
@@ -22,11 +23,29 @@ public class Client implements Runnable {
     InetAddress ip;
     String username;
 
+    ClientState state;
+    ClientState lobbyState;
+    ClientState playerTurnState;
+    ClientState otherPlayerTurnState;
+    ClientState victoryState;
+    ClientState defeatState;
+
+
 
     public Client(int port, String username) {
         this.port = port;
-        ip = InetAddress.getLoopbackAddress();
         this.username = username;
+
+        ip = InetAddress.getLoopbackAddress();
+        gui = new ClientGUI();
+
+        lobbyState = new ClientLobbyState(this, gui);
+        playerTurnState = new ClientPlayerTurnState(this, gui);
+        otherPlayerTurnState = new ClientOtherPlayerTurnState(this, gui);
+        victoryState = new ClientVictoryState(this, gui);
+        defeatState = new ClientDefeatState(this, gui);
+
+
     }
 
     private void connectToServer() {
@@ -41,11 +60,35 @@ public class Client implements Runnable {
 
             while ((unknownResponseFromServer = in.readObject()) != null) {
                 switch (unknownResponseFromServer) {
-                    case ListeningResponse listeningResponse -> JOptionPane.showMessageDialog(gui.frame, "Listening connection established");
-                    case NewGameResponse newGameResponse -> JOptionPane.showMessageDialog(gui.frame, "New game response received");
-                    case RoundPlayedResponse roundPlayedResponse -> JOptionPane.showMessageDialog(gui.frame, "Round played response received");
-                    case VictoryResponse victoryResponse -> JOptionPane.showMessageDialog(gui.frame, "Victory response received");
-                    case DefeatResponse defeatResponse -> JOptionPane.showMessageDialog(gui.frame, "Defeat response received");
+                    case ListeningResponse listeningResponse -> {
+                        state = lobbyState;
+                        state.handleResponse(listeningResponse);
+                        state.updateGUI();
+                    }
+                    // TODO: Add logic in here to determine if its this players or other players turn
+                    case NewGameResponse newGameResponse -> {
+                        state = playerTurnState;
+                        state.handleResponse(newGameResponse);
+                        state.updateGUI();
+                    }
+                    // TODO: Add logic in here to determine if its this players or other players turn
+                    case RoundPlayedResponse roundPlayedResponse -> {
+                        state = otherPlayerTurnState;
+                        state.handleResponse(roundPlayedResponse);
+                        state.updateGUI();
+                    }
+
+                    case VictoryResponse victoryResponse -> {
+                        state = victoryState;
+                        state.handleResponse(victoryResponse);
+                        state.updateGUI();
+                    }
+
+                    case DefeatResponse defeatResponse -> {
+                        state = defeatState;
+                        state.handleResponse(defeatResponse);
+                        state.updateGUI();
+                    }
                     default -> JOptionPane.showMessageDialog(gui.frame, "Unknown response received");
                 }
 
@@ -60,7 +103,6 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
-         gui = new ClientGUI();
          gui.init();
          connectToServer();
     }

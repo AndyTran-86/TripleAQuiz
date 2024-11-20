@@ -4,6 +4,7 @@ import Client.ClientGUI;
 import Client.Client;
 import Responses.Response;
 
+import javax.swing.*;
 import java.io.IOException;
 
 public class ClientPlayerTurnState implements ClientState {
@@ -18,7 +19,7 @@ public class ClientPlayerTurnState implements ClientState {
 
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
-        System.out.println("Handling " + response.getClass());
+        JOptionPane.showMessageDialog(gui.frame, "New game response received");
     }
 
     @Override

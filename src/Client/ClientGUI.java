@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ClientGUI {
-    JFrame frame;
+    public JFrame frame;
     JPanel lobbyMainPanel;
     JPanel lobbyTopHeaderPanel;
     JPanel lobbyCenterPanel;
