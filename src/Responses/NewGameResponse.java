@@ -15,7 +15,7 @@ public class NewGameResponse extends Response implements Serializable {
         return gameInstanceID;
     }
 
-    public RoundTurn isTurnToPlay() {
+    public RoundTurn getTurnToPlay() {
         return turnToPlay;
     }
 }

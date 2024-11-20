@@ -65,15 +65,17 @@ public class Client implements Runnable {
                         state.handleResponse(listeningResponse);
                         state.updateGUI();
                     }
-                    // TODO: Add logic in here to determine if its this players or other players turn
+
                     case NewGameResponse newGameResponse -> {
-                        state = playerTurnState;
+                        state = newGameResponse.getTurnToPlay() == RoundTurn.PLAYER_TURN ? playerTurnState
+                                                                                         : otherPlayerTurnState;
                         state.handleResponse(newGameResponse);
                         state.updateGUI();
                     }
-                    // TODO: Add logic in here to determine if its this players or other players turn
+
                     case RoundPlayedResponse roundPlayedResponse -> {
-                        state = otherPlayerTurnState;
+                        state = roundPlayedResponse.getTurnToPlay() == RoundTurn.PLAYER_TURN ? playerTurnState
+                                                                                             : otherPlayerTurnState;
                         state.handleResponse(roundPlayedResponse);
                         state.updateGUI();
                     }

@@ -12,7 +12,7 @@ public class RoundPlayedResponse extends Response implements Serializable {
         this.result = result;
     }
 
-    public RoundTurn isTurnToPlay() {
+    public RoundTurn getTurnToPlay() {
         return turnToPlay;
     }
 
