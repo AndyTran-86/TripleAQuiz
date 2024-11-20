@@ -36,7 +36,7 @@ public class ClientConnection implements Runnable {
                 case StartNewGameRequest startNewGameRequest -> out.writeObject(new NewGameResponse());
                 case RoundPlayedRequest roundPlayedRequest -> out.writeObject(new RoundPlayedResponse());
                 case SurrenderRequest surrenderRequest -> out.writeObject(new SurrenderRequest());
-                default -> throw new UnsupportedOperationException("Unknown request");
+                default -> throw new UnsupportedOperationException("Unknown request!");
             }
 
 //            out.writeObject(new Response(null, "You are connected."));
