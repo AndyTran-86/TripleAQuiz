@@ -47,7 +47,7 @@ public class CategorySelectionBoard {
 
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(3,1,10,10));
+        buttonPanel.setLayout(new GridLayout(3,1,30,30));
         for (JButton button : categoryButtons) {
             buttonPanel.add(button);
         }
@@ -60,11 +60,11 @@ public class CategorySelectionBoard {
 
 
         }
-        /*public static void main(String[] args) {
+        public static void main(String[] args) {
         SwingUtilities.invokeLater(() ->{
             CategorySelectionBoard selectionBoard = new CategorySelectionBoard();
             selectionBoard.CategorySelectionBoardinit();
         });
 
-    }*/
+    }
 }

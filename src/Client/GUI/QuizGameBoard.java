@@ -10,6 +10,7 @@ public class QuizGameBoard {
     JPanel answerPanel;
     JPanel gameBottomPanel;
 
+
     JTextArea questionTextArea;
     JLabel timerLabel;
 
@@ -26,9 +27,6 @@ public class QuizGameBoard {
         questionPanel = new JPanel();
         answerPanel = new JPanel();
         gameBottomPanel = new JPanel();
-
-        questionTextArea = new JTextArea();
-        timerLabel = new JLabel();
 
 
         questionTextArea = new JTextArea("Question will be here, I hope its okay to put the question here. " +
@@ -65,21 +63,23 @@ public class QuizGameBoard {
 
         gameMainPanel.setLayout(new BorderLayout());
 
+
         //Övre
-        gameMainPanel.add(questionPanel, BorderLayout.NORTH);
         questionPanel.setLayout(new BorderLayout());
         questionPanel.add(questionTextArea, BorderLayout.CENTER);
         questionPanel.add(timerLabel, BorderLayout.SOUTH);
+        gameMainPanel.add(questionPanel, BorderLayout.NORTH);
+
 
         //Mitt
-        gameMainPanel.add(answerPanel, BorderLayout.CENTER);
         answerPanel.setLayout(new GridLayout(2,2,10,10));
         for (JButton button : answerButtons) {
             answerPanel.add(button);
         }
+        gameMainPanel.add(answerPanel, BorderLayout.CENTER);
+
 
         //Nedre
-        gameMainPanel.add(gameBottomPanel, BorderLayout.SOUTH);
         gameBottomPanel.setLayout(new GridLayout(2,4));
         gameBottomPanel.add(homeIconLabel);
         gameBottomPanel.add(new JLabel());
@@ -89,18 +89,21 @@ public class QuizGameBoard {
         gameBottomPanel.add(new JLabel());
         gameBottomPanel.add(new JLabel());
         gameBottomPanel.add(new JLabel("Friends", SwingConstants.CENTER));
+        gameMainPanel.add(gameBottomPanel, BorderLayout.SOUTH);
 
+
+        frame.add(gameMainPanel);
         frame.setVisible(true);
     }
 
 
     ///////////////////////////////////
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         SwingUtilities.invokeLater(() ->{
             QuizGameBoard game = new QuizGameBoard();
             game.QuizBoardinit();
         });
-    }*/
+    }
     ///////////////////////////////////
 
 
