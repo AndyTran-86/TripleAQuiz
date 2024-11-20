@@ -3,9 +3,6 @@ package Client;
 import Client.StateMachine.*;
 import Requests.ListeningRequest;
 import Responses.*;
-import Server.QuizQuestion;
-import Server.Request;
-import Server.Response;
 
 import javax.swing.*;
 import java.io.IOException;
