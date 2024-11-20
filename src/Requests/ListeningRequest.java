@@ -8,4 +8,8 @@ public class ListeningRequest extends Request implements Serializable {
     public ListeningRequest(String username) {
         this.username = username;
     }
+
+    public String getUsername() {
+        return username;
+    }
 }
