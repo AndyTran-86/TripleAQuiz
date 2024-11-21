@@ -19,6 +19,9 @@ public class ClientConnection implements Runnable {
     Socket socket;
     public ObjectOutputStream out;
     public ObjectInputStream in;
+    public long clientID;
+    static long clientIDIncrementor = 1;
+    GameInstanceManager gameInstanceManager;
 
     ServerState state;
     ServerState handleListeningRequestState;
@@ -26,13 +29,15 @@ public class ClientConnection implements Runnable {
     ServerState handleRoundPlayedRequestState;
     ServerState handleSurrenderRequestState;
 
-    public ClientConnection(Socket socket) {
+    public ClientConnection(Socket socket, GameInstanceManager gameInstanceManager) {
         database = new Database();
         this.socket = socket;
-        handleListeningRequestState = new ListeningRequestHandlingState(this);
-        handleNewGameRequestState = new NewGameRequestHandlingState(this);
-        handleRoundPlayedRequestState = new RoundPlayedRequestHandlingState(this);
-        handleSurrenderRequestState = new SurrenderRequestHandlingState(this);
+        clientID = clientIDIncrementor++;
+        this.gameInstanceManager = gameInstanceManager;
+        handleListeningRequestState = new ListeningRequestHandlingState(this, this.gameInstanceManager);
+        handleNewGameRequestState = new NewGameRequestHandlingState(this, this.gameInstanceManager);
+        handleRoundPlayedRequestState = new RoundPlayedRequestHandlingState(this, this.gameInstanceManager);
+        handleSurrenderRequestState = new SurrenderRequestHandlingState(this, this.gameInstanceManager);
     }
 
     public void processRequest() {

@@ -7,9 +7,11 @@ import java.net.Socket;
 public class Server implements Runnable{
     int port;
     ServerSocket serverSocket;
+    GameInstanceManager gameInstanceManager;
 
     public Server(int port) {
         this.port = port;
+        gameInstanceManager = new GameInstanceManager();
         try {
             this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -22,7 +24,7 @@ public class Server implements Runnable{
         try {
             while (true) {
                 Socket clientCallingSocket = serverSocket.accept();
-                ClientConnection clientConnection = new ClientConnection(clientCallingSocket);
+                ClientConnection clientConnection = new ClientConnection(clientCallingSocket, gameInstanceManager);
                 new Thread(clientConnection).start();
             }
         } catch (IOException e) {

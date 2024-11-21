@@ -19,7 +19,7 @@ public class ClientPlayerTurnState implements ClientState {
 
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
-        JOptionPane.showMessageDialog(gui.frame, "New game response received");
+        JOptionPane.showMessageDialog(gui.frame, "Round played response received with THIS PLAYER TURN");
     }
 
     @Override

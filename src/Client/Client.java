@@ -2,6 +2,7 @@ package Client;
 
 import Client.StateMachine.*;
 import Requests.ListeningRequest;
+import Requests.StartNewGameRequest;
 import Responses.*;
 
 import javax.swing.*;
@@ -19,6 +20,7 @@ public class Client implements Runnable {
     int port;
     InetAddress ip;
     String username;
+    long clientID;
 
     ClientState state;
     ClientState lobbyState;
@@ -104,5 +106,30 @@ public class Client implements Runnable {
     public void run() {
          gui.init();
          connectToServer();
+         addEventListeners();
+    }
+
+    public void addEventListeners() {
+        gui.getLobbyStartNewGameButton().addActionListener(e -> {
+            System.out.println("pressed start new game button");
+            try (Socket socket = new Socket(ip, port);
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+
+                out.writeObject(new StartNewGameRequest(clientID));
+            } catch (IOException e2) {
+                e2.printStackTrace();
+            }
+
+
+
+        });
+    }
+
+    public long getClientID() {
+        return clientID;
+    }
+
+    public void setClientID(long clientID) {
+        this.clientID = clientID;
     }
 }

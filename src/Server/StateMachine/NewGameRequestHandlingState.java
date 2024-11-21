@@ -1,22 +1,44 @@
 package Server.StateMachine;
 
 import Requests.Request;
+import Requests.StartNewGameRequest;
 import Responses.NewGameResponse;
 import Responses.RoundTurn;
 import Server.ClientConnection;
+import Server.GameInstanceManager;
 
 import java.io.IOException;
 
 public class NewGameRequestHandlingState implements ServerState {
     ClientConnection connection;
+    GameInstanceManager gameInstanceManager;
 
-    public NewGameRequestHandlingState(ClientConnection connection) {
+    public NewGameRequestHandlingState(ClientConnection connection, GameInstanceManager gameInstanceManager) {
         this.connection = connection;
+        this.gameInstanceManager = gameInstanceManager;
     }
 
     @Override
     public void handleRequest(Request request) throws IOException, ClassNotFoundException {
+        if (request instanceof StartNewGameRequest startNewGameRequest) {
+
+            long clientID = startNewGameRequest.getClientID();
+            ClientConnection clientInLobby = gameInstanceManager.takePlayerFromLobby(clientID);
+            System.out.println("Test");
+            if (gameInstanceManager.gameInstanceOpenForNewPlayer()) {
+                long gameInstanceID = gameInstanceManager.getCurrentOpenGameInstance().getGameInstanceID();
+                gameInstanceManager.putPlayerInOpenGameInstance(clientInLobby);
+                connection.out.writeObject(new NewGameResponse(gameInstanceID, RoundTurn.OTHER_PLAYER_TURN));
+            } else {
+                gameInstanceManager.startNewGameInstance();
+                long gameInstanceID = gameInstanceManager.getCurrentOpenGameInstance().getGameInstanceID();
+                gameInstanceManager.putPlayerInOpenGameInstance(clientInLobby);
+                connection.out.writeObject(new NewGameResponse(gameInstanceID, RoundTurn.PLAYER_TURN));
+            }
+        }
         //TODO get actual gameinstanceID and turnToPlay and put here once its available
-        connection.out.writeObject(new NewGameResponse(15, RoundTurn.PLAYER_TURN));
+
+
+
     }
 }

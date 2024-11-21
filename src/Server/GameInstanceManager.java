@@ -9,14 +9,14 @@ import java.util.Map;
 public class GameInstanceManager {
     Map<Long, ClientConnection> clientsInLobbyByID;
     Map<String, List<String>> questionsByCategory;
-    Map<Long, GameInstance> gameInstancesByID;
+    protected Map<Long, GameInstance> gameInstancesMapByID;
     GameInstance currentOpenGameInstance;
     boolean gameInstanceOpenForNewPlayer;
 
     public GameInstanceManager() {
         clientsInLobbyByID = new HashMap<>();
         questionsByCategory = new HashMap<>();
-        gameInstancesByID = new HashMap<>();
+        gameInstancesMapByID = new HashMap<>();
         gameInstanceOpenForNewPlayer = false;
     }
 
@@ -26,30 +26,42 @@ public class GameInstanceManager {
         return currentOpenGameInstance;
     }
 
+
     public void startNewGameInstance() {
         currentOpenGameInstance = new GameInstance();
-        //TODO Add gameinstance to map with long id
+        gameInstancesMapByID.put(currentOpenGameInstance.getGameInstanceID(), currentOpenGameInstance);
+        gameInstanceOpenForNewPlayer = true;
     }
 
-    public void putPlayerInOpenGameInstance(ClientConnection clientConnectionToJoin) {
-        //TODO remove player from lobby and add to gameinstance
+    public void putPlayerInOpenGameInstance(ClientConnection clientConnection) {
+        currentOpenGameInstance.addPlayer(clientConnection);
+        if (currentOpenGameInstance.isFull()) {
+            gameInstanceOpenForNewPlayer = false;
+        }
+
     }
 
     public void terminateGameInstance(long gameInstanceID) {
-        GameInstance instanceToTerminate = gameInstancesByID.get(gameInstanceID);
+        GameInstance instanceToTerminate = gameInstancesMapByID.get(gameInstanceID);
         for (ClientConnection players : clientsInLobbyByID.values()) {
             // TODO add to lobby with id as key then null the object and remove from the map
         }
 
     }
 
-    private void putPlayerInLobby(ClientConnection clientConnectionToJoin) {
-        //TODO remove player from lobby and add to gameinstance
+    public void putPlayerInLobby(ClientConnection clientConnectionToJoin) {
+        clientsInLobbyByID.put(clientConnectionToJoin.clientID, clientConnectionToJoin);
+    }
+
+    public ClientConnection takePlayerFromLobby(long clientID) {
+        ClientConnection clientConnection = clientsInLobbyByID.get(clientID);
+        clientsInLobbyByID.remove(clientID);
+        return clientConnection;
     }
 
 
     public GameInstance getGameInstanceByID(long gameInstanceID) {
-        return gameInstancesByID.get(gameInstanceID);
+        return gameInstancesMapByID.get(gameInstanceID);
     }
 
     public boolean gameInstanceOpenForNewPlayer() {
