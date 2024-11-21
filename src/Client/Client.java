@@ -24,6 +24,7 @@ public class Client implements Runnable {
 
     ClientState state;
     ClientState lobbyState;
+    ClientState newGameState;
     ClientState playerTurnState;
     ClientState otherPlayerTurnState;
     ClientState victoryState;
@@ -40,6 +41,7 @@ public class Client implements Runnable {
 
         lobbyState = new ClientLobbyState(this, gui);
         playerTurnState = new ClientPlayerTurnState(this, gui);
+        newGameState = new ClientNewGameState(this, gui);
         otherPlayerTurnState = new ClientOtherPlayerTurnState(this, gui);
         victoryState = new ClientVictoryState(this, gui);
         defeatState = new ClientDefeatState(this, gui);
@@ -67,8 +69,7 @@ public class Client implements Runnable {
                         }
 
                         case NewGameResponse newGameResponse -> {
-                            state = newGameResponse.getTurnToPlay() == RoundTurn.PLAYER_TURN ? playerTurnState
-                                    : otherPlayerTurnState;
+                            state = newGameState;
                             state.handleResponse(newGameResponse);
                             state.updateGUI();
                         }
@@ -113,14 +114,14 @@ public class Client implements Runnable {
     }
 
     public void addEventListeners() {
-        gui.getLobbyStartNewGameButton().addActionListener(e -> {
+        gui.getLobbyStartNewGameButton().addActionListener(event -> {
             System.out.println("pressed start new game button");
             try (Socket socket = new Socket(ip, port);
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
 
                 out.writeObject(new StartNewGameRequest(clientID));
-            } catch (IOException e2) {
-                e2.printStackTrace();
+            } catch (IOException exception) {
+                exception.printStackTrace();
             }
 
 
