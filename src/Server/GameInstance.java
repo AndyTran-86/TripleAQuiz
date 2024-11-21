@@ -1,5 +1,8 @@
 package Server;
 
+import Responses.PlayerJoinedResponse;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,12 @@ public class GameInstance {
 
     public boolean isFirstPlayer() {
         return players.size() == 1;
+    }
+
+    public void notifyPlayerJoined(String playerName) throws IOException {
+        for (ClientConnection clientConnection : players) {
+            clientConnection.out.writeObject(new PlayerJoinedResponse(playerName));
+        }
     }
 
 }

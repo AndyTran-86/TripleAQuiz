@@ -3,6 +3,7 @@ package Client.StateMachine;
 import Client.ClientGUI;
 import Client.Client;
 import Responses.NewGameResponse;
+import Responses.PlayerJoinedResponse;
 import Responses.Response;
 
 import javax.swing.*;
@@ -31,5 +32,10 @@ public class ClientNewGameState  implements ClientState {
     @Override
     public void updateGUI() {
         System.out.println("Updating GUI");
+    }
+
+    @Override
+    public void handlePlayerJoined(PlayerJoinedResponse response) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

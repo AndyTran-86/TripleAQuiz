@@ -22,6 +22,7 @@ public class ClientConnection implements Runnable {
     public long clientID;
     static long clientIDIncrementor = 1;
     GameInstanceManager gameInstanceManager;
+    public String username;
 
     ServerState state;
     ServerState handleListeningRequestState;
@@ -80,5 +81,13 @@ public class ClientConnection implements Runnable {
     @Override
     public void run() {
         processRequest();
+    }
+
+    public void setClientID(long clientID) {
+        this.clientID = clientID;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

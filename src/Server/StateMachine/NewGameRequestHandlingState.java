@@ -5,6 +5,7 @@ import Requests.StartNewGameRequest;
 import Responses.NewGameResponse;
 import Responses.RoundTurn;
 import Server.ClientConnection;
+import Server.GameInstance;
 import Server.GameInstanceManager;
 
 import java.io.IOException;
@@ -24,10 +25,14 @@ public class NewGameRequestHandlingState implements ServerState {
 
             long clientID = startNewGameRequest.getClientID();
             ClientConnection clientInLobby = gameInstanceManager.takePlayerFromLobby(clientID);
-            System.out.println("Test");
+
             if (gameInstanceManager.gameInstanceOpenForNewPlayer()) {
                 long gameInstanceID = gameInstanceManager.getCurrentOpenGameInstance().getGameInstanceID();
+
+                GameInstance gameInstance = gameInstanceManager.getGameInstanceByID(gameInstanceID);
+                gameInstance.notifyPlayerJoined(clientInLobby.username);
                 gameInstanceManager.putPlayerInOpenGameInstance(clientInLobby);
+
                 clientInLobby.out.writeObject(new NewGameResponse(gameInstanceID, RoundTurn.OTHER_PLAYER_TURN));
             } else {
                 gameInstanceManager.startNewGameInstance();

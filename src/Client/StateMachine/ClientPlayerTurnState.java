@@ -2,6 +2,7 @@ package Client.StateMachine;
 
 import Client.ClientGUI;
 import Client.Client;
+import Responses.PlayerJoinedResponse;
 import Responses.Response;
 
 import javax.swing.*;
@@ -25,5 +26,12 @@ public class ClientPlayerTurnState implements ClientState {
     @Override
     public void updateGUI() {
         System.out.println("Updating GUI");
+    }
+
+    @Override
+    public void handlePlayerJoined(PlayerJoinedResponse response) {
+        String opponentUserName = response.getUsername();
+        JOptionPane.showMessageDialog(gui.frame, opponentUserName + " joined the game");
+        //TODO add getUserName to data in client, then update gui with it?
     }
 }
