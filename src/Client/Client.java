@@ -71,12 +71,19 @@ public class Client implements Runnable {
                         case NewGameResponse newGameResponse -> {
                             state = newGameState;
                             state.handleResponse(newGameResponse);
+
+                            switch (newGameResponse.getTurnToPlay()) {
+                                case PLAYER_TURN -> state = playerTurnState;
+                                case OTHER_PLAYER_TURN -> state = otherPlayerTurnState;
+                            }
                             state.updateGUI();
                         }
 
                         case RoundPlayedResponse roundPlayedResponse -> {
-                            state = roundPlayedResponse.getTurnToPlay() == RoundTurn.PLAYER_TURN ? playerTurnState
-                                    : otherPlayerTurnState;
+                            switch (roundPlayedResponse.getTurnToPlay()) {
+                                case PLAYER_TURN -> state = playerTurnState;
+                                case OTHER_PLAYER_TURN -> state = otherPlayerTurnState;
+                            }
                             state.handleResponse(roundPlayedResponse);
                             state.updateGUI();
                         }

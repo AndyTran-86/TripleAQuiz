@@ -22,8 +22,8 @@ public class ClientNewGameState  implements ClientState {
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
         if (response instanceof NewGameResponse newGameResponse) {
             switch (newGameResponse.getTurnToPlay()) {
-                case PLAYER_TURN -> JOptionPane.showMessageDialog(gui.frame, "New Game response received with THIS PLAYER TURN");
-                case OTHER_PLAYER_TURN -> JOptionPane.showMessageDialog(gui.frame, "New Game response received with OTHER PLAYER TURN");
+                case PLAYER_TURN -> JOptionPane.showMessageDialog(gui.frame, "New Game response received with THIS PLAYER TURN - in gameInstance: " + newGameResponse.getGameInstanceID());
+                case OTHER_PLAYER_TURN -> JOptionPane.showMessageDialog(gui.frame, "New Game response received with OTHER PLAYER TURN - in gameInstance: " + newGameResponse.getGameInstanceID());
             }
         }
     }
