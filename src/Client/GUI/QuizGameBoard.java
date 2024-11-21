@@ -6,15 +6,23 @@ import java.awt.*;
 public class QuizGameBoard {
     JFrame frame;
     JPanel gameMainPanel;
+    JPanel middlePanel;
     JPanel questionPanel;
     JPanel answerPanel;
     JPanel gameBottomPanel;
+    JPanel headerPanel;
 
 
     JTextArea questionTextArea;
     JLabel timerLabel;
 
     JButton[] answerButtons;
+
+    JLabel headerLabel;
+    JLabel player1Label;
+    JLabel player2Label;
+    JLabel spaceLabel;
+    JLabel spaceLabel1;
 
     JLabel homeIconLabel;
     JLabel friendIconLabel;
@@ -24,10 +32,19 @@ public class QuizGameBoard {
         frame = new JFrame("Triple-A Quiz Game");
 
         gameMainPanel = new JPanel();
+        middlePanel = new JPanel(new BorderLayout());
         questionPanel = new JPanel();
         answerPanel = new JPanel();
         gameBottomPanel = new JPanel();
+        headerPanel = new JPanel(new BorderLayout());
+        headerLabel = new JLabel("Question Theme", SwingConstants.CENTER);
+        player1Label = new JLabel("Player 1", SwingConstants.CENTER);
+        player2Label = new JLabel("Player 2", SwingConstants.CENTER);
 
+        spaceLabel = new JLabel(" ");
+        spaceLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+        spaceLabel1 = new JLabel(" ");
+        spaceLabel1.setFont(new Font("Arial", Font.PLAIN, 40));
 
         questionTextArea = new JTextArea("Question will be here, I hope its okay to put the question here. " +
                 "I write some just to fill it and see how it looks");
@@ -65,10 +82,19 @@ public class QuizGameBoard {
 
 
         //Övre
+
+        headerPanel.add(spaceLabel, BorderLayout.NORTH);
+        headerPanel.add(player1Label, BorderLayout.WEST);
+        headerPanel.add(headerLabel, BorderLayout.CENTER);
+        headerPanel.add(player2Label, BorderLayout.EAST);
+        headerPanel.add(spaceLabel1, BorderLayout.SOUTH);
+
+        gameMainPanel.add(headerPanel, BorderLayout.NORTH);
+
         questionPanel.setLayout(new BorderLayout());
         questionPanel.add(questionTextArea, BorderLayout.CENTER);
         questionPanel.add(timerLabel, BorderLayout.SOUTH);
-        gameMainPanel.add(questionPanel, BorderLayout.NORTH);
+        //gameMainPanel.add(questionPanel, BorderLayout.NORTH);
 
 
         //Mitt
@@ -76,7 +102,9 @@ public class QuizGameBoard {
         for (JButton button : answerButtons) {
             answerPanel.add(button);
         }
-        gameMainPanel.add(answerPanel, BorderLayout.CENTER);
+        middlePanel.add(questionPanel, BorderLayout.NORTH);
+        middlePanel.add(answerPanel, BorderLayout.CENTER);
+        gameMainPanel.add(middlePanel, BorderLayout.CENTER);
 
 
         //Nedre
