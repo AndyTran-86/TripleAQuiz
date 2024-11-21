@@ -48,58 +48,61 @@ public class Client implements Runnable {
     }
 
     private void connectToServer() {
-        try(Socket socket = new Socket(ip, port)) {
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
+        new Thread(() -> {
+            try(Socket socket = new Socket(ip, port)) {
+                out = new ObjectOutputStream(socket.getOutputStream());
+                in = new ObjectInputStream(socket.getInputStream());
 
 
-            out.writeObject(new ListeningRequest(username));
+                out.writeObject(new ListeningRequest(username));
 
-            Object unknownResponseFromServer;
+                Object unknownResponseFromServer;
 
-            while ((unknownResponseFromServer = in.readObject()) != null) {
-                switch (unknownResponseFromServer) {
-                    case ListeningResponse listeningResponse -> {
-                        state = lobbyState;
-                        state.handleResponse(listeningResponse);
-                        state.updateGUI();
+                while ((unknownResponseFromServer = in.readObject()) != null) {
+                    switch (unknownResponseFromServer) {
+                        case ListeningResponse listeningResponse -> {
+                            state = lobbyState;
+                            state.handleResponse(listeningResponse);
+                            state.updateGUI();
+                        }
+
+                        case NewGameResponse newGameResponse -> {
+                            state = newGameResponse.getTurnToPlay() == RoundTurn.PLAYER_TURN ? playerTurnState
+                                    : otherPlayerTurnState;
+                            state.handleResponse(newGameResponse);
+                            state.updateGUI();
+                        }
+
+                        case RoundPlayedResponse roundPlayedResponse -> {
+                            state = roundPlayedResponse.getTurnToPlay() == RoundTurn.PLAYER_TURN ? playerTurnState
+                                    : otherPlayerTurnState;
+                            state.handleResponse(roundPlayedResponse);
+                            state.updateGUI();
+                        }
+
+                        case VictoryResponse victoryResponse -> {
+                            state = victoryState;
+                            state.handleResponse(victoryResponse);
+                            state.updateGUI();
+                        }
+
+                        case DefeatResponse defeatResponse -> {
+                            state = defeatState;
+                            state.handleResponse(defeatResponse);
+                            state.updateGUI();
+                        }
+                        default -> JOptionPane.showMessageDialog(gui.frame, "Unknown response received");
                     }
 
-                    case NewGameResponse newGameResponse -> {
-                        state = newGameResponse.getTurnToPlay() == RoundTurn.PLAYER_TURN ? playerTurnState
-                                                                                         : otherPlayerTurnState;
-                        state.handleResponse(newGameResponse);
-                        state.updateGUI();
-                    }
 
-                    case RoundPlayedResponse roundPlayedResponse -> {
-                        state = roundPlayedResponse.getTurnToPlay() == RoundTurn.PLAYER_TURN ? playerTurnState
-                                                                                             : otherPlayerTurnState;
-                        state.handleResponse(roundPlayedResponse);
-                        state.updateGUI();
-                    }
-
-                    case VictoryResponse victoryResponse -> {
-                        state = victoryState;
-                        state.handleResponse(victoryResponse);
-                        state.updateGUI();
-                    }
-
-                    case DefeatResponse defeatResponse -> {
-                        state = defeatState;
-                        state.handleResponse(defeatResponse);
-                        state.updateGUI();
-                    }
-                    default -> JOptionPane.showMessageDialog(gui.frame, "Unknown response received");
                 }
-
-
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        }).start();
+
     }
 
     @Override

@@ -67,20 +67,12 @@ public class ClientConnection implements Runnable {
                 default -> throw new UnsupportedOperationException("Unknown request!");
             }
 
-//            out.writeObject(new Response(null, "You are connected."));
-//
-//            Request fromClient;
-//
-//            while ((fromClient = (Request) in.readObject()) != null) {
-//                if (fromClient.quizQuestion == null)
-//                    out.writeObject(new Response(database.quizQuestions.getFirst(), null));
-//            }
 
 
         } catch (IOException e ) {
-            System.out.println("IO ex");
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            System.out.println("Classcast ex");
+            e.printStackTrace();
         }
     }
 
