@@ -7,15 +7,41 @@ public class CategorySelectionBoard {
     JFrame frame;
 
     JPanel categoryMainPanel;
+    JPanel headerPanel;
+    JPanel middlePanel;
+    JPanel bottomPanel;
+
+    JLabel headerLabel;
+    JLabel player1Label;
+    JLabel player2Label;
+    JLabel spaceLabel;
+    JLabel spaceLabel1;
 
     JLabel categoryTitleLabel;
 
     JButton[] categoryButtons;
 
+    JLabel homeIconLabel;
+    JLabel friendIconLabel;
 
     public CategorySelectionBoard() {
         frame = new JFrame("Category Selection Board");
+
         categoryMainPanel = new JPanel();
+        headerPanel = new JPanel(new BorderLayout());
+        middlePanel = new JPanel(new GridLayout(4,1,10,10));
+        bottomPanel = new JPanel();
+
+
+        headerLabel = new JLabel("Question Theme", SwingConstants.CENTER);
+        player1Label = new JLabel("Player 1", SwingConstants.CENTER);
+        player2Label = new JLabel("Player 2", SwingConstants.CENTER);
+
+        spaceLabel = new JLabel(" ");
+        spaceLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+        spaceLabel1 = new JLabel(" ");
+        spaceLabel1.setFont(new Font("Arial", Font.PLAIN, 40));
+
 
         categoryTitleLabel = new JLabel("Select a category", SwingConstants.CENTER);
         categoryTitleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -28,6 +54,11 @@ public class CategorySelectionBoard {
             categoryButtons[i].setFont(new Font("Arial", Font.BOLD, 16));
 
         }
+
+        homeIconLabel = new JLabel(new ImageIcon("icons/lobby/home.png"));
+        friendIconLabel = new JLabel(new ImageIcon("icons/lobby/friends.png"));
+
+
     }
 
 
@@ -38,33 +69,50 @@ public class CategorySelectionBoard {
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
 
-        categoryMainPanel.setLayout(new BoxLayout(categoryMainPanel, BoxLayout.Y_AXIS));
-        categoryMainPanel.add(Box.createVerticalStrut(200));
+        categoryMainPanel = new JPanel(new BorderLayout());
 
-        categoryMainPanel.add(categoryTitleLabel);
+        //Header
+        headerPanel.add(spaceLabel, BorderLayout.NORTH);
+        headerPanel.add(player1Label, BorderLayout.WEST);
+        headerPanel.add(headerLabel, BorderLayout.CENTER);
+        headerPanel.add(player2Label, BorderLayout.EAST);
+        headerPanel.add(spaceLabel1, BorderLayout.SOUTH);
 
-        categoryMainPanel.add(Box.createVerticalStrut(80));
+        categoryMainPanel.add(headerPanel, BorderLayout.NORTH);
 
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(3,1,10,10));
-        for (JButton button : categoryButtons) {
-            buttonPanel.add(button);
-        }
+        //Center
+        middlePanel.add(categoryTitleLabel);
+            for (JButton button : categoryButtons) {
+                middlePanel.add(button);
+            }
 
-        categoryMainPanel.add(buttonPanel);
+        categoryMainPanel.add(middlePanel, BorderLayout.CENTER);
 
-        frame.add(categoryMainPanel, BorderLayout.CENTER);
 
+        //Footer
+        bottomPanel.setLayout(new GridLayout(2,4));
+        bottomPanel.add(homeIconLabel);
+        bottomPanel.add(new JLabel());
+        bottomPanel.add(new JLabel());
+        bottomPanel.add(friendIconLabel);
+        bottomPanel.add(new JLabel("Home", SwingConstants.CENTER));
+        bottomPanel.add(new JLabel());
+        bottomPanel.add(new JLabel());
+        bottomPanel.add(new JLabel("Friends", SwingConstants.CENTER));
+        categoryMainPanel.add(bottomPanel, BorderLayout.SOUTH);
+
+
+        frame.add(categoryMainPanel);
         frame.setVisible(true);
 
 
         }
-        /*public static void main(String[] args) {
+        public static void main(String[] args) {
         SwingUtilities.invokeLater(() ->{
             CategorySelectionBoard selectionBoard = new CategorySelectionBoard();
             selectionBoard.CategorySelectionBoardinit();
         });
 
-    }*/
+    }
 }
