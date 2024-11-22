@@ -12,24 +12,23 @@ public class GameInstanceManager {
     protected Map<Long, GameInstance> gameInstancesMapByID;
     GameInstance currentOpenGameInstance;
     boolean gameInstanceOpenForNewPlayer;
+    private List<QuestionsByCategory> allQuestions;
 
-    public GameInstanceManager() {
+    public GameInstanceManager(List<QuestionsByCategory> allQuestions) {
         clientsInLobbyByID = new HashMap<>();
         questionsByCategory = new HashMap<>();
         gameInstancesMapByID = new HashMap<>();
+        this.allQuestions = allQuestions;
         gameInstanceOpenForNewPlayer = false;
     }
-
 
 
     public GameInstance getCurrentOpenGameInstance() {
         return currentOpenGameInstance;
     }
 
-
     public void startNewGameInstance() {
         currentOpenGameInstance = new GameInstance();
-        currentOpenGameInstance.startApiRequest();
         gameInstancesMapByID.put(currentOpenGameInstance.getGameInstanceID(), currentOpenGameInstance);
         gameInstanceOpenForNewPlayer = true;
     }
@@ -39,8 +38,6 @@ public class GameInstanceManager {
         if (currentOpenGameInstance.isFull()) {
             gameInstanceOpenForNewPlayer = false;
         }
-
-
     }
 
     public void terminateGameInstance(long gameInstanceID) {
@@ -70,11 +67,7 @@ public class GameInstanceManager {
         return gameInstanceOpenForNewPlayer;
     }
 
-    public boolean categoriesReady() {
-        return currentOpenGameInstance.categoriesReady();
-    }
-
-    public List<QuestionsByCategory> getQuestions() {
-        return currentOpenGameInstance.getQuestions();
+    public List<QuestionsByCategory> getAllQuestions() {
+        return allQuestions;
     }
 }

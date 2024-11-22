@@ -13,26 +13,16 @@ public class GameInstance {
     private static long gameInstanceIDIncrementor = 1;
     private final long gameInstanceID;
     private final List<ClientConnection> players;
-    private Api_Client apiClient;
     private boolean categoriesReady;
 
     public GameInstance() {
         this.gameInstanceID = gameInstanceIDIncrementor++;
         this.players = new ArrayList<>();
-        categoriesReady = false;
-        apiClient = new Api_Client(this);
-    }
-
-    public void startApiRequest() {
-        new Thread(apiClient).start();
+        categoriesReady = false;;
     }
 
     public long getGameInstanceID() {
         return gameInstanceID;
-    }
-
-    public List<QuestionsByCategory> getQuestions() {
-        return apiClient.getAll_questions();
     }
 
     public void addPlayer(ClientConnection clientConnection) {
