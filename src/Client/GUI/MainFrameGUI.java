@@ -36,8 +36,8 @@ public class MainFrameGUI {
         //Header
         headerPanel = new JPanel(new BorderLayout());
         headerLabel = new JLabel("Question Theme", SwingConstants.CENTER);
-        player1Label = new JLabel("Player 1", SwingConstants.CENTER);
-        player2Label = new JLabel("Player 2", SwingConstants.CENTER);
+        player1Label = new JLabel(" Player 1", SwingConstants.CENTER);
+        player2Label = new JLabel("Player 2 ", SwingConstants.CENTER);
 
 
         //Footer
