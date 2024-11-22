@@ -19,6 +19,10 @@ public class ClientConnection implements Runnable {
     Socket socket;
     public ObjectOutputStream out;
     public ObjectInputStream in;
+    public long clientID;
+    static long clientIDIncrementor = 1;
+    GameInstanceManager gameInstanceManager;
+    public String username;
 
     ServerState state;
     ServerState handleListeningRequestState;
@@ -26,13 +30,15 @@ public class ClientConnection implements Runnable {
     ServerState handleRoundPlayedRequestState;
     ServerState handleSurrenderRequestState;
 
-    public ClientConnection(Socket socket) {
+    public ClientConnection(Socket socket, GameInstanceManager gameInstanceManager) {
         database = new Database();
         this.socket = socket;
-        handleListeningRequestState = new ListeningRequestHandlingState(this);
-        handleNewGameRequestState = new NewGameRequestHandlingState(this);
-        handleRoundPlayedRequestState = new RoundPlayedRequestHandlingState(this);
-        handleSurrenderRequestState = new SurrenderRequestHandlingState(this);
+        clientID = clientIDIncrementor++;
+        this.gameInstanceManager = gameInstanceManager;
+        handleListeningRequestState = new ListeningRequestHandlingState(this, this.gameInstanceManager);
+        handleNewGameRequestState = new NewGameRequestHandlingState(this, this.gameInstanceManager);
+        handleRoundPlayedRequestState = new RoundPlayedRequestHandlingState(this, this.gameInstanceManager);
+        handleSurrenderRequestState = new SurrenderRequestHandlingState(this, this.gameInstanceManager);
     }
 
     public void processRequest() {
@@ -62,20 +68,12 @@ public class ClientConnection implements Runnable {
                 default -> throw new UnsupportedOperationException("Unknown request!");
             }
 
-//            out.writeObject(new Response(null, "You are connected."));
-//
-//            Request fromClient;
-//
-//            while ((fromClient = (Request) in.readObject()) != null) {
-//                if (fromClient.quizQuestion == null)
-//                    out.writeObject(new Response(database.quizQuestions.getFirst(), null));
-//            }
 
 
         } catch (IOException e ) {
-            System.out.println("IO ex");
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            System.out.println("Classcast ex");
+            e.printStackTrace();
         }
     }
 
@@ -83,5 +81,13 @@ public class ClientConnection implements Runnable {
     @Override
     public void run() {
         processRequest();
+    }
+
+    public void setClientID(long clientID) {
+        this.clientID = clientID;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

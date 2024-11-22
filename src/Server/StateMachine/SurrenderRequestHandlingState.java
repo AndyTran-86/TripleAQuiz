@@ -5,14 +5,17 @@ import Requests.SurrenderRequest;
 import Responses.DefeatResponse;
 import Responses.DefeatType;
 import Server.ClientConnection;
+import Server.GameInstanceManager;
 
 import java.io.IOException;
 
 public class SurrenderRequestHandlingState implements ServerState {
     ClientConnection connection;
+    GameInstanceManager gameInstanceManager;
 
-    public SurrenderRequestHandlingState(ClientConnection connection) {
+    public SurrenderRequestHandlingState(ClientConnection connection, GameInstanceManager gameInstanceManager) {
         this.connection = connection;
+        this.gameInstanceManager = gameInstanceManager;
     }
 
     @Override

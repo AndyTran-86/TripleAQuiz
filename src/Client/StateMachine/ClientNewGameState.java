@@ -2,18 +2,18 @@ package Client.StateMachine;
 
 import Client.ClientGUI;
 import Client.Client;
-import Responses.ListeningResponse;
+import Responses.NewGameResponse;
 import Responses.PlayerJoinedResponse;
 import Responses.Response;
 
 import javax.swing.*;
 import java.io.IOException;
 
-public class ClientLobbyState implements ClientState {
+public class ClientNewGameState  implements ClientState {
     Client client;
     ClientGUI gui;
 
-    public ClientLobbyState(Client client, ClientGUI gui) {
+    public ClientNewGameState(Client client, ClientGUI gui) {
         this.client = client;
         this.gui = gui;
     }
@@ -21,11 +21,11 @@ public class ClientLobbyState implements ClientState {
 
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
-        if (response instanceof ListeningResponse listeningResponse) {
-            long id = listeningResponse.getClientID();
-            client.setClientID(id);
-            //TODO handle question data here and integrate into client
-            JOptionPane.showMessageDialog(gui.frame, "Listening connection established with clientID: " + client.getClientID());
+        if (response instanceof NewGameResponse newGameResponse) {
+            switch (newGameResponse.getTurnToPlay()) {
+                case PLAYER_TURN -> JOptionPane.showMessageDialog(gui.frame, "New Game response received with THIS PLAYER TURN - in gameInstance: " + newGameResponse.getGameInstanceID());
+                case OTHER_PLAYER_TURN -> JOptionPane.showMessageDialog(gui.frame, "New Game response received with OTHER PLAYER TURN - in gameInstance: " + newGameResponse.getGameInstanceID());
+            }
         }
     }
 

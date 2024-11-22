@@ -2,6 +2,7 @@ package Client;
 
 import Client.StateMachine.*;
 import Requests.ListeningRequest;
+import Requests.StartNewGameRequest;
 import Responses.*;
 
 import javax.swing.*;
@@ -19,9 +20,11 @@ public class Client implements Runnable {
     int port;
     InetAddress ip;
     String username;
+    long clientID;
 
     ClientState state;
     ClientState lobbyState;
+    ClientState newGameState;
     ClientState playerTurnState;
     ClientState otherPlayerTurnState;
     ClientState victoryState;
@@ -38,6 +41,7 @@ public class Client implements Runnable {
 
         lobbyState = new ClientLobbyState(this, gui);
         playerTurnState = new ClientPlayerTurnState(this, gui);
+        newGameState = new ClientNewGameState(this, gui);
         otherPlayerTurnState = new ClientOtherPlayerTurnState(this, gui);
         victoryState = new ClientVictoryState(this, gui);
         defeatState = new ClientDefeatState(this, gui);
@@ -46,63 +50,103 @@ public class Client implements Runnable {
     }
 
     private void connectToServer() {
-        try(Socket socket = new Socket(ip, port)) {
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
+        new Thread(() -> {
+            try(Socket socket = new Socket(ip, port)) {
+                out = new ObjectOutputStream(socket.getOutputStream());
+                in = new ObjectInputStream(socket.getInputStream());
 
 
-            out.writeObject(new ListeningRequest(username));
+                out.writeObject(new ListeningRequest(username));
 
-            Object unknownResponseFromServer;
+                Object unknownResponseFromServer;
 
-            while ((unknownResponseFromServer = in.readObject()) != null) {
-                switch (unknownResponseFromServer) {
-                    case ListeningResponse listeningResponse -> {
-                        state = lobbyState;
-                        state.handleResponse(listeningResponse);
-                        state.updateGUI();
+                while ((unknownResponseFromServer = in.readObject()) != null) {
+                    switch (unknownResponseFromServer) {
+                        case ListeningResponse listeningResponse -> {
+                            state = lobbyState;
+                            state.handleResponse(listeningResponse);
+                            state.updateGUI();
+                        }
+
+                        case NewGameResponse newGameResponse -> {
+                            state = newGameState;
+                            state.handleResponse(newGameResponse);
+
+                            switch (newGameResponse.getTurnToPlay()) {
+                                case PLAYER_TURN -> state = playerTurnState;
+                                case OTHER_PLAYER_TURN -> state = otherPlayerTurnState;
+                            }
+                            state.updateGUI();
+                        }
+
+                        case PlayerJoinedResponse playerJoinedResponse -> {
+                            state.handlePlayerJoined(playerJoinedResponse);
+                            // TODO find a way to update gui with username only - make playerturn state update gui by reading instance valuables, if opponent username != null. update it.
+                            state.updateGUI();
+                        }
+
+                        case RoundPlayedResponse roundPlayedResponse -> {
+                            switch (roundPlayedResponse.getTurnToPlay()) {
+                                case PLAYER_TURN -> state = playerTurnState;
+                                case OTHER_PLAYER_TURN -> state = otherPlayerTurnState;
+                            }
+                            state.handleResponse(roundPlayedResponse);
+                            state.updateGUI();
+                        }
+
+                        case VictoryResponse victoryResponse -> {
+                            state = victoryState;
+                            state.handleResponse(victoryResponse);
+                            state.updateGUI();
+                        }
+
+                        case DefeatResponse defeatResponse -> {
+                            state = defeatState;
+                            state.handleResponse(defeatResponse);
+                            state.updateGUI();
+                        }
+                        default -> JOptionPane.showMessageDialog(gui.frame, "Unknown response received");
                     }
 
-                    case NewGameResponse newGameResponse -> {
-                        state = newGameResponse.getTurnToPlay() == RoundTurn.PLAYER_TURN ? playerTurnState
-                                                                                         : otherPlayerTurnState;
-                        state.handleResponse(newGameResponse);
-                        state.updateGUI();
-                    }
 
-                    case RoundPlayedResponse roundPlayedResponse -> {
-                        state = roundPlayedResponse.getTurnToPlay() == RoundTurn.PLAYER_TURN ? playerTurnState
-                                                                                             : otherPlayerTurnState;
-                        state.handleResponse(roundPlayedResponse);
-                        state.updateGUI();
-                    }
-
-                    case VictoryResponse victoryResponse -> {
-                        state = victoryState;
-                        state.handleResponse(victoryResponse);
-                        state.updateGUI();
-                    }
-
-                    case DefeatResponse defeatResponse -> {
-                        state = defeatState;
-                        state.handleResponse(defeatResponse);
-                        state.updateGUI();
-                    }
-                    default -> JOptionPane.showMessageDialog(gui.frame, "Unknown response received");
                 }
-
-
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        }).start();
+
     }
 
     @Override
     public void run() {
          gui.init();
          connectToServer();
+         addEventListeners();
+    }
+
+    public void addEventListeners() {
+        gui.getLobbyStartNewGameButton().addActionListener(event -> {
+            System.out.println("pressed start new game button");
+            try (Socket socket = new Socket(ip, port);
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+
+                out.writeObject(new StartNewGameRequest(clientID));
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+
+
+
+        });
+    }
+
+    public long getClientID() {
+        return clientID;
+    }
+
+    public void setClientID(long clientID) {
+        this.clientID = clientID;
     }
 }
