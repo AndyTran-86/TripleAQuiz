@@ -8,7 +8,6 @@ public class Main {
     static void startNewClient() {
         Client client = new Client(5555, "testUsername");
         new Thread(client).start();
-/*
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -34,7 +33,7 @@ public class Main {
         }
 
         Client client4 = new Client(5555, "testUsername2");
-        new Thread(client4).start();*/
+        new Thread(client4).start();
 
     }
 

@@ -1,12 +1,15 @@
 package Client.GUI;
 
+import Server.QuizDatabase.QuestionsByCategory;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class CategorySelectionBoard {
     JFrame frame;
 
-    JPanel categoryMainPanel;
+    private JPanel categoryMainPanel;
     JPanel headerPanel;
     JPanel middlePanel;
     JPanel bottomPanel;
@@ -58,16 +61,15 @@ public class CategorySelectionBoard {
         homeIconLabel = new JLabel(new ImageIcon("icons/lobby/home.png"));
         friendIconLabel = new JLabel(new ImageIcon("icons/lobby/friends.png"));
 
-
     }
 
 
 
         public void CategorySelectionBoardinit(){
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        /*frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(600,1000);
         frame.setLayout(new BorderLayout());
-        frame.setLocationRelativeTo(null);
+        frame.setLocationRelativeTo(null);*/
 
         categoryMainPanel = new JPanel(new BorderLayout());
 
@@ -103,16 +105,30 @@ public class CategorySelectionBoard {
         categoryMainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
 
-        frame.add(categoryMainPanel);
-        frame.setVisible(true);
-
-
+        //frame.add(categoryMainPanel);
+        //frame.setVisible(true);
         }
+
+        public JPanel getCategoryMainPanel() {
+            return categoryMainPanel;
+        }
+
+    public void setCategorySelectionboard(List<QuestionsByCategory> questionsByCategories) {
+        for (int i = 0; i < categoryButtons.length; i++) {
+            categoryButtons[i].setText(questionsByCategories.get(i).results().getFirst().category());
+        }
+    }
+
+
+
+
+
+        /*
         public static void main(String[] args) {
         SwingUtilities.invokeLater(() ->{
             CategorySelectionBoard selectionBoard = new CategorySelectionBoard();
             selectionBoard.CategorySelectionBoardinit();
         });
 
-    }
+    }*/
 }
