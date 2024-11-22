@@ -1,9 +1,10 @@
 package Server.QuizDatabase;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public final class Question {
+public final class Question implements Serializable {
     private String type;
     private String difficulty;
     private String category;

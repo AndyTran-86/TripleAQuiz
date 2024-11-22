@@ -11,10 +11,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class Api_Client implements Runnable {
-    private Random rand;
+public class Api_Client {
+    private StringBuilder addedCategories;
     private List<QuestionsByCategory> all_questions;
     private final String categories_url = "https://opentdb.com/api_category.php";
     private final String url_a = "https://opentdb.com/api.php?amount=50&category=";
@@ -23,11 +22,16 @@ public class Api_Client implements Runnable {
     private final HttpClient client;
     private final Gson gson;
 
+
     public Api_Client() {
         this.client = HttpClient.newHttpClient();
         this.gson = new Gson();
         this.all_questions = new ArrayList<>();
-        this.rand = new Random();
+        this.addedCategories = new StringBuilder();
+    }
+
+    public List<QuestionsByCategory> getAll_questions() {
+        return all_questions;
     }
 
     public All_Categories getAllCategories() throws IOException, InterruptedException {
@@ -94,9 +98,23 @@ public class Api_Client implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        getNewCategories();
+    public List<QuestionsByCategory> deSerializeAllQuestions() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/Server/QuizDatabase/questions.ser"))) {
+            return (List<QuestionsByCategory>) in.readObject();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void serializeAllQuestions() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/Server/QuizDatabase/questions.ser"))) {
+            out.writeObject(all_questions);
+            out.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void serializeValidCategories(List<Category> validCategories) {
@@ -109,14 +127,12 @@ public class Api_Client implements Runnable {
         }
     }
 
-    private void getNewCategories() {
+    public List<QuestionsByCategory> getNewCategories(int amountNewCategories) {
         try {
             int sleep = 6500;
             int counter = 0;
 
-            StringBuilder addedCategories = new StringBuilder();
-
-            while (counter < 9) {
+            while (counter < amountNewCategories) {
                 QuestionsByCategory category = getQuestionByCategory();
                 if (!addedCategories.toString().contains(category.results().getFirst().category())) {
                     all_questions.add(category);
@@ -132,6 +148,9 @@ public class Api_Client implements Runnable {
                 }
             }
             decodeHtmlFromAllQuestions(all_questions);
+            serializeAllQuestions();
+            System.out.println("All questions saved.");
+            return (all_questions);
 
         } catch (Exception e) {
             throw new RuntimeException(e);

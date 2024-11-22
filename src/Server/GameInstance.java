@@ -1,6 +1,9 @@
 package Server;
 
 import Responses.PlayerJoinedResponse;
+import Server.QuizDatabase.Api_Client;
+import Server.QuizDatabase.Question;
+import Server.QuizDatabase.QuestionsByCategory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,10 +13,12 @@ public class GameInstance {
     private static long gameInstanceIDIncrementor = 1;
     private final long gameInstanceID;
     private final List<ClientConnection> players;
+    private boolean categoriesReady;
 
     public GameInstance() {
         this.gameInstanceID = gameInstanceIDIncrementor++;
         this.players = new ArrayList<>();
+        categoriesReady = false;;
     }
 
     public long getGameInstanceID() {
@@ -38,4 +43,11 @@ public class GameInstance {
         }
     }
 
+    public void setCategoriesReady() {
+        this.categoriesReady = true;
+    }
+
+    public boolean categoriesReady() {
+        return categoriesReady;
+    }
 }

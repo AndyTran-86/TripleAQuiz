@@ -1,9 +1,13 @@
 package Client;
 
+import Client.GUI.CategorySelectionBoard;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class ClientGUI {
+    private CategorySelectionBoard categorySelectionBoard;
+
     public JFrame frame;
     JPanel lobbyMainPanel;
     JPanel lobbyTopHeaderPanel;
@@ -26,6 +30,7 @@ public class ClientGUI {
         lobbyBottomPanel = new JPanel();
         lobbyBottomHomeIcon = new JLabel(new ImageIcon("icons/lobby/home.png"));
         lobbyBottomFriendsIcon = new JLabel(new ImageIcon("icons/lobby/friends.png"));
+        categorySelectionBoard = new CategorySelectionBoard();
 
     }
     public void init() {
@@ -83,9 +88,25 @@ public class ClientGUI {
         lobbyBottomPanel.add(new JLabel());
         lobbyBottomPanel.add(new JLabel());
         lobbyBottomPanel.add(new JLabel("                  Friends"));
+
+        categorySelectionBoard.CategorySelectionBoardinit();
+    }
+
+    public CategorySelectionBoard getCategorySelectionBoard() {
+        return categorySelectionBoard;
     }
 
     public JButton getLobbyStartNewGameButton() {
         return lobbyStartNewGameButton;
+    }
+
+    public void setMainPanel(JPanel categoryMainPanel) {
+        lobbyMainPanel.removeAll();
+        lobbyMainPanel.add(categoryMainPanel);
+    }
+
+    public void updateGUI() {
+        frame.repaint();
+        frame.revalidate();
     }
 }

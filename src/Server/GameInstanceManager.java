@@ -1,6 +1,6 @@
 package Server;
 
-import Client.Client;
+import Server.QuizDatabase.QuestionsByCategory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,20 +12,20 @@ public class GameInstanceManager {
     protected Map<Long, GameInstance> gameInstancesMapByID;
     GameInstance currentOpenGameInstance;
     boolean gameInstanceOpenForNewPlayer;
+    private List<QuestionsByCategory> allQuestions;
 
-    public GameInstanceManager() {
+    public GameInstanceManager(List<QuestionsByCategory> allQuestions) {
         clientsInLobbyByID = new HashMap<>();
         questionsByCategory = new HashMap<>();
         gameInstancesMapByID = new HashMap<>();
+        this.allQuestions = allQuestions;
         gameInstanceOpenForNewPlayer = false;
     }
-
 
 
     public GameInstance getCurrentOpenGameInstance() {
         return currentOpenGameInstance;
     }
-
 
     public void startNewGameInstance() {
         currentOpenGameInstance = new GameInstance();
@@ -38,7 +38,6 @@ public class GameInstanceManager {
         if (currentOpenGameInstance.isFull()) {
             gameInstanceOpenForNewPlayer = false;
         }
-
     }
 
     public void terminateGameInstance(long gameInstanceID) {
@@ -66,5 +65,9 @@ public class GameInstanceManager {
 
     public boolean gameInstanceOpenForNewPlayer() {
         return gameInstanceOpenForNewPlayer;
+    }
+
+    public List<QuestionsByCategory> getAllQuestions() {
+        return allQuestions;
     }
 }

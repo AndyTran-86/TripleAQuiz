@@ -4,6 +4,7 @@ import Client.StateMachine.*;
 import Requests.ListeningRequest;
 import Requests.StartNewGameRequest;
 import Responses.*;
+import Server.QuizDatabase.QuestionsByCategory;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -11,8 +12,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.List;
 
 public class Client implements Runnable {
+    ClientQuestionData clientQuestionData;
+    List<QuestionsByCategory> all_questions;
 
     ObjectOutputStream out;
     ObjectInputStream in;
@@ -133,6 +137,7 @@ public class Client implements Runnable {
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
 
                 out.writeObject(new StartNewGameRequest(clientID));
+                System.out.println("sent new game request."); //för testsyfte.
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
