@@ -1,6 +1,9 @@
 package Server;
 
 import Responses.PlayerJoinedResponse;
+import Server.QuizDatabase.Api_Client;
+import Server.QuizDatabase.Question;
+import Server.QuizDatabase.QuestionsByCategory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,14 +13,26 @@ public class GameInstance {
     private static long gameInstanceIDIncrementor = 1;
     private final long gameInstanceID;
     private final List<ClientConnection> players;
+    private Api_Client apiClient;
+    private boolean categoriesReady;
 
     public GameInstance() {
         this.gameInstanceID = gameInstanceIDIncrementor++;
         this.players = new ArrayList<>();
+        categoriesReady = false;
+        apiClient = new Api_Client(this);
+    }
+
+    public void startApiRequest() {
+        new Thread(apiClient).start();
     }
 
     public long getGameInstanceID() {
         return gameInstanceID;
+    }
+
+    public List<QuestionsByCategory> getQuestions() {
+        return apiClient.getAll_questions();
     }
 
     public void addPlayer(ClientConnection clientConnection) {
@@ -38,4 +53,11 @@ public class GameInstance {
         }
     }
 
+    public void setCategoriesReady() {
+        this.categoriesReady = true;
+    }
+
+    public boolean categoriesReady() {
+        return categoriesReady;
+    }
 }

@@ -1,5 +1,6 @@
 package Server.QuizDatabase;
 
+import Server.GameInstance;
 import com.google.gson.Gson;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -11,10 +12,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Api_Client implements Runnable {
-    private Random rand;
+    private StringBuilder addedCategories;
     private List<QuestionsByCategory> all_questions;
     private final String categories_url = "https://opentdb.com/api_category.php";
     private final String url_a = "https://opentdb.com/api.php?amount=50&category=";
@@ -22,12 +22,22 @@ public class Api_Client implements Runnable {
     private final String url_any50category = "https://opentdb.com/api.php?amount=50&type=multiple";
     private final HttpClient client;
     private final Gson gson;
+    private GameInstance gameInstance;
 
-    public Api_Client() {
+    public Api_Client(GameInstance gameInstance) {
         this.client = HttpClient.newHttpClient();
         this.gson = new Gson();
         this.all_questions = new ArrayList<>();
-        this.rand = new Random();
+        this.addedCategories = new StringBuilder();
+        this.gameInstance = gameInstance;
+    }
+
+    public List<QuestionsByCategory> getAll_questions() {
+        return all_questions;
+    }
+
+    public void notifyCategoriesReady() {
+        gameInstance.setCategoriesReady();
     }
 
     public All_Categories getAllCategories() throws IOException, InterruptedException {
@@ -96,7 +106,10 @@ public class Api_Client implements Runnable {
 
     @Override
     public void run() {
-        getNewCategories();
+        getNewCategories(3);
+        notifyCategoriesReady();
+        System.out.println("notified first categories ready");
+        getNewCategories(5);
     }
 
     private void serializeValidCategories(List<Category> validCategories) {
@@ -109,14 +122,12 @@ public class Api_Client implements Runnable {
         }
     }
 
-    private void getNewCategories() {
+    private void getNewCategories(int amountNewCategories) {
         try {
             int sleep = 6500;
             int counter = 0;
 
-            StringBuilder addedCategories = new StringBuilder();
-
-            while (counter < 9) {
+            while (counter < amountNewCategories) {
                 QuestionsByCategory category = getQuestionByCategory();
                 if (!addedCategories.toString().contains(category.results().getFirst().category())) {
                     all_questions.add(category);

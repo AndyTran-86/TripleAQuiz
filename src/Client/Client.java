@@ -133,6 +133,7 @@ public class Client implements Runnable {
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
 
                 out.writeObject(new StartNewGameRequest(clientID));
+                System.out.println("sent new game request."); //för testsyfte.
             } catch (IOException exception) {
                 exception.printStackTrace();
             }

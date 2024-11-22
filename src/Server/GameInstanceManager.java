@@ -1,6 +1,6 @@
 package Server;
 
-import Client.Client;
+import Server.QuizDatabase.QuestionsByCategory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +29,7 @@ public class GameInstanceManager {
 
     public void startNewGameInstance() {
         currentOpenGameInstance = new GameInstance();
+        currentOpenGameInstance.startApiRequest();
         gameInstancesMapByID.put(currentOpenGameInstance.getGameInstanceID(), currentOpenGameInstance);
         gameInstanceOpenForNewPlayer = true;
     }
@@ -38,6 +39,7 @@ public class GameInstanceManager {
         if (currentOpenGameInstance.isFull()) {
             gameInstanceOpenForNewPlayer = false;
         }
+
 
     }
 
@@ -66,5 +68,13 @@ public class GameInstanceManager {
 
     public boolean gameInstanceOpenForNewPlayer() {
         return gameInstanceOpenForNewPlayer;
+    }
+
+    public boolean categoriesReady() {
+        return currentOpenGameInstance.categoriesReady();
+    }
+
+    public List<QuestionsByCategory> getQuestions() {
+        return currentOpenGameInstance.getQuestions();
     }
 }
