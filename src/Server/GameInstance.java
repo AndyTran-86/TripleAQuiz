@@ -1,9 +1,7 @@
 package Server;
 
 import Client.Client;
-import Responses.PlayerJoinedResponse;
-import Responses.RoundPlayedResponse;
-import Responses.RoundTurn;
+import Responses.*;
 import Server.QuizDatabase.Api_Client;
 import Server.QuizDatabase.Question;
 import Server.QuizDatabase.QuestionsByCategory;
@@ -46,21 +44,8 @@ public class GameInstance {
         return players.size() > 1;
     }
 
-    public boolean isFirstPlayer() {
-        return players.size() == 1;
-    }
-
     public void notifyPlayerJoined(String playerName) throws IOException {
-        for (ClientConnection player : players.keySet()) {
-            player.out.writeObject(new PlayerJoinedResponse(playerName));
-        }
-    }
-
-    public void handleRoundPlayedBy(long clientID, Map<String, Integer> roundResult) throws IOException {
-
-        callingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.OTHER_PLAYER_TURN, roundResult));
-        nonCallingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.PLAYER_TURN, roundResult));
-
+        nonCallingPlayer.out.writeObject(new PlayerJoinedResponse(playerName));
     }
 
     public void findCallingPlayer(long clientID) {
@@ -73,7 +58,11 @@ public class GameInstance {
         }
     }
 
-    public void addScoreToGame(Map<String, Integer> roundResult) {
+    public void addRoundToCounter() {
+        currentRoundPerPlayer++;
+    }
+
+    public void updateGameScore(Map<String, Integer> roundResult) {
         String category = roundResult.keySet().iterator().next();
         int scoreThisRound = roundResult.get(category);
         int totalScoreBeforeRound = players.get(callingPlayer);
@@ -85,13 +74,28 @@ public class GameInstance {
         return (currentRoundPerPlayer%2) == maxRounds;
     }
 
-
-    public void decideWinnerAndLoser() {
-
+    public void notifyRoundPlayed(Map<String, Integer> roundResult) throws IOException {
+        callingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.OTHER_PLAYER_TURN, roundResult));
+        nonCallingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.PLAYER_TURN, roundResult));
     }
 
-    public void addRoundToCounter() {
-        currentRoundPerPlayer++;
+
+    public void notifyGameOverResult() throws IOException {
+        if (!finalRoundPlayed()) {
+            throw new IllegalCallerException("Final round has not been played yet");
+        }
+
+        if (players.get(callingPlayer) > players.get(nonCallingPlayer)) {
+            callingPlayer.out.writeObject(new VictoryResponse(VictoryType.WIN));
+            nonCallingPlayer.out.writeObject(new DefeatResponse(DefeatType.LOSS));
+        }
+        else if (players.get(callingPlayer) < players.get(nonCallingPlayer)) {
+            callingPlayer.out.writeObject(new DefeatResponse(DefeatType.LOSS));
+            nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.WIN));
+        } else {
+            callingPlayer.out.writeObject(new VictoryResponse(VictoryType.DRAW));
+            nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.DRAW));
+        }
     }
 
     public void setCategoriesReady() {
