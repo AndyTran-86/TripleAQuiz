@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Api_Client {
     private StringBuilder addedCategories;
-    private List<QuestionsByCategory> all_questions;
+    private List<Category> all_categories;
     private final String categories_url = "https://opentdb.com/api_category.php";
     private final String url_a = "https://opentdb.com/api.php?amount=50&category=";
     private final String url_b = "&type=multiple";
@@ -26,12 +26,12 @@ public class Api_Client {
     public Api_Client() {
         this.client = HttpClient.newHttpClient();
         this.gson = new Gson();
-        this.all_questions = new ArrayList<>();
+        this.all_categories = new ArrayList<>();
         this.addedCategories = new StringBuilder();
     }
 
-    public List<QuestionsByCategory> getAll_questions() {
-        return all_questions;
+    public List<Category> getAll_questions() {
+        return all_categories;
     }
 
     public All_Categories getAllCategories() throws IOException, InterruptedException {
@@ -79,10 +79,9 @@ public class Api_Client {
         return s;
     }
 
-    public void decodeHtmlFromAllQuestions(List<QuestionsByCategory> allQuestions) {
-        for (QuestionsByCategory category : allQuestions) {
-            if (category.results() != null) {
-                for (Question q : category.results()) {
+    public void decodeHtmlFromAllQuestions(List<Category> allQuestions) {
+        for (Category c : allQuestions) {
+                for (Question q : c.questions()) {
                     q.setCategory(decodeHtmlFromString(q.category()));
                     q.setType(decodeHtmlFromString(q.type()));
                     q.setDifficulty(decodeHtmlFromString(q.difficulty()));
@@ -95,12 +94,11 @@ public class Api_Client {
                     q.setIncorrect_answers(decodedIncorrect);
                 }
             }
-        }
     }
 
-    public List<QuestionsByCategory> deSerializeAllQuestions() {
+    public List<Category> deSerializeAllQuestions() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/Server/QuizDatabase/questions.ser"))) {
-            return (List<QuestionsByCategory>) in.readObject();
+            return (List<Category>) in.readObject();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
@@ -110,7 +108,7 @@ public class Api_Client {
 
     private void serializeAllQuestions() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/Server/QuizDatabase/questions.ser"))) {
-            out.writeObject(all_questions);
+            out.writeObject(all_categories);
             out.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -127,34 +125,42 @@ public class Api_Client {
         }
     }
 
-    public List<QuestionsByCategory> getNewCategories(int amountNewCategories) {
+    public List<Category> getNewCategories(int amountNewCategories) {
         try {
             int sleep = 6500;
             int counter = 0;
 
             while (counter < amountNewCategories) {
-                QuestionsByCategory category = getQuestionByCategory();
-                if (!addedCategories.toString().contains(category.results().getFirst().category())) {
-                    all_questions.add(category);
-                    System.out.println("Added category: " + category.results().getFirst().category());
+                QuestionsByCategory c = getQuestionByCategory();
+                if (!addedCategories.toString().contains(c.results().getFirst().category())) {
+                    Category category = convertToCategoryObject(c);
+                    all_categories.add(category);
+                    System.out.println("Added category: " + category.name());
                     Thread.sleep(sleep);
                     System.out.println("Slept: " + sleep + " ms");
                     counter++;
-                    addedCategories.append(category.results().getFirst().category());
+                    addedCategories.append(category.name());
                 } else {
                     System.out.println("Category already in database");
                     Thread.sleep(sleep);
                     System.out.println("Slept: " + sleep + " ms");
                 }
             }
-            decodeHtmlFromAllQuestions(all_questions);
+            decodeHtmlFromAllQuestions(all_categories);
             serializeAllQuestions();
             System.out.println("All questions saved.");
-            return (all_questions);
+            return (all_categories);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Category convertToCategoryObject(QuestionsByCategory original) {
+        List<Question> questions = new ArrayList<>();
+        String name = original.results().getFirst().category();
+        questions.addAll(original.results());
+        return new Category(name, questions);
     }
 
     private List<Category> deSerializeValidCategories() {
