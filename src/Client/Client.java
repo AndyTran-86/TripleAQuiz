@@ -5,7 +5,6 @@ import Requests.ListeningRequest;
 import Requests.StartNewGameRequest;
 import Responses.*;
 import Server.QuizDatabase.Category;
-import Server.QuizDatabase.QuestionsByCategory;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -17,6 +16,7 @@ import java.util.List;
 
 public class Client implements Runnable {
     ClientQuestionData questionData;
+    private int questionsPlayed;
 
     ObjectOutputStream out;
     ObjectInputStream in;
@@ -40,6 +40,7 @@ public class Client implements Runnable {
         this.questionData = new ClientQuestionData();
         this.port = port;
         this.username = username;
+        this.questionsPlayed = 0;
 
         ip = InetAddress.getLoopbackAddress();
         gui = new ClientGUI();
@@ -146,6 +147,19 @@ public class Client implements Runnable {
 
         });
     }
+
+    public int getQuestionsPlayed() {
+        return questionsPlayed;
+    }
+
+    public void resetQuestionsPlayed() {
+        questionsPlayed = 0;
+    }
+
+    public boolean checkAnswer(String answer) {
+        return questionData.checkAnswer(answer, ++questionsPlayed);
+    }
+
 
 
     public long getClientID() {
