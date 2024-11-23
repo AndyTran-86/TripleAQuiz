@@ -43,10 +43,10 @@ public class GameInstanceManager {
 
     public void terminateGameInstance(long gameInstanceID) {
         GameInstance instanceToTerminate = gameInstancesMapByID.get(gameInstanceID);
-        for (ClientConnection players : clientsInLobbyByID.values()) {
-            // TODO add to lobby with id as key then null the object and remove from the map
+        for (ClientConnection player : instanceToTerminate.getPlayers().keySet()) {
+            putPlayerInLobby(player);
         }
-
+        gameInstancesMapByID.remove(gameInstanceID);
     }
 
     public void putPlayerInLobby(ClientConnection clientConnectionToJoin) {

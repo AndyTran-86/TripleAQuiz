@@ -20,7 +20,7 @@ public class GameInstance {
     private boolean categoriesReady;
     private ClientConnection callingPlayer;
     private ClientConnection nonCallingPlayer;
-    private int maxRounds;
+    private final int maxRounds;
     private int currentRoundPerPlayer;
 
     public GameInstance(GameInstanceManager gameInstanceManager) {
@@ -69,6 +69,9 @@ public class GameInstance {
         players.replace(callingPlayer, totalScoreBeforeRound, totalScoreBeforeRound+scoreThisRound);
     }
 
+    public Map<ClientConnection, Integer> getPlayers() {
+        return players;
+    }
 
     public boolean finalRoundPlayed() {
         return (currentRoundPerPlayer%2) == maxRounds;
@@ -97,6 +100,13 @@ public class GameInstance {
             nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.DRAW));
         }
     }
+
+    public void notifySurrender() throws IOException {
+        callingPlayer.out.writeObject(new DefeatResponse(DefeatType.SURRENDER));
+        nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.SURRENDER));
+    }
+
+
 
     public void setCategoriesReady() {
         this.categoriesReady = true;

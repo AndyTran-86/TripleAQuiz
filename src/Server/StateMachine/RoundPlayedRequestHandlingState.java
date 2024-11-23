@@ -24,17 +24,17 @@ public class RoundPlayedRequestHandlingState implements ServerState {
     public void handleRequest(Request request) throws IOException, ClassNotFoundException {
         if (request instanceof RoundPlayedRequest roundPlayedRequest) {
             GameInstance gameInstance = gameInstanceManager.getGameInstanceByID(roundPlayedRequest.getGameInstanceID());
+
             gameInstance.findCallingPlayer(roundPlayedRequest.getClientID());
             gameInstance.addRoundToCounter();
             gameInstance.updateGameScore(roundPlayedRequest.getResult());
 
             if (gameInstance.finalRoundPlayed()) {
                 gameInstance.notifyGameOverResult();
+                gameInstanceManager.terminateGameInstance(gameInstance.getGameInstanceID());
             } else {
                 gameInstance.notifyRoundPlayed(roundPlayedRequest.getResult());
             }
         }
-
-        connection.out.writeObject(new RoundPlayedResponse(RoundTurn.OTHER_PLAYER_TURN, Map.of("Category2", 3)));
     }
 }

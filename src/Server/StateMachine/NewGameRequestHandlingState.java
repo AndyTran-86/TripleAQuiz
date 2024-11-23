@@ -27,23 +27,20 @@ public class NewGameRequestHandlingState implements ServerState {
             ClientConnection playerJoining = gameInstanceManager.takePlayerFromLobby(clientID);
 
             if (gameInstanceManager.gameInstanceOpenForNewPlayer()) {
-                long gameInstanceID = gameInstanceManager.getCurrentOpenGameInstance().getGameInstanceID();
 
-                GameInstance gameInstance = gameInstanceManager.getGameInstanceByID(gameInstanceID);
+                GameInstance gameInstance = gameInstanceManager.getCurrentOpenGameInstance();
                 gameInstance.findCallingPlayer(clientID);
                 gameInstance.notifyPlayerJoined(playerJoining.username);
                 gameInstanceManager.putPlayerInOpenGameInstance(playerJoining);
-                playerJoining.out.writeObject(new NewGameResponse(gameInstanceID, RoundTurn.OTHER_PLAYER_TURN, gameInstanceManager.getAllCategories()));
+                playerJoining.out.writeObject(new NewGameResponse(gameInstance.getGameInstanceID(), RoundTurn.OTHER_PLAYER_TURN, gameInstanceManager.getAllCategories()));
+
             } else {
+
                 gameInstanceManager.startNewGameInstance();
-                long gameInstanceID = gameInstanceManager.getCurrentOpenGameInstance().getGameInstanceID();
                 gameInstanceManager.putPlayerInOpenGameInstance(playerJoining);
+                long gameInstanceID = gameInstanceManager.getCurrentOpenGameInstance().getGameInstanceID();
                 playerJoining.out.writeObject(new NewGameResponse(gameInstanceID, RoundTurn.PLAYER_TURN, gameInstanceManager.getAllCategories()));
             }
         }
-        //TODO get actual gameinstanceID and turnToPlay and put here once its available
-
-
-
     }
 }
