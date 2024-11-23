@@ -28,7 +28,7 @@ public class GameInstanceManager {
     }
 
     public void startNewGameInstance() {
-        currentOpenGameInstance = new GameInstance();
+        currentOpenGameInstance = new GameInstance(this);
         gameInstancesMapByID.put(currentOpenGameInstance.getGameInstanceID(), currentOpenGameInstance);
         gameInstanceOpenForNewPlayer = true;
     }
