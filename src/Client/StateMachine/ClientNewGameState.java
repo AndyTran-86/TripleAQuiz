@@ -2,15 +2,12 @@ package Client.StateMachine;
 
 import Client.ClientGUI;
 import Client.Client;
-import Client.GUI.CategorySelectionBoard;
 import Responses.NewGameResponse;
 import Responses.PlayerJoinedResponse;
 import Responses.Response;
-import Server.QuizDatabase.QuestionsByCategory;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.util.List;
 
 public class ClientNewGameState  implements ClientState {
     Client client;
@@ -27,8 +24,9 @@ public class ClientNewGameState  implements ClientState {
         if (response instanceof NewGameResponse newGameResponse) {
             switch (newGameResponse.getTurnToPlay()) {
                 case PLAYER_TURN -> {
-                    List<QuestionsByCategory> categories = newGameResponse.getQuestionsToClient();
-                    gui.getCategorySelectionBoard().setCategorySelectionboard(pickRandomCategories(categories));
+                    client.setAllCategories(newGameResponse.getCategoriesToClient());
+                    //Lite arbete att utföra - Anton
+                    //gui.getCategorySelectionBoard().setCategorySelectionboard(pickRandomCategories(categories));
                     gui.setMainPanel(gui.getCategorySelectionBoard().getCategoryMainPanel());
                     updateGUI();
                 }

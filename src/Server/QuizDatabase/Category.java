@@ -1,6 +1,7 @@
 package Server.QuizDatabase;
 
 import java.io.Serializable;
+import java.util.List;
 
-public record Category(Integer id, String name) implements Serializable {
+public record Category(String name, List<Question> questions) implements Serializable {
 }
