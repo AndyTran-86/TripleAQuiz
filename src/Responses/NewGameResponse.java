@@ -1,6 +1,6 @@
 package Responses;
 
-import Server.QuizDatabase.QuestionsByCategory;
+import Server.QuizDatabase.Category;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,16 +8,16 @@ import java.util.List;
 public class NewGameResponse extends Response implements Serializable {
     long gameInstanceID;
     RoundTurn turnToPlay;
-    private List<QuestionsByCategory> questionsToClient;
+    private List<Category> categoriesToClient;
 
-    public NewGameResponse(long gameInstanceID, RoundTurn turnToPlay, List<QuestionsByCategory> questionsToClient) {
+    public NewGameResponse(long gameInstanceID, RoundTurn turnToPlay, List<Category> questionsToClient) {
         this.gameInstanceID = gameInstanceID;
-        this.questionsToClient = questionsToClient;
+        this.categoriesToClient = questionsToClient;
         this.turnToPlay = turnToPlay;
     }
 
-    public List<QuestionsByCategory> getQuestionsToClient() {
-        return questionsToClient;
+    public List<Category> getCategoriesToClient() {
+        return categoriesToClient;
     }
 
     public long getGameInstanceID() {

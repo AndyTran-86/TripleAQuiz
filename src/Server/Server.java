@@ -1,6 +1,7 @@
 package Server;
 
 import Server.QuizDatabase.Api_Client;
+import Server.QuizDatabase.Category;
 import Server.QuizDatabase.QuestionsByCategory;
 
 import java.io.File;
@@ -14,7 +15,7 @@ public class Server implements Runnable{
     ServerSocket serverSocket;
     GameInstanceManager gameInstanceManager;
     Api_Client apiClient;
-    List<QuestionsByCategory> allQuestions;
+    List<Category> allCategories;
 
     public Server(int port) {
         this.port = port;
@@ -42,15 +43,15 @@ public class Server implements Runnable{
     private void getAllQuestions() {
         File temp = new File("src/Server/QuizDatabase/questions.ser");
         if (temp.exists()) {
-            allQuestions = apiClient.deSerializeAllQuestions();
+            allCategories = apiClient.deSerializeAllQuestions();
             System.out.println("Categories in database:");
-            for (QuestionsByCategory category : allQuestions) {
-                    System.out.println(category.results().getFirst().category());
+            for (Category category : allCategories) {
+                    System.out.println(category.name());
             }
         }
         else
-            allQuestions = apiClient.getNewCategories(8);
-        gameInstanceManager = new GameInstanceManager(allQuestions);
+            allCategories = apiClient.getNewCategories(8);
+        gameInstanceManager = new GameInstanceManager(allCategories);
     }
 
     @Override
