@@ -36,9 +36,5 @@
     </orderEntry>
     <orderEntry type="library" name="google.code.gson" level="project" />
     <orderEntry type="library" name="apache.commons.text" level="project" />
-    <orderEntry type="library" name="commons-text-1.12.0 (3)" level="project" />
-    <orderEntry type="library" name="error_prone_annotations-2.27.0 (2)" level="project" />
-    <orderEntry type="library" name="gson-2.11.0 (3)" level="project" />
-    <orderEntry type="library" name="commons-lang3-3.14.0 (3)" level="project" />
   </component>
 </module>
