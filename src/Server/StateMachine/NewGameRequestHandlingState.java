@@ -24,25 +24,23 @@ public class NewGameRequestHandlingState implements ServerState {
         if (request instanceof StartNewGameRequest startNewGameRequest) {
 
             long clientID = startNewGameRequest.getClientID();
-            ClientConnection clientInLobby = gameInstanceManager.takePlayerFromLobby(clientID);
+            ClientConnection playerJoining = gameInstanceManager.takePlayerFromLobby(clientID);
 
             if (gameInstanceManager.gameInstanceOpenForNewPlayer()) {
-                long gameInstanceID = gameInstanceManager.getCurrentOpenGameInstance().getGameInstanceID();
 
-                GameInstance gameInstance = gameInstanceManager.getGameInstanceByID(gameInstanceID);
-                gameInstance.notifyPlayerJoined(clientInLobby.username);
-                gameInstanceManager.putPlayerInOpenGameInstance(clientInLobby);
-                clientInLobby.out.writeObject(new NewGameResponse(gameInstanceID, RoundTurn.OTHER_PLAYER_TURN, gameInstanceManager.getAllCategories()));
+                GameInstance gameInstance = gameInstanceManager.getCurrentOpenGameInstance();
+                gameInstance.findCallingPlayer(clientID);
+                gameInstance.notifyPlayerJoined(playerJoining.username);
+                gameInstanceManager.putPlayerInOpenGameInstance(playerJoining);
+                playerJoining.out.writeObject(new NewGameResponse(gameInstance.getGameInstanceID(), RoundTurn.OTHER_PLAYER_TURN, gameInstanceManager.getAllCategories()));
+
             } else {
+
                 gameInstanceManager.startNewGameInstance();
+                gameInstanceManager.putPlayerInOpenGameInstance(playerJoining);
                 long gameInstanceID = gameInstanceManager.getCurrentOpenGameInstance().getGameInstanceID();
-                gameInstanceManager.putPlayerInOpenGameInstance(clientInLobby);
-                clientInLobby.out.writeObject(new NewGameResponse(gameInstanceID, RoundTurn.PLAYER_TURN, gameInstanceManager.getAllCategories()));
+                playerJoining.out.writeObject(new NewGameResponse(gameInstanceID, RoundTurn.PLAYER_TURN, gameInstanceManager.getAllCategories()));
             }
         }
-        //TODO get actual gameinstanceID and turnToPlay and put here once its available
-
-
-
     }
 }

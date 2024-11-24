@@ -1,9 +1,11 @@
 package Server.StateMachine;
 
 import Requests.Request;
+import Requests.RoundPlayedRequest;
 import Responses.RoundPlayedResponse;
 import Responses.RoundTurn;
 import Server.ClientConnection;
+import Server.GameInstance;
 import Server.GameInstanceManager;
 
 import java.io.IOException;
@@ -20,6 +22,19 @@ public class RoundPlayedRequestHandlingState implements ServerState {
 
     @Override
     public void handleRequest(Request request) throws IOException, ClassNotFoundException {
-        connection.out.writeObject(new RoundPlayedResponse(RoundTurn.OTHER_PLAYER_TURN, Map.of("Category2", 3)));
+        if (request instanceof RoundPlayedRequest roundPlayedRequest) {
+            GameInstance gameInstance = gameInstanceManager.getGameInstanceByID(roundPlayedRequest.getGameInstanceID());
+
+            gameInstance.findCallingPlayer(roundPlayedRequest.getClientID());
+            gameInstance.addRoundToCounter();
+            gameInstance.updateGameScore(roundPlayedRequest.getResult());
+
+            if (gameInstance.finalRoundPlayed()) {
+                gameInstance.notifyGameOverResult();
+                gameInstanceManager.terminateGameInstance(gameInstance.getGameInstanceID());
+            } else {
+                gameInstance.notifyRoundPlayed(roundPlayedRequest.getResult());
+            }
+        }
     }
 }
