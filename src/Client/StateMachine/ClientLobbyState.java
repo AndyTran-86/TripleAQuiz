@@ -1,6 +1,6 @@
 package Client.StateMachine;
 
-import Client.ClientGUI;
+
 import Client.Client;
 import Client.GUI.MainFrameGUI;
 import Responses.ListeningResponse;

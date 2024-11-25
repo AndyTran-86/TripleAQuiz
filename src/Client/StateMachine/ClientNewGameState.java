@@ -1,6 +1,6 @@
 package Client.StateMachine;
 
-import Client.ClientGUI;
+
 import Client.Client;
 import Responses.NewGameResponse;
 import Responses.PlayerJoinedResponse;
