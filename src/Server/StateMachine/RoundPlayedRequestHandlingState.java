@@ -33,7 +33,7 @@ public class RoundPlayedRequestHandlingState implements ServerState {
                 gameInstance.notifyGameOverResult();
                 gameInstanceManager.terminateGameInstance(gameInstance.getGameInstanceID());
             } else {
-                gameInstance.notifyRoundPlayed(roundPlayedRequest.getResult());
+                gameInstance.notifyRoundPlayed(roundPlayedRequest.getResult(), roundPlayedRequest.getSelectedCategory(), roundPlayedRequest.getAnsweredQuestions());
             }
         }
     }

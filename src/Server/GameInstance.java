@@ -3,6 +3,7 @@ package Server;
 import Client.Client;
 import Responses.*;
 import Server.QuizDatabase.Api_Client;
+import Server.QuizDatabase.Category;
 import Server.QuizDatabase.Question;
 import Server.QuizDatabase.QuestionsByCategory;
 
@@ -62,10 +63,9 @@ public class GameInstance {
         currentRoundPerPlayer++;
     }
 
-    public void updateGameScore(Map<String, Integer> roundResult) {
-        String category = roundResult.keySet().iterator().next();
-        int scoreThisRound = roundResult.get(category);
+    public void updateGameScore(List<Integer> result) {
         int totalScoreBeforeRound = players.get(callingPlayer);
+        int scoreThisRound = result.stream().reduce(0, Integer::sum);
         players.replace(callingPlayer, totalScoreBeforeRound, totalScoreBeforeRound+scoreThisRound);
     }
 
@@ -74,12 +74,12 @@ public class GameInstance {
     }
 
     public boolean finalRoundPlayed() {
-        return (currentRoundPerPlayer%2) == maxRounds;
+        return (currentRoundPerPlayer/2) == maxRounds;
     }
 
-    public void notifyRoundPlayed(Map<String, Integer> roundResult) throws IOException {
-        callingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.OTHER_PLAYER_TURN, roundResult));
-        nonCallingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.PLAYER_TURN, roundResult));
+    public void notifyRoundPlayed(List<Integer> result, Category selectedCategory, List<Question> answeredQuestions) throws IOException {
+        callingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.OTHER_PLAYER_TURN, result, selectedCategory, answeredQuestions));
+        nonCallingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.PLAYER_TURN, result, selectedCategory, answeredQuestions));
     }
 
 
