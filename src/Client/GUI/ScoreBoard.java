@@ -70,4 +70,13 @@ public class ScoreBoard {
             scoreboard.ScoreBoardinit();
         });
     }
-}
+
+
+    public JLabel getTurnLabel() {
+        return turnLabel;
+    }
+
+    public JButton getPlayButton() {
+        return playButton;
+    }
+}*/

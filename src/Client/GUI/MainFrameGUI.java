@@ -29,6 +29,11 @@ public class MainFrameGUI {
     CardLayout cardLayout;
 
 
+    //Cards
+    LobbyBoard lobbyBoard;
+    CategoryBoard categoryBoard;
+    QuizGameBoard quizGameBoard;
+    ScoreBoard scoreBoard;
 
 
 
@@ -107,24 +112,27 @@ public class MainFrameGUI {
 
 
         //LobbyBoard
-        LobbyBoard lobbyBoard = new LobbyBoard(cardLayout, midPanel);
+        lobbyBoard = new LobbyBoard(cardLayout, midPanel);
         addBoard(lobbyBoard.getBoard(), "Lobby");
 
         //WaitingBoard
+        //TODO: remove
         WaitingBoard waitingBoard = new WaitingBoard();
         addBoard(waitingBoard.getBoard(),"WaitingBoard");
 
         //CategoryBoard
-        CategoryBoard categoryBoard = new CategoryBoard();
+        categoryBoard = new CategoryBoard();
         addBoard(categoryBoard.getBoard(), "CategoryBoard");
 
         //
-        QuizGameBoard quizGameBoard = new QuizGameBoard();
+        quizGameBoard = new QuizGameBoard();
         addBoard(quizGameBoard.getBoard(),"QuizGameBoard");
 
 
+        scoreBoard = new ScoreBoard();
+        addBoard(scoreBoard.getBoard(),"ScoreBoard");
 
-        cardLayout.show(midPanel,"Lobby");
+//        cardLayout.show(midPanel,"Lobby");
 
         //cardLayout.show(midPanel, "WaitingBoard");
 
@@ -163,13 +171,45 @@ public class MainFrameGUI {
     }
 
 
+    public void setLobbyView() {
+        cardLayout.show(midPanel,"Lobby");
+    }
+
+    public void setScoreBoardView() {
+        cardLayout.show(midPanel, "ScoreBoard");
+    }
 
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() ->{
-            MainFrameGUI game = new MainFrameGUI();
-            game.init();
-        });
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() ->{
+//            MainFrameGUI game = new MainFrameGUI();
+//            game.init();
+//        });
+//    }
+
+    public JButton getLobbyStartGameButton() {
+        return lobbyBoard.getLobbyStartButton();
+    }
+
+    public String getInputUsername() {
+        return lobbyBoard.getInputUserName();
+    }
+
+
+    public void disablePlayButton() {
+        System.out.println("disable play button");
+    }
+
+    public void enablePlayButton() {
+        System.out.println("disable play button");
+    }
+
+    public void setPlayerTurn() {
+        System.out.println("player turn");
+    }
+
+    public void setOtherPlayerTurn() {
+        System.out.println("other player turn");
     }
 
 

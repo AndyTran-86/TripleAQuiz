@@ -45,8 +45,9 @@ public class GameInstance {
         return players.size() > 1;
     }
 
-    public void notifyPlayerJoined(String playerName) throws IOException {
-        nonCallingPlayer.out.writeObject(new PlayerJoinedResponse(playerName));
+    public void notifyPlayerJoined() throws IOException {
+        nonCallingPlayer.out.writeObject(new PlayerJoinedResponse(callingPlayer.username));
+        callingPlayer.out.writeObject(new PlayerJoinedResponse(nonCallingPlayer.username));
     }
 
     public void findCallingPlayer(long clientID) {

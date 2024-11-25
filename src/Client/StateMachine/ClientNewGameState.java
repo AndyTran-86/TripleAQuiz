@@ -8,14 +8,15 @@ import Responses.Response;
 
 import javax.swing.*;
 import java.io.IOException;
+import Client.GUI.MainFrameGUI;
 
 public class ClientNewGameState  implements ClientState {
     Client client;
-    ClientGUI gui;
+    MainFrameGUI guiMainFrame;
 
-    public ClientNewGameState(Client client, ClientGUI gui) {
+    public ClientNewGameState(Client client, MainFrameGUI guiMainFrame) {
         this.client = client;
-        this.gui = gui;
+        this.guiMainFrame = guiMainFrame;
     }
 
 
@@ -25,20 +26,17 @@ public class ClientNewGameState  implements ClientState {
             switch (newGameResponse.getTurnToPlay()) {
                 case PLAYER_TURN -> {
                     client.setAllCategories(newGameResponse.getCategoriesToClient());
-                    //Lite arbete att utföra - Anton
-                    //gui.getCategorySelectionBoard().setCategorySelectionboard(pickRandomCategories(categories));
-                    gui.setMainPanel(gui.getCategorySelectionBoard().getCategoryMainPanel());
-                    updateGUI();
+                    client.getQuestionData().setThreeRandomCategories();
                 }
 
-                case OTHER_PLAYER_TURN -> JOptionPane.showMessageDialog(gui.frame, "New Game response received with OTHER PLAYER TURN - in gameInstance: " + newGameResponse.getGameInstanceID());
+                case OTHER_PLAYER_TURN -> JOptionPane.showMessageDialog(null, "New Game response received with OTHER PLAYER TURN - in gameInstance: " + newGameResponse.getGameInstanceID());
             }
         }
     }
 
     @Override
     public void updateGUI() {
-        gui.updateGUI();
+        guiMainFrame.setScoreBoardView();
         System.out.println("Updating GUI");
     }
 
