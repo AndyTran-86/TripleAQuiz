@@ -157,7 +157,7 @@ public class Client implements Runnable {
     }
 
     public boolean checkAnswer(String answer) {
-        return questionData.checkAnswer(answer, ++questionsPlayed);
+        return questionData.checkAnswer(answer);
     }
 
 

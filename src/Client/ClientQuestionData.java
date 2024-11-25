@@ -15,7 +15,7 @@ public class ClientQuestionData implements Serializable {
     private List<Category> remainingCategories;
     private Category selectedCategory;
     private List<Category> threeRandomCategories;
-    private int roundsPlayed;
+    private int questionsPlayed;
     private List<Question> selectedCategoryQuestions;
 
     public ClientQuestionData() {
@@ -40,13 +40,14 @@ public class ClientQuestionData implements Serializable {
         this.remainingCategories = allCategories;
     }
 
-    public boolean checkAnswer(String answer, int roundsPlayed) {
-        String correctAnswer = selectedCategoryQuestions.get(roundsPlayed).correct_answer();
+    public boolean checkAnswer(String answer) {
+        String correctAnswer = selectedCategoryQuestions.get(questionsPlayed).correct_answer();
         if (correctAnswer.equals(answer)) {
             resultsPerRound.add(1);
         } else {
             resultsPerRound.add(0);
         }
+        questionsPlayed++;
         return (correctAnswer.equals(answer));
     }
 
@@ -61,6 +62,11 @@ public class ClientQuestionData implements Serializable {
             int randomIndex = random.nextInt(selectedCategory.questions().size());
             selectedCategoryQuestions.add(selectedCategory.questions().remove(randomIndex));
         }
+    }
+
+    public void setSelectedCategoryFromOpponent(Category category, List<Question> questions) {
+        this.remainingCategories.remove(category);
+        this.selectedCategoryQuestions = questions;
     }
 
     public List<Question> getSelectedCategoryQuestions() {
