@@ -58,6 +58,7 @@ public class ClientQuestionData implements Serializable {
     }
 
     public void setSelectedCategoryQuestions() {
+        this.questionsPlayed = 0;
         for (int i = 0; i < 3; i++) {
             int randomIndex = random.nextInt(selectedCategory.questions().size());
             selectedCategoryQuestions.add(selectedCategory.questions().remove(randomIndex));
@@ -65,6 +66,7 @@ public class ClientQuestionData implements Serializable {
     }
 
     public void setSelectedCategoryFromOpponent(Category category, List<Question> questions) {
+        this.questionsPlayed = 0;
         this.remainingCategories.remove(category);
         this.selectedCategoryQuestions = questions;
     }
