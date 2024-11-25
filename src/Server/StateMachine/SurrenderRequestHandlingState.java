@@ -5,6 +5,7 @@ import Requests.SurrenderRequest;
 import Responses.DefeatResponse;
 import Responses.DefeatType;
 import Server.ClientConnection;
+import Server.GameInstance;
 import Server.GameInstanceManager;
 
 import java.io.IOException;
@@ -20,6 +21,10 @@ public class SurrenderRequestHandlingState implements ServerState {
 
     @Override
     public void handleRequest(Request request) throws IOException, ClassNotFoundException {
-        connection.out.writeObject(new DefeatResponse(DefeatType.SURRENDER));
+        if (request instanceof SurrenderRequest surrenderRequest) {
+            GameInstance gameInstance = gameInstanceManager.getGameInstanceByID(surrenderRequest.getGameInstanceID());
+            gameInstance.findCallingPlayer(surrenderRequest.getClientID());
+            gameInstance.notifySurrender();
+        }
     }
 }
