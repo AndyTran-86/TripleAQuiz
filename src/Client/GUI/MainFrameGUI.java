@@ -176,13 +176,6 @@ public class MainFrameGUI {
     }
 
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() ->{
-//            MainFrameGUI game = new MainFrameGUI();
-//            game.init();
-//        });
-//    }
-
     public JButton getLobbyStartGameButton() {
         return lobbyBoard.getLobbyStartButton();
     }
@@ -209,20 +202,11 @@ public class MainFrameGUI {
 
 
     public void disablePlayButton() {
-        System.out.println("disable play button");
+        scoreBoard.getPlayButton().setEnabled(false);
     }
 
     public void enablePlayButton() {
-        System.out.println("disable play button");
+        scoreBoard.getPlayButton().setEnabled(true);
     }
-
-    public void setPlayerTurn() {
-        System.out.println("player turn");
-    }
-
-    public void setOtherPlayerTurn() {
-        System.out.println("other player turn");
-    }
-
 
 }

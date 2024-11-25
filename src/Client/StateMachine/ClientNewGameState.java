@@ -6,7 +6,6 @@ import Responses.NewGameResponse;
 import Responses.PlayerJoinedResponse;
 import Responses.Response;
 
-import javax.swing.*;
 import java.io.IOException;
 import Client.GUI.MainFrameGUI;
 
@@ -29,7 +28,11 @@ public class ClientNewGameState  implements ClientState {
                     client.getQuestionData().setThreeRandomCategories();
                 }
 
-                case OTHER_PLAYER_TURN -> JOptionPane.showMessageDialog(null, "New Game response received with OTHER PLAYER TURN - in gameInstance: " + newGameResponse.getGameInstanceID());
+                case OTHER_PLAYER_TURN -> {
+                    //TODO check if this is this needed
+                    client.setAllCategories(newGameResponse.getCategoriesToClient());
+                    client.getQuestionData().setThreeRandomCategories();
+                }
             }
         }
     }
@@ -37,7 +40,6 @@ public class ClientNewGameState  implements ClientState {
     @Override
     public void updateGUI() {
         guiMainFrame.setScoreBoardView();
-        System.out.println("Updating GUI");
     }
 
     @Override

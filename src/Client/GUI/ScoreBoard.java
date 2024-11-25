@@ -64,6 +64,10 @@ public class ScoreBoard extends AbstractBoard {
     public JLabel getPlayerTurnLabel() {
         return playerTurnLabel;
     }
+
+    public JButton getPlayButton() {
+        return playButton;
+    }
 }
 
 
