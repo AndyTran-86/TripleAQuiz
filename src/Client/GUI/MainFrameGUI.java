@@ -199,6 +199,14 @@ public class MainFrameGUI {
         scoreBoard.getOtherPlayerLabel().setText(username);
     }
 
+    public void setPlayerTurnLabelToPlayer() {
+        scoreBoard.getPlayerTurnLabel().setText("         Your turn");
+    }
+
+    public void setPlayerTurnLabelToOtherPlayer() {
+        scoreBoard.getPlayerTurnLabel().setText("         Their turn");
+    }
+
 
     public void disablePlayButton() {
         System.out.println("disable play button");

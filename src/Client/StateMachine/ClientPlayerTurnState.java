@@ -28,14 +28,13 @@ public class ClientPlayerTurnState implements ClientState {
     public void updateGUI() {
         System.out.println("Updating GUI");
         guiMainFrame.enablePlayButton();
-        guiMainFrame.setPlayerTurn();
+        guiMainFrame.setPlayerTurnLabelToPlayer();
         guiMainFrame.setScoreBoardView();
     }
 
     @Override
     public void handlePlayerJoined(PlayerJoinedResponse response) {
         guiMainFrame.setOtherPlayerUserName(response.getUsername());
-        JOptionPane.showMessageDialog(null, response.getUsername() + " joined the game");
-        //TODO add getUserName to data in client, then update gui with it?
+
     }
 }

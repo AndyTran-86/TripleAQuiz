@@ -8,15 +8,22 @@ public class ScoreBoard extends AbstractBoard {
     JLabel headerLabel;
     JLabel playerLabel;
     JLabel otherPlayerLabel;
+
+    JLabel playerTurnLabel;
+
     private JPanel midPanel;
     private JButton playButton;
 
     @Override
     protected void initComponents() {
 
+        playerTurnLabel = new JLabel("         Your turn");
+        playerTurnLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        midPanel = new JPanel(new GridLayout(9, 3, 10, 10));
 
-
-        midPanel = new JPanel(new GridLayout(8, 3, 10, 10));
+        midPanel.add(new JLabel());
+        midPanel.add(playerTurnLabel);
+        midPanel.add(new JLabel());
 
         playerLabel = new JLabel(" Player 1", SwingConstants.CENTER);
         headerLabel = new JLabel("Question Theme", SwingConstants.CENTER);
@@ -52,6 +59,10 @@ public class ScoreBoard extends AbstractBoard {
 
     public JLabel getOtherPlayerLabel() {
         return otherPlayerLabel;
+    }
+
+    public JLabel getPlayerTurnLabel() {
+        return playerTurnLabel;
     }
 }
 
