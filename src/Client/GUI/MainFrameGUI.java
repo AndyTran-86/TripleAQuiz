@@ -115,10 +115,6 @@ public class MainFrameGUI {
         lobbyBoard = new LobbyBoard(cardLayout, midPanel);
         addBoard(lobbyBoard.getBoard(), "Lobby");
 
-        //WaitingBoard
-        //TODO: remove
-        WaitingBoard waitingBoard = new WaitingBoard();
-        addBoard(waitingBoard.getBoard(),"WaitingBoard");
 
         //CategoryBoard
         categoryBoard = new CategoryBoard();

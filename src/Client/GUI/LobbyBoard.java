@@ -55,20 +55,6 @@ public class LobbyBoard extends AbstractBoard {
         board.add(lobbyStartButton);
         board.add(new JLabel());
 
-
-//        lobbyStartButton.addActionListener(e -> {
-//            //TODO replace with mainframe gui
-//            String userName = this.getInputUserName();
-//            if (!userName.isEmpty()) {
-//                System.out.println("User name: " + userName);
-//
-//                //change board?
-//                cardLayout.show(midPanel, "CategoryBoard");
-//            }else {JOptionPane.showMessageDialog(board, "Please enter a username!", "Error", JOptionPane.ERROR_MESSAGE);
-//
-//            }
-//
-//        });
     }
 
     public JButton getLobbyStartButton() {
