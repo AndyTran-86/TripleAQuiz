@@ -35,6 +35,6 @@ public class ClientOtherPlayerTurnState  implements ClientState {
 
     @Override
     public void handlePlayerJoined(PlayerJoinedResponse response) {
-        guiMainFrame.setOtherPlayerLabel(response.getUsername());
+        guiMainFrame.setOtherPlayerUserName(response.getUsername());
     }
 }

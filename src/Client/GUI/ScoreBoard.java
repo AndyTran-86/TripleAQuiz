@@ -4,12 +4,28 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ScoreBoard extends AbstractBoard {
+
+    JLabel headerLabel;
+    JLabel playerLabel;
+    JLabel otherPlayerLabel;
     private JPanel midPanel;
     private JButton playButton;
 
     @Override
     protected void initComponents() {
-        midPanel = new JPanel(new GridLayout(7, 3, 10, 10));
+
+
+
+        midPanel = new JPanel(new GridLayout(8, 3, 10, 10));
+
+        playerLabel = new JLabel(" Player 1", SwingConstants.CENTER);
+        headerLabel = new JLabel("Question Theme", SwingConstants.CENTER);
+        otherPlayerLabel = new JLabel("Player 2 ", SwingConstants.CENTER);
+
+        midPanel.add(playerLabel);
+        midPanel.add(headerLabel);
+        midPanel.add(otherPlayerLabel);
+
         for (int i = 1; i <= 6; i++) {
             midPanel.add(new JLabel("0", SwingConstants.CENTER));
             midPanel.add(new JLabel("Round " + i, SwingConstants.CENTER));
@@ -19,12 +35,23 @@ public class ScoreBoard extends AbstractBoard {
         midPanel.add(new JLabel());
         midPanel.add(playButton);
         midPanel.add(new JLabel());
+
+
+
     }
 
     @Override
     protected void buildLayout() {
         board.setLayout(new BorderLayout());
         board.add(midPanel, BorderLayout.CENTER);
+    }
+
+    public JLabel getPlayerLabel() {
+        return playerLabel;
+    }
+
+    public JLabel getOtherPlayerLabel() {
+        return otherPlayerLabel;
     }
 }
 

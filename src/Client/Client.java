@@ -159,6 +159,7 @@ public class Client implements Runnable {
             if (!userName.isEmpty()) {
                 System.out.println("User name: " + userName);
                 username = userName;
+                guiMainFrame.setPlayerUserName(username);
 
                 try (Socket socket = new Socket(ip, port);
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {

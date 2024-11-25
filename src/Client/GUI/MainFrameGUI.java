@@ -149,10 +149,6 @@ public class MainFrameGUI {
         midPanel.add(board, name);
     }
 
-    public void setOtherPlayerLabel(String username) {
-        otherPlayerLabel.setText(username);
-    }
-
 
 
     private void hideHeaderContent() {
@@ -193,6 +189,14 @@ public class MainFrameGUI {
 
     public String getInputUsername() {
         return lobbyBoard.getInputUserName();
+    }
+
+    public void setPlayerUserName(String username) {
+        scoreBoard.getPlayerLabel().setText(username);
+    }
+
+    public void setOtherPlayerUserName(String username) {
+        scoreBoard.getOtherPlayerLabel().setText(username);
     }
 
 

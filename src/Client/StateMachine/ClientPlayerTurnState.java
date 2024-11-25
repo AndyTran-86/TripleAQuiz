@@ -34,7 +34,7 @@ public class ClientPlayerTurnState implements ClientState {
 
     @Override
     public void handlePlayerJoined(PlayerJoinedResponse response) {
-        guiMainFrame.setOtherPlayerLabel(response.getUsername());
+        guiMainFrame.setOtherPlayerUserName(response.getUsername());
         JOptionPane.showMessageDialog(null, response.getUsername() + " joined the game");
         //TODO add getUserName to data in client, then update gui with it?
     }
