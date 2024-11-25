@@ -65,7 +65,7 @@ public class CategorySelectionBoard {
 
 
 
-        public void CategorySelectionBoardinit(){
+    public void CategorySelectionBoardinit(){
         /*frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(600,1000);
         frame.setLayout(new BorderLayout());
@@ -85,9 +85,9 @@ public class CategorySelectionBoard {
 
         //Center
         middlePanel.add(categoryTitleLabel);
-            for (JButton button : categoryButtons) {
-                middlePanel.add(button);
-            }
+        for (JButton button : categoryButtons) {
+            middlePanel.add(button);
+        }
 
         categoryMainPanel.add(middlePanel, BorderLayout.CENTER);
 
@@ -107,11 +107,11 @@ public class CategorySelectionBoard {
 
         //frame.add(categoryMainPanel);
         //frame.setVisible(true);
-        }
+    }
 
-        public JPanel getCategoryMainPanel() {
-            return categoryMainPanel;
-        }
+    public JPanel getCategoryMainPanel() {
+        return categoryMainPanel;
+    }
 
     public void setCategorySelectionboard(List<QuestionsByCategory> questionsByCategories) {
         for (int i = 0; i < categoryButtons.length; i++) {

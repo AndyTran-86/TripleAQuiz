@@ -13,6 +13,8 @@ public class MainFrameGUI {
     JLabel player1Label;
     JLabel player2Label;
 
+    JLabel headerSpacer;
+
     //Footer
     JPanel footerPanel;
     JLabel homeIconLabel;
@@ -24,8 +26,10 @@ public class MainFrameGUI {
 
     //MiddleSection
     JPanel midPanel;
-
     CardLayout cardLayout;
+
+
+
 
 
     public MainFrameGUI() {
@@ -38,6 +42,10 @@ public class MainFrameGUI {
         headerLabel = new JLabel("Question Theme", SwingConstants.CENTER);
         player1Label = new JLabel(" Player 1", SwingConstants.CENTER);
         player2Label = new JLabel("Player 2 ", SwingConstants.CENTER);
+
+        headerSpacer = new JLabel();
+        headerSpacer.setPreferredSize(new Dimension(0, 50));
+
 
 
         //Footer
@@ -55,8 +63,11 @@ public class MainFrameGUI {
 
         //midSection
         //all code for STATE should be here. -CardLayout? -Revalidate? -Repaint?
-        midPanel = new JPanel(new BorderLayout());
+        midPanel = new JPanel();
         cardLayout = new CardLayout();
+        midPanel.setLayout(cardLayout);
+        mainFramePanel.add(midPanel,BorderLayout.CENTER);
+
 
     }
 
@@ -76,6 +87,8 @@ public class MainFrameGUI {
         headerPanel.add(spacer1, BorderLayout.SOUTH);
 
 
+
+
         //Footer
         footerPanel.add(new JLabel());
         footerPanel.add(new JLabel());
@@ -93,17 +106,65 @@ public class MainFrameGUI {
 
 
 
-        //midSection
-        //all code for different boards/STATE should be here. -CardLayout? -Revalidate? -Repaint?
-        mainFramePanel.add(midPanel, BorderLayout.CENTER);
-        midPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2, true));
+        //LobbyBoard
+        LobbyBoard lobbyBoard = new LobbyBoard(cardLayout, midPanel);
+        addBoard(lobbyBoard.getBoard(), "Lobby");
 
-        frame.add(mainFramePanel);
+        //WaitingBoard
+        WaitingBoard waitingBoard = new WaitingBoard();
+        addBoard(waitingBoard.getBoard(),"WaitingBoard");
+
+        //CategoryBoard
+        CategoryBoard categoryBoard = new CategoryBoard();
+        addBoard(categoryBoard.getBoard(), "CategoryBoard");
+
+        //
+        QuizGameBoard quizGameBoard = new QuizGameBoard();
+        addBoard(quizGameBoard.getBoard(),"QuizGameBoard");
+
+
+
+        cardLayout.show(midPanel,"Lobby");
+
+        //cardLayout.show(midPanel, "WaitingBoard");
+
+        //cardLayout.show(midPanel, "CategoryBoard");
+
+        //cardLayout.show(midPanel, "QuizGameBoard");
+
+
+
         frame.setVisible(true);
 
-
+        //Hide header
+        hideHeaderContent();
 
     }
+
+    private void addBoard(JPanel board, String name){
+        midPanel.add(board, name);
+    }
+
+
+
+    private void hideHeaderContent() {
+        headerLabel.setVisible(false);
+        player1Label.setVisible(false);
+        player2Label.setVisible(false);
+        headerPanel.revalidate();
+        headerPanel.repaint();
+    }
+    private void showHeaderContent() {
+        headerLabel.setVisible(true);
+        player1Label.setVisible(true);
+        player2Label.setVisible(true);
+        headerPanel.revalidate();
+        headerPanel.repaint();
+    }
+
+
+
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() ->{
             MainFrameGUI game = new MainFrameGUI();
