@@ -108,15 +108,32 @@ public class MainFrameGUI {
 
         //LobbyBoard
         LobbyBoard lobbyBoard = new LobbyBoard(cardLayout, midPanel);
-        addBoard(lobbyBoard.getLobbyBoard(), "Lobby");
+        addBoard(lobbyBoard.getBoard(), "Lobby");
 
-        //CategorySelectionBoard (not finished)
+        //WaitingBoard
+        WaitingBoard waitingBoard = new WaitingBoard();
+        addBoard(waitingBoard.getBoard(),"WaitingBoard");
+
+        //CategoryBoard
         CategoryBoard categoryBoard = new CategoryBoard();
-        addBoard(categoryBoard.getMiddlePanel(), "CategoryBoard");
+        addBoard(categoryBoard.getBoard(), "CategoryBoard");
+
+        //
+        QuizGameBoard quizGameBoard = new QuizGameBoard();
+        addBoard(quizGameBoard.getBoard(),"QuizGameBoard");
 
 
 
         cardLayout.show(midPanel,"Lobby");
+
+        //cardLayout.show(midPanel, "WaitingBoard");
+
+        //cardLayout.show(midPanel, "CategoryBoard");
+
+        //cardLayout.show(midPanel, "QuizGameBoard");
+
+
+
         frame.setVisible(true);
 
         //Hide header

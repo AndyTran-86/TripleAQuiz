@@ -3,46 +3,57 @@ package Client.GUI;
 import javax.swing.*;
 import java.awt.*;
 
-public class LobbyBoard {
-    JPanel lobbyBoard;
-    JLabel lobbyGameTitleLabel;
-    JLabel lobbyProfileIcon;
-    JButton lobbyStartButton;
-    JTextField userNameInput;
+public class LobbyBoard extends AbstractBoard {
 
-    public LobbyBoard(CardLayout cardLayout, JPanel midpanel) {
+    private JLabel lobbyGameTitleLabel;
+    private JLabel lobbyProfileIcon;
+    private JButton lobbyStartButton;
+    private JTextField userNameInput;
+
+    private CardLayout cardLayout;
+    private JPanel midPanel;
+
+    public LobbyBoard(CardLayout cardLayout, JPanel midPanel) {
+        this.cardLayout = cardLayout;
+        this.midPanel = midPanel;
+    }
+
+    @Override
+    protected void initComponents(){
         lobbyGameTitleLabel = new JLabel("TAQ - Triple-A Quiz", SwingConstants.CENTER);
-        lobbyProfileIcon = new JLabel(new ImageIcon("images/lobby/user.png"));
+        lobbyProfileIcon = new JLabel(new ImageIcon("icons/lobby/user.png"));
         lobbyStartButton = new JButton("Start New Game");
         userNameInput = new JTextField(15);
 
-        lobbyBoard = new JPanel(new GridLayout(6,3));
 
-        buildLobbyLayout(cardLayout, midpanel);
     }
 
-    private void buildLobbyLayout(CardLayout cardLayout, JPanel midPanel) {
-        lobbyBoard.add(new JLabel());
-        lobbyBoard.add(lobbyGameTitleLabel);
-        lobbyBoard.add(new JLabel());
+    @Override
+    protected void buildLayout(){
 
-        lobbyBoard.add(new JLabel());
-        lobbyBoard.add(lobbyProfileIcon);
-        lobbyBoard.add(new JLabel());
+        board.setLayout(new GridLayout(6,3));
 
-        lobbyBoard.add(new JLabel());
-        lobbyBoard.add(new JLabel("Username:", SwingConstants.CENTER));
-        lobbyBoard.add(new JLabel());
+        board.add(new JLabel());
+        board.add(lobbyGameTitleLabel);
+        board.add(new JLabel());
 
-        lobbyBoard.add(new JLabel());
+        board.add(new JLabel());
+        board.add(lobbyProfileIcon);
+        board.add(new JLabel());
+
+        board.add(new JLabel());
+        board.add(new JLabel("Username:", SwingConstants.CENTER));
+        board.add(new JLabel());
+
+        board.add(new JLabel());
         JPanel userNamePanel = new JPanel(new FlowLayout());
         userNamePanel.add(userNameInput);
-        lobbyBoard.add(userNamePanel);
-        lobbyBoard.add(new JLabel());
+        board.add(userNamePanel);
+        board.add(new JLabel());
 
-        lobbyBoard.add(new JLabel());
-        lobbyBoard.add(lobbyStartButton);
-        lobbyBoard.add(new JLabel());
+        board.add(new JLabel());
+        board.add(lobbyStartButton);
+        board.add(new JLabel());
 
 
         lobbyStartButton.addActionListener(e -> {
@@ -52,15 +63,14 @@ public class LobbyBoard {
 
                 //change board?
                 cardLayout.show(midPanel, "CategoryBoard");
-            }else {JOptionPane.showMessageDialog(lobbyBoard, "Please enter a username!", "Error", JOptionPane.ERROR_MESSAGE);
+            }else {JOptionPane.showMessageDialog(board, "Please enter a username!", "Error", JOptionPane.ERROR_MESSAGE);
 
             }
 
         });
     }
-    public JPanel getLobbyBoard(){
-        return lobbyBoard;
-    }
 
 }
+
+
 

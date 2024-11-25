@@ -6,16 +6,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class CategoryBoard {
+public class CategoryBoard extends AbstractBoard {
 
-    JPanel middlePanel;
-    JLabel categoryTitleLabel;
-    JButton[] categoryButtons;
+    private JLabel categoryTitleLabel;
+    private JButton[] categoryButtons;
 
     public CategoryBoard() {
-
-        middlePanel = new JPanel(new GridLayout(4, 1, 10, 10));
-
+        super();
+    }
+    @Override
+    protected void initComponents(){
         categoryTitleLabel = new JLabel("Select a category", SwingConstants.CENTER);
         categoryTitleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         categoryTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -27,28 +27,21 @@ public class CategoryBoard {
 
         }
 
-        buildLayout();
     }
 
+    @Override
+    protected void buildLayout() {
+        board.setLayout(new GridLayout(4, 1, 10, 10));
 
-    public void buildLayout() {
-        middlePanel.add(categoryTitleLabel);
+        board.add(categoryTitleLabel);
         for (JButton button : categoryButtons) {
-            middlePanel.add(button);
+            board.add(button);
         }
     }
 
-
-
-    public JPanel getMiddlePanel(){
-        return middlePanel;
-    }
-
-
-
-    public void setCategoryBoard(List<QuestionsByCategory> questionsByCategories) {
+    /*public void setCategoryBoard(List<QuestionsByCategory> questionsByCategories) {
         for (int i = 0; i < categoryButtons.length; i++) {
             categoryButtons[i].setText(questionsByCategories.get(i).results().getFirst().category());
         }
-    }
+    }*/
 }
