@@ -16,7 +16,7 @@ import java.net.Socket;
 import java.util.List;
 
 public class Client implements Runnable {
-    ClientQuestionData questionData;
+    private ClientQuestionData questionData;
 
 
     ObjectOutputStream out;

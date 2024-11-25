@@ -75,14 +75,13 @@ public class ClientQuestionData implements Serializable {
         return selectedCategoryQuestions;
     }
 
-    public List<Category> getThreeRandomCategories() {
+    public void setThreeRandomCategories() {
         if (!threeRandomCategories.isEmpty())
             threeRandomCategories.clear();
         for(int i = 0; i < 3; i++) {
             int randomIndex = random.nextInt(allCategories.size());
             threeRandomCategories.add(remainingCategories.get(randomIndex));
         }
-        return threeRandomCategories;
     }
 
 }

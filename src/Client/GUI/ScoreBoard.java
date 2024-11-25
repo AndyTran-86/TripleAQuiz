@@ -3,6 +3,42 @@ package Client.GUI;
 import javax.swing.*;
 import java.awt.*;
 
+public class ScoreBoard extends AbstractBoard {
+    private JPanel midPanel;
+    private JButton playButton;
+
+    @Override
+    protected void initComponents() {
+        midPanel = new JPanel(new GridLayout(7, 3, 10, 10));
+        for (int i = 1; i <= 6; i++) {
+            midPanel.add(new JLabel("0", SwingConstants.CENTER));
+            midPanel.add(new JLabel("Round " + i, SwingConstants.CENTER));
+            midPanel.add(new JLabel("0", SwingConstants.CENTER));
+        }
+        playButton = new JButton("Play");
+        midPanel.add(new JLabel());
+        midPanel.add(playButton);
+        midPanel.add(new JLabel());
+    }
+
+    @Override
+    protected void buildLayout() {
+        board.setLayout(new BorderLayout());
+        board.add(midPanel, BorderLayout.CENTER);
+    }
+}
+
+
+
+
+
+
+
+/*package Client.GUI;
+
+import javax.swing.*;
+import java.awt.*;
+
 public class ScoreBoard {
     JFrame frame;
     JPanel scoreMainPanel;

@@ -10,8 +10,8 @@ public class MainFrameGUI {
     //Header
     JPanel headerPanel;
     JLabel headerLabel;
-    JLabel player1Label;
-    JLabel player2Label;
+    JLabel playerLabel;
+    JLabel otherPlayerLabel;
 
     JLabel headerSpacer;
 
@@ -45,8 +45,8 @@ public class MainFrameGUI {
         //Header
         headerPanel = new JPanel(new BorderLayout());
         headerLabel = new JLabel("Question Theme", SwingConstants.CENTER);
-        player1Label = new JLabel(" Player 1", SwingConstants.CENTER);
-        player2Label = new JLabel("Player 2 ", SwingConstants.CENTER);
+        playerLabel = new JLabel(" Player 1", SwingConstants.CENTER);
+        otherPlayerLabel = new JLabel("Player 2 ", SwingConstants.CENTER);
 
         headerSpacer = new JLabel();
         headerSpacer.setPreferredSize(new Dimension(0, 50));
@@ -85,9 +85,9 @@ public class MainFrameGUI {
 
         //Header
         mainFramePanel.add(headerPanel, BorderLayout.NORTH);
-        headerPanel.add(player1Label, BorderLayout.WEST);
+        headerPanel.add(playerLabel, BorderLayout.WEST);
         headerPanel.add(headerLabel, BorderLayout.CENTER);
-        headerPanel.add(player2Label, BorderLayout.EAST);
+        headerPanel.add(otherPlayerLabel, BorderLayout.EAST);
         headerPanel.add(spacer, BorderLayout.NORTH);
         headerPanel.add(spacer1, BorderLayout.SOUTH);
 
@@ -153,19 +153,23 @@ public class MainFrameGUI {
         midPanel.add(board, name);
     }
 
+    public void setOtherPlayerLabel(String username) {
+        otherPlayerLabel.setText(username);
+    }
+
 
 
     private void hideHeaderContent() {
         headerLabel.setVisible(false);
-        player1Label.setVisible(false);
-        player2Label.setVisible(false);
+        playerLabel.setVisible(false);
+        otherPlayerLabel.setVisible(false);
         headerPanel.revalidate();
         headerPanel.repaint();
     }
     private void showHeaderContent() {
         headerLabel.setVisible(true);
-        player1Label.setVisible(true);
-        player2Label.setVisible(true);
+        playerLabel.setVisible(true);
+        otherPlayerLabel.setVisible(true);
         headerPanel.revalidate();
         headerPanel.repaint();
     }
