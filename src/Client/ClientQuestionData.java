@@ -2,7 +2,6 @@ package Client;
 
 import Server.QuizDatabase.Category;
 import Server.QuizDatabase.Question;
-import jdk.internal.icu.text.UnicodeSet;
 
 import java.io.Serializable;
 import java.util.ArrayList;
