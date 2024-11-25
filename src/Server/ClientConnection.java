@@ -4,9 +4,6 @@ import Requests.ListeningRequest;
 import Requests.RoundPlayedRequest;
 import Requests.StartNewGameRequest;
 import Requests.SurrenderRequest;
-import Responses.ListeningResponse;
-import Responses.NewGameResponse;
-import Responses.RoundPlayedResponse;
 import Server.StateMachine.*;
 
 import java.io.IOException;
@@ -15,7 +12,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ClientConnection implements Runnable {
-    Database database;
     Socket socket;
     public ObjectOutputStream out;
     public ObjectInputStream in;
@@ -31,7 +27,6 @@ public class ClientConnection implements Runnable {
     ServerState handleSurrenderRequestState;
 
     public ClientConnection(Socket socket, GameInstanceManager gameInstanceManager) {
-        database = new Database();
         this.socket = socket;
         clientID = clientIDIncrementor++;
         this.gameInstanceManager = gameInstanceManager;

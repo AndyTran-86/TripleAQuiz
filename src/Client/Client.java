@@ -21,7 +21,6 @@ public class Client implements Runnable {
 
     ObjectOutputStream out;
     ObjectInputStream in;
-//    ClientGUI gui;
     MainFrameGUI guiMainFrame;
     int port;
     InetAddress ip;
@@ -46,7 +45,6 @@ public class Client implements Runnable {
 
 
         ip = InetAddress.getLoopbackAddress();
-//        gui = new ClientGUI();
         guiMainFrame = new MainFrameGUI();
 
         lobbyState = new ClientLobbyState(this, guiMainFrame);
@@ -61,7 +59,6 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
-//        gui.init();
         guiMainFrame.init();
         connectToServer();
         addEventListeners();
