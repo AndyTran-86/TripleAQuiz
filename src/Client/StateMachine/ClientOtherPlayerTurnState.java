@@ -2,6 +2,7 @@ package Client.StateMachine;
 
 import Client.ClientGUI;
 import Client.Client;
+import Client.GUI.MainFrameGUI;
 import Responses.PlayerJoinedResponse;
 import Responses.Response;
 
@@ -10,27 +11,30 @@ import java.io.IOException;
 
 public class ClientOtherPlayerTurnState  implements ClientState {
     Client client;
-    ClientGUI gui;
+    MainFrameGUI guiMainFrame;
 
-    public ClientOtherPlayerTurnState(Client client, ClientGUI gui) {
+    public ClientOtherPlayerTurnState(Client client, MainFrameGUI guiMainFrame) {
         this.client = client;
-        this.gui = gui;
+        this.guiMainFrame = guiMainFrame;
     }
 
 
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
-        JOptionPane.showMessageDialog(gui.frame, "Round played response received with OTHER PLAYER TURN");
+        JOptionPane.showMessageDialog(null, "Round played response received with OTHER PLAYER TURN");
     }
 
     @Override
     public void updateGUI() {
         System.out.println("Updating GUI");
+        guiMainFrame.disablePlayButton();
+        guiMainFrame.setOtherPlayerTurn();
+        guiMainFrame.setScoreBoardView();
     }
 
 
     @Override
     public void handlePlayerJoined(PlayerJoinedResponse response) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        guiMainFrame.setOtherPlayerLabel(response.getUsername());
     }
 }

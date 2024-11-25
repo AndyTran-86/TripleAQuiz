@@ -2,6 +2,7 @@ package Client.StateMachine;
 
 import Client.ClientGUI;
 import Client.Client;
+import Client.GUI.MainFrameGUI;
 import Responses.PlayerJoinedResponse;
 import Responses.Response;
 
@@ -10,17 +11,17 @@ import java.io.IOException;
 
 public class ClientDefeatState implements ClientState {
     Client client;
-    ClientGUI gui;
+    MainFrameGUI guiMainFrame;
 
-    public ClientDefeatState(Client client, ClientGUI gui) {
+    public ClientDefeatState(Client client, MainFrameGUI guiMainFrame) {
         this.client = client;
-        this.gui = gui;
+        this.guiMainFrame = guiMainFrame;
     }
 
 
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
-        JOptionPane.showMessageDialog(gui.frame, "Defeat response received");
+        JOptionPane.showMessageDialog(null, "Defeat response received");
     }
 
     @Override

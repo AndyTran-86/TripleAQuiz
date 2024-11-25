@@ -56,20 +56,28 @@ public class LobbyBoard extends AbstractBoard {
         board.add(new JLabel());
 
 
-        lobbyStartButton.addActionListener(e -> {
-            String userName = userNameInput.getText().trim();
-            if (!userName.isEmpty()) {
-                System.out.println("User name: " + userName);
-
-                //change board?
-                cardLayout.show(midPanel, "CategoryBoard");
-            }else {JOptionPane.showMessageDialog(board, "Please enter a username!", "Error", JOptionPane.ERROR_MESSAGE);
-
-            }
-
-        });
+//        lobbyStartButton.addActionListener(e -> {
+//            //TODO replace with mainframe gui
+//            String userName = this.getInputUserName();
+//            if (!userName.isEmpty()) {
+//                System.out.println("User name: " + userName);
+//
+//                //change board?
+//                cardLayout.show(midPanel, "CategoryBoard");
+//            }else {JOptionPane.showMessageDialog(board, "Please enter a username!", "Error", JOptionPane.ERROR_MESSAGE);
+//
+//            }
+//
+//        });
     }
 
+    public JButton getLobbyStartButton() {
+        return lobbyStartButton;
+    }
+
+    public String getInputUserName() {
+        return userNameInput.getText().trim();
+    }
 }
 
 

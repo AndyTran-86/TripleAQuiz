@@ -26,13 +26,16 @@ public class NewGameRequestHandlingState implements ServerState {
             long clientID = startNewGameRequest.getClientID();
             ClientConnection playerJoining = gameInstanceManager.takePlayerFromLobby(clientID);
 
+            playerJoining.setUsername(startNewGameRequest.getUsername());
+
             if (gameInstanceManager.gameInstanceOpenForNewPlayer()) {
 
                 GameInstance gameInstance = gameInstanceManager.getCurrentOpenGameInstance();
-                gameInstance.findCallingPlayer(clientID);
-                gameInstance.notifyPlayerJoined(playerJoining.username);
                 gameInstanceManager.putPlayerInOpenGameInstance(playerJoining);
+                gameInstance.findCallingPlayer(clientID);
                 playerJoining.out.writeObject(new NewGameResponse(gameInstance.getGameInstanceID(), RoundTurn.OTHER_PLAYER_TURN, gameInstanceManager.getAllCategories()));
+                gameInstance.notifyPlayerJoined();
+
 
             } else {
 

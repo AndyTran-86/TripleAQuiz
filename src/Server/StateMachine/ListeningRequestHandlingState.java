@@ -22,7 +22,6 @@ public class ListeningRequestHandlingState implements ServerState {
     public void handleRequest(Request request) throws IOException, ClassNotFoundException {
         switch (request) {
             case ListeningRequest listeningRequest -> {
-                connection.setUsername(listeningRequest.getUsername());
                 gameInstanceManager.putPlayerInLobby(connection);
                 //TODO get actual Question/Category object once its available
                 connection.out.writeObject(new ListeningResponse(connection.clientID, List.of("Question1", "Question2", "Question3", "Question4")));

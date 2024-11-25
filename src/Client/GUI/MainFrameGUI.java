@@ -10,8 +10,8 @@ public class MainFrameGUI {
     //Header
     JPanel headerPanel;
     JLabel headerLabel;
-    JLabel player1Label;
-    JLabel player2Label;
+    JLabel playerLabel;
+    JLabel otherPlayerLabel;
 
     JLabel headerSpacer;
 
@@ -29,6 +29,11 @@ public class MainFrameGUI {
     CardLayout cardLayout;
 
 
+    //Cards
+    LobbyBoard lobbyBoard;
+    CategoryBoard categoryBoard;
+    QuizGameBoard quizGameBoard;
+    ScoreBoard scoreBoard;
 
 
 
@@ -40,8 +45,8 @@ public class MainFrameGUI {
         //Header
         headerPanel = new JPanel(new BorderLayout());
         headerLabel = new JLabel("Question Theme", SwingConstants.CENTER);
-        player1Label = new JLabel(" Player 1", SwingConstants.CENTER);
-        player2Label = new JLabel("Player 2 ", SwingConstants.CENTER);
+        playerLabel = new JLabel(" Player 1", SwingConstants.CENTER);
+        otherPlayerLabel = new JLabel("Player 2 ", SwingConstants.CENTER);
 
         headerSpacer = new JLabel();
         headerSpacer.setPreferredSize(new Dimension(0, 50));
@@ -80,9 +85,9 @@ public class MainFrameGUI {
 
         //Header
         mainFramePanel.add(headerPanel, BorderLayout.NORTH);
-        headerPanel.add(player1Label, BorderLayout.WEST);
+        headerPanel.add(playerLabel, BorderLayout.WEST);
         headerPanel.add(headerLabel, BorderLayout.CENTER);
-        headerPanel.add(player2Label, BorderLayout.EAST);
+        headerPanel.add(otherPlayerLabel, BorderLayout.EAST);
         headerPanel.add(spacer, BorderLayout.NORTH);
         headerPanel.add(spacer1, BorderLayout.SOUTH);
 
@@ -107,24 +112,27 @@ public class MainFrameGUI {
 
 
         //LobbyBoard
-        LobbyBoard lobbyBoard = new LobbyBoard(cardLayout, midPanel);
+        lobbyBoard = new LobbyBoard(cardLayout, midPanel);
         addBoard(lobbyBoard.getBoard(), "Lobby");
 
         //WaitingBoard
+        //TODO: remove
         WaitingBoard waitingBoard = new WaitingBoard();
         addBoard(waitingBoard.getBoard(),"WaitingBoard");
 
         //CategoryBoard
-        CategoryBoard categoryBoard = new CategoryBoard();
+        categoryBoard = new CategoryBoard();
         addBoard(categoryBoard.getBoard(), "CategoryBoard");
 
         //
-        QuizGameBoard quizGameBoard = new QuizGameBoard();
+        quizGameBoard = new QuizGameBoard();
         addBoard(quizGameBoard.getBoard(),"QuizGameBoard");
 
 
+        scoreBoard = new ScoreBoard();
+        addBoard(scoreBoard.getBoard(),"ScoreBoard");
 
-        cardLayout.show(midPanel,"Lobby");
+//        cardLayout.show(midPanel,"Lobby");
 
         //cardLayout.show(midPanel, "WaitingBoard");
 
@@ -145,31 +153,67 @@ public class MainFrameGUI {
         midPanel.add(board, name);
     }
 
+    public void setOtherPlayerLabel(String username) {
+        otherPlayerLabel.setText(username);
+    }
+
 
 
     private void hideHeaderContent() {
         headerLabel.setVisible(false);
-        player1Label.setVisible(false);
-        player2Label.setVisible(false);
+        playerLabel.setVisible(false);
+        otherPlayerLabel.setVisible(false);
         headerPanel.revalidate();
         headerPanel.repaint();
     }
     private void showHeaderContent() {
         headerLabel.setVisible(true);
-        player1Label.setVisible(true);
-        player2Label.setVisible(true);
+        playerLabel.setVisible(true);
+        otherPlayerLabel.setVisible(true);
         headerPanel.revalidate();
         headerPanel.repaint();
     }
 
 
+    public void setLobbyView() {
+        cardLayout.show(midPanel,"Lobby");
+    }
+
+    public void setScoreBoardView() {
+        cardLayout.show(midPanel, "ScoreBoard");
+    }
 
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() ->{
-            MainFrameGUI game = new MainFrameGUI();
-            game.init();
-        });
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() ->{
+//            MainFrameGUI game = new MainFrameGUI();
+//            game.init();
+//        });
+//    }
+
+    public JButton getLobbyStartGameButton() {
+        return lobbyBoard.getLobbyStartButton();
+    }
+
+    public String getInputUsername() {
+        return lobbyBoard.getInputUserName();
+    }
+
+
+    public void disablePlayButton() {
+        System.out.println("disable play button");
+    }
+
+    public void enablePlayButton() {
+        System.out.println("disable play button");
+    }
+
+    public void setPlayerTurn() {
+        System.out.println("player turn");
+    }
+
+    public void setOtherPlayerTurn() {
+        System.out.println("other player turn");
     }
 
 

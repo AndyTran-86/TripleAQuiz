@@ -2,6 +2,7 @@ package Client.StateMachine;
 
 import Client.ClientGUI;
 import Client.Client;
+import Client.GUI.MainFrameGUI;
 import Responses.ListeningResponse;
 import Responses.PlayerJoinedResponse;
 import Responses.Response;
@@ -11,11 +12,11 @@ import java.io.IOException;
 
 public class ClientLobbyState implements ClientState {
     Client client;
-    ClientGUI gui;
+    MainFrameGUI guiMainFrame;
 
-    public ClientLobbyState(Client client, ClientGUI gui) {
+    public ClientLobbyState(Client client, MainFrameGUI guiMainFrame) {
         this.client = client;
-        this.gui = gui;
+        this.guiMainFrame = guiMainFrame;
     }
 
 
@@ -25,12 +26,13 @@ public class ClientLobbyState implements ClientState {
             long id = listeningResponse.getClientID();
             client.setClientID(id);
             //TODO handle question data here and integrate into client
-            JOptionPane.showMessageDialog(gui.frame, "Listening connection established with clientID: " + client.getClientID());
+            JOptionPane.showMessageDialog(null, "Listening connection established with clientID: " + client.getClientID());
         }
     }
 
     @Override
     public void updateGUI() {
+        guiMainFrame.setLobbyView();
         System.out.println("Updating GUI");
     }
 
