@@ -167,14 +167,33 @@ public class MainFrameGUI {
     }
 
 
-    public void setLobbyView() {
+    public void showLobbyView() {
         cardLayout.show(midPanel,"Lobby");
     }
 
-    public void setScoreBoardView() {
+    public void showScoreBoardView() {
         cardLayout.show(midPanel, "ScoreBoard");
     }
 
+    public void showCategoryBoardView() {
+        cardLayout.show(midPanel, "CategoryBoard");
+    }
+
+    public void showQuizGameView() {
+        cardLayout.show(midPanel, "QuizGameBoard");
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public JButton getScoreBoardPlayButton() {
+        return scoreBoard.getPlayButton();
+    }
+
+    public JButton[] getCategoryButtons() {
+        return categoryBoard.getCategoryButtons();
+    }
 
     public JButton getLobbyStartGameButton() {
         return lobbyBoard.getLobbyStartButton();

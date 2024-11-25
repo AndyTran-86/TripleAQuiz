@@ -31,7 +31,7 @@ public class ClientLobbyState implements ClientState {
 
     @Override
     public void updateGUI() {
-        guiMainFrame.setLobbyView();
+        guiMainFrame.showLobbyView();
     }
 
     @Override

@@ -39,7 +39,7 @@ public class ClientNewGameState  implements ClientState {
 
     @Override
     public void updateGUI() {
-        guiMainFrame.setScoreBoardView();
+        guiMainFrame.showScoreBoardView();
     }
 
     @Override

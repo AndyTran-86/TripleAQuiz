@@ -28,7 +28,7 @@ public class ClientOtherPlayerTurnState  implements ClientState {
     public void updateGUI() {
         guiMainFrame.disablePlayButton();
         guiMainFrame.setPlayerTurnLabelToOtherPlayer();
-        guiMainFrame.setScoreBoardView();
+        guiMainFrame.showScoreBoardView();
     }
 
 
