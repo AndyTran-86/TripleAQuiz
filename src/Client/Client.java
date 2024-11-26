@@ -141,11 +141,15 @@ public class Client implements Runnable {
     public void addEventListeners() {
 
         guiMainFrame.getScoreBoardPlayButton().addActionListener((e) -> {
+            guiMainFrame.setCategoryBoardNames(questionData.getThreeRandomCategories());
             guiMainFrame.showCategoryBoardView();
         });
 
         for (JButton categoryButton : guiMainFrame.getCategoryButtons()) {
             categoryButton.addActionListener((e) -> {
+                //Todo add question, correct_answer and incorrect_answers to QuizGameBoard
+                questionData.selectCategory(categoryButton.getText());
+                guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                 guiMainFrame.showQuizGameView();
             });
         }

@@ -1,7 +1,12 @@
 package Client.GUI;
 
+import Server.QuizDatabase.Category;
+import Server.QuizDatabase.Question;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
+import java.util.List;
 
 public class MainFrameGUI {
     JFrame frame;
@@ -179,6 +184,14 @@ public class MainFrameGUI {
         cardLayout.show(midPanel, "CategoryBoard");
     }
 
+    public void setCategoryBoardNames(List<Category> categories) {
+        int counter = 0;
+        for (JButton b : categoryBoard.getCategoryButtons()) {
+            b.setText(categories.get(counter++).name());
+        }
+
+    }
+
     public void showQuizGameView() {
         cardLayout.show(midPanel, "QuizGameBoard");
     }
@@ -219,7 +232,6 @@ public class MainFrameGUI {
         scoreBoard.getPlayerTurnLabel().setText("         Their turn");
     }
 
-
     public void disablePlayButton() {
         scoreBoard.getPlayButton().setEnabled(false);
     }
@@ -228,4 +240,11 @@ public class MainFrameGUI {
         scoreBoard.getPlayButton().setEnabled(true);
     }
 
+    public void setGameBoard(Question selectedQuestion) {
+        quizGameBoard.getQuestionTextArea().setText(selectedQuestion.category() + "\n" +selectedQuestion.question());
+        quizGameBoard.getAnswerButtons().getFirst().setText(selectedQuestion.correct_answer());
+        for (int i = 1; i < 4; i++)
+            quizGameBoard.getAnswerButtons().get(i).setText(selectedQuestion.incorrect_answers().get(i-1));
+        Collections.shuffle(quizGameBoard.getAnswerButtons());
+    }
 }

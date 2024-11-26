@@ -24,7 +24,12 @@ public class ClientQuestionData implements Serializable {
         this.allCategories = new ArrayList<>();
         this.threeRandomCategories = new ArrayList<>();
         this.selectedCategoryQuestions = new ArrayList<>();
+        this.selectedCategory = new Category(null, null);
         this.random = new Random();
+    }
+
+    public List<Category> getThreeRandomCategories() {
+        return threeRandomCategories;
     }
 
     public Category getSelectedCategory() {
@@ -36,6 +41,7 @@ public class ClientQuestionData implements Serializable {
     }
 
     public void setAllCategories(List<Category> allCategories) {
+
         this.allCategories = allCategories;
         this.remainingCategories = allCategories;
     }
@@ -51,9 +57,14 @@ public class ClientQuestionData implements Serializable {
         return (correctAnswer.equals(answer));
     }
 
-    public void selectCategory(Category category) {
-        this.selectedCategory = category;
-        this.remainingCategories.remove(category);
+    public void selectCategory(String categoryName) {
+      for (Category c : threeRandomCategories) {
+            if (c.name().equals(categoryName)) {
+                this.selectedCategory = c;
+                this.remainingCategories.remove(c);
+                break;
+                }
+            }
         setSelectedCategoryQuestions();
     }
 
@@ -61,7 +72,9 @@ public class ClientQuestionData implements Serializable {
         this.questionsPlayed = 0;
         for (int i = 0; i < 3; i++) {
             int randomIndex = random.nextInt(selectedCategory.questions().size());
+            System.out.println(selectedCategory.name());
             selectedCategoryQuestions.add(selectedCategory.questions().remove(randomIndex));
+            System.out.println(selectedCategoryQuestions.getLast().question());
         }
     }
 
@@ -71,8 +84,9 @@ public class ClientQuestionData implements Serializable {
         this.selectedCategoryQuestions = questions;
     }
 
-    public List<Question> getSelectedCategoryQuestions() {
-        return selectedCategoryQuestions;
+    public Question getSelectedCategoryQuestion() {
+        System.out.println(selectedCategoryQuestions.get(questionsPlayed).question());
+        return selectedCategoryQuestions.get(questionsPlayed);
     }
 
     public void setThreeRandomCategories() {
@@ -80,6 +94,8 @@ public class ClientQuestionData implements Serializable {
             threeRandomCategories.clear();
         for(int i = 0; i < 3; i++) {
             int randomIndex = random.nextInt(allCategories.size());
+            while (threeRandomCategories.contains(allCategories.get(randomIndex)))
+                randomIndex = random.nextInt(allCategories.size());
             threeRandomCategories.add(remainingCategories.get(randomIndex));
         }
     }
