@@ -96,8 +96,6 @@ public class Client implements Runnable {
 
                         case PlayerJoinedResponse playerJoinedResponse -> {
                             state.handlePlayerJoined(playerJoinedResponse);
-                            // TODO find a way to update gui with username only - make playerturn state update gui by reading instance valuables, if opponent username != null. update it.
-                            state.updateGUI();
                         }
 
                         case RoundPlayedResponse roundPlayedResponse -> {
