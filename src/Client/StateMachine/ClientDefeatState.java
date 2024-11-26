@@ -26,6 +26,7 @@ public class ClientDefeatState implements ClientState {
 
     @Override
     public void updateGUI() {
+        guiMainFrame.getSurrenderButton().setVisible(false);
         System.out.println("Updating GUI");
     }
 

@@ -31,6 +31,7 @@ public class ClientLobbyState implements ClientState {
 
     @Override
     public void updateGUI() {
+        guiMainFrame.getSurrenderButton().setVisible(false);
         guiMainFrame.showLobbyView();
     }
 

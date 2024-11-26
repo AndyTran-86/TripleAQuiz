@@ -26,6 +26,7 @@ public class ClientOtherPlayerTurnState  implements ClientState {
 
     @Override
     public void updateGUI() {
+        guiMainFrame.getSurrenderButton().setVisible(true);
         guiMainFrame.disablePlayButton();
         guiMainFrame.setPlayerTurnLabelToOtherPlayer();
         guiMainFrame.showScoreBoardView();
