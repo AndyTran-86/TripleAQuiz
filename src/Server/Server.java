@@ -2,9 +2,7 @@ package Server;
 
 import Server.QuizDatabase.Api_Client;
 import Server.QuizDatabase.Category;
-import Server.QuizDatabase.QuestionsByCategory;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

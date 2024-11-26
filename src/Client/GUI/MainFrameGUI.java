@@ -232,7 +232,6 @@ public class MainFrameGUI {
         scoreBoard.getPlayerTurnLabel().setText("         Their turn");
     }
 
-
     public void disablePlayButton() {
         scoreBoard.getPlayButton().setEnabled(false);
     }
@@ -242,7 +241,7 @@ public class MainFrameGUI {
     }
 
     public void setGameBoard(Question selectedQuestion) {
-        quizGameBoard.getQuestionTextArea().setText(selectedQuestion.question());
+        quizGameBoard.getQuestionTextArea().setText(selectedQuestion.category() + "\n" +selectedQuestion.question());
         quizGameBoard.getAnswerButtons().getFirst().setText(selectedQuestion.correct_answer());
         for (int i = 1; i < 4; i++)
             quizGameBoard.getAnswerButtons().get(i).setText(selectedQuestion.incorrect_answers().get(i-1));

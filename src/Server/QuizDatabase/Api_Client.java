@@ -32,18 +32,8 @@ public class Api_Client {
         this.temp = new File("src/Server/QuizDatabase/questions.ser");
     }
 
-    public List<Category> getAll_questions() {
+    public List<Category> getAll_categories() {
         return all_categories;
-    }
-
-    public All_Categories getAllCategories() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(categories_url))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return deSerializeCategories(response.body());
     }
 
     public QuestionsByCategory getQuestionByCategory() throws Exception {
@@ -131,6 +121,8 @@ public class Api_Client {
     }
 
     public List<Category> getNewCategories(int amountNewCategories) {
+        //Todo fix bux: questions in category end up all mixed up!
+
         if (temp.exists()) {
             List<Category> allCategories = deSerializeAllQuestions();
             decodeHtmlFromAllQuestions(allCategories);
