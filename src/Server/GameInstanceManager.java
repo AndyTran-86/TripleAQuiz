@@ -1,7 +1,6 @@
 package Server;
 
 import Server.QuizDatabase.Category;
-import Server.QuizDatabase.QuestionsByCategory;
 
 import java.util.HashMap;
 import java.util.List;

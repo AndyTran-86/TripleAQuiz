@@ -39,7 +39,7 @@ public class Server implements Runnable{
     }
 
     private void getAllQuestions() {
-        allCategories = apiClient.getNewCategories(8);
+        allCategories = apiClient.getNewCategories();
         gameInstanceManager = new GameInstanceManager(allCategories);
     }
 

@@ -1,14 +1,10 @@
 package Server;
 
-import Client.Client;
 import Responses.*;
-import Server.QuizDatabase.Api_Client;
 import Server.QuizDatabase.Category;
 import Server.QuizDatabase.Question;
-import Server.QuizDatabase.QuestionsByCategory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
