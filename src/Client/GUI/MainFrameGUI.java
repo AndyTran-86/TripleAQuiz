@@ -24,6 +24,7 @@ public class MainFrameGUI {
     JPanel footerPanel;
     JLabel homeIconLabel;
     JLabel friendIconLabel;
+    JButton surrenderButton;
 
     //Spacers
     JLabel spacer;
@@ -62,6 +63,7 @@ public class MainFrameGUI {
         footerPanel = new JPanel(new GridLayout(3,2,10,10));
         homeIconLabel = new JLabel(new ImageIcon("icons/lobby/home.png"));
         friendIconLabel = new JLabel(new ImageIcon("icons/lobby/friends.png"));
+        surrenderButton = new JButton("Surrender");
 
 
         spacer = new JLabel(" ", SwingConstants.CENTER) {{
@@ -106,7 +108,7 @@ public class MainFrameGUI {
         footerPanel.add(new JLabel());
         mainFramePanel.add(footerPanel, BorderLayout.SOUTH);
         footerPanel.add(homeIconLabel);
-        footerPanel.add(new JLabel());
+        footerPanel.add(surrenderButton);
         footerPanel.add(new JLabel());
         footerPanel.add(friendIconLabel);
         footerPanel.add(new JLabel("Home", SwingConstants.CENTER));
@@ -214,6 +216,10 @@ public class MainFrameGUI {
 
     public String getInputUsername() {
         return lobbyBoard.getInputUserName();
+    }
+    
+    public JButton getSurrenderButton() {
+        return surrenderButton;
     }
 
     public void setPlayerUserName(String username) {

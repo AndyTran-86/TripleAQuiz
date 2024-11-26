@@ -4,6 +4,7 @@ import Client.GUI.MainFrameGUI;
 import Client.StateMachine.*;
 import Requests.ListeningRequest;
 import Requests.StartNewGameRequest;
+import Requests.SurrenderRequest;
 import Responses.*;
 import Server.QuizDatabase.Category;
 
@@ -26,6 +27,7 @@ public class Client implements Runnable {
     InetAddress ip;
     String username;
     long clientID;
+    long gameInstanceID;
 
     ClientState state;
     ClientState lobbyState;
@@ -170,7 +172,16 @@ public class Client implements Runnable {
             }else {JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Please enter a username!", "Error", JOptionPane.ERROR_MESSAGE);
 
             }
+        });
 
+        guiMainFrame.getSurrenderButton().addActionListener((e) -> {
+            try (Socket socket = new Socket(ip, port);
+                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+                out.writeObject(new SurrenderRequest(clientID, gameInstanceID));
+
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
         });
     }
 
@@ -187,6 +198,10 @@ public class Client implements Runnable {
 
     public void setClientID(long clientID) {
         this.clientID = clientID;
+    }
+
+    public void setGameInstanceID(long gameInstanceID) {
+        this.gameInstanceID = gameInstanceID;
     }
 
     public void setAllCategories(List<Category> questionsToClient) {

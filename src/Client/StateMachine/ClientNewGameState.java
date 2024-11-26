@@ -24,12 +24,14 @@ public class ClientNewGameState  implements ClientState {
         if (response instanceof NewGameResponse newGameResponse) {
             switch (newGameResponse.getTurnToPlay()) {
                 case PLAYER_TURN -> {
+                    client.setGameInstanceID(newGameResponse.getGameInstanceID());
                     client.setAllCategories(newGameResponse.getCategoriesToClient());
                     client.getQuestionData().setThreeRandomCategories();
                 }
 
                 case OTHER_PLAYER_TURN -> {
                     //TODO check if this is this needed
+                    client.setGameInstanceID(newGameResponse.getGameInstanceID());
                     client.setAllCategories(newGameResponse.getCategoriesToClient());
                     client.getQuestionData().setThreeRandomCategories();
                 }
