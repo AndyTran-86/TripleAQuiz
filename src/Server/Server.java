@@ -41,16 +41,7 @@ public class Server implements Runnable{
     }
 
     private void getAllQuestions() {
-        File temp = new File("src/Server/QuizDatabase/questions.ser");
-        if (temp.exists()) {
-            allCategories = apiClient.deSerializeAllQuestions();
-            System.out.println("Categories in database:");
-            for (Category category : allCategories) {
-                    System.out.println(category.name());
-            }
-        }
-        else
-            allCategories = apiClient.getNewCategories(8);
+        allCategories = apiClient.getNewCategories(8);
         gameInstanceManager = new GameInstanceManager(allCategories);
     }
 

@@ -27,6 +27,10 @@ public class ClientQuestionData implements Serializable {
         this.random = new Random();
     }
 
+    public List<Category> getThreeRandomCategories() {
+        return threeRandomCategories;
+    }
+
     public Category getSelectedCategory() {
         return selectedCategory;
     }
@@ -36,6 +40,7 @@ public class ClientQuestionData implements Serializable {
     }
 
     public void setAllCategories(List<Category> allCategories) {
+
         this.allCategories = allCategories;
         this.remainingCategories = allCategories;
     }
@@ -76,6 +81,8 @@ public class ClientQuestionData implements Serializable {
     }
 
     public void setThreeRandomCategories() {
+        //Todo make sure no category is picked twice
+
         if (!threeRandomCategories.isEmpty())
             threeRandomCategories.clear();
         for(int i = 0; i < 3; i++) {

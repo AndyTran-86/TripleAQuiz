@@ -1,7 +1,10 @@
 package Client.GUI;
 
+import Server.QuizDatabase.Category;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class MainFrameGUI {
     JFrame frame;
@@ -177,6 +180,14 @@ public class MainFrameGUI {
 
     public void showCategoryBoardView() {
         cardLayout.show(midPanel, "CategoryBoard");
+    }
+
+    public void setCategoryBoardNames(List<Category> categories) {
+        int counter = 0;
+        for (JButton b : categoryBoard.getCategoryButtons()) {
+            b.setText(categories.get(counter++).name());
+        }
+
     }
 
     public void showQuizGameView() {

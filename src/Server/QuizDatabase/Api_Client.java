@@ -21,6 +21,7 @@ public class Api_Client {
     private final String url_any50category = "https://opentdb.com/api.php?amount=50&type=multiple";
     private final HttpClient client;
     private final Gson gson;
+    private final File temp;
 
 
     public Api_Client() {
@@ -28,6 +29,7 @@ public class Api_Client {
         this.gson = new Gson();
         this.all_categories = new ArrayList<>();
         this.addedCategories = new StringBuilder();
+        this.temp = new File("src/Server/QuizDatabase/questions.ser");
     }
 
     public List<Category> getAll_questions() {
@@ -79,21 +81,24 @@ public class Api_Client {
         return s;
     }
 
-    public void decodeHtmlFromAllQuestions(List<Category> allQuestions) {
-        for (Category c : allQuestions) {
-                for (Question q : c.questions()) {
-                    q.setCategory(decodeHtmlFromString(q.category()));
-                    q.setType(decodeHtmlFromString(q.type()));
-                    q.setDifficulty(decodeHtmlFromString(q.difficulty()));
-                    q.setQuestion(decodeHtmlFromString(q.question()));
-                    q.setCorrect_answer(decodeHtmlFromString(q.correct_answer()));
-                    List<String> decodedIncorrect = new ArrayList<>();
-                    for (String s : q.incorrect_answers()) {
-                        decodedIncorrect.add(decodeHtmlFromString(s));
-                    }
-                    q.setIncorrect_answers(decodedIncorrect);
-                }
+    public void decodeHtmlFromAllQuestions(List<Category> categories) {
+
+        for (Category c : categories) {
+            List<Question> decodedQuestions = new ArrayList<>();
+            for (Question q : c.questions()) {
+                List<String> decodedIncorrect = new ArrayList<>();
+                for (String s : q.incorrect_answers())
+                    decodedIncorrect.add(decodeHtmlFromString(s));
+                decodedQuestions.add(new Question(
+                        decodeHtmlFromString(q.type()),
+                        decodeHtmlFromString(q.difficulty()),
+                        decodeHtmlFromString(q.category()),
+                        decodeHtmlFromString(q.question()),
+                        decodeHtmlFromString(q.correct_answer()),
+                        decodedIncorrect));
             }
+            all_categories.add(new Category(decodeHtmlFromString(c.name()), decodedQuestions));
+        }
     }
 
     public List<Category> deSerializeAllQuestions() {
@@ -126,34 +131,45 @@ public class Api_Client {
     }
 
     public List<Category> getNewCategories(int amountNewCategories) {
-        try {
-            int sleep = 6500;
-            int counter = 0;
-
-            while (counter < amountNewCategories) {
-                QuestionsByCategory c = getQuestionByCategory();
-                if (!addedCategories.toString().contains(c.results().getFirst().category())) {
-                    Category category = convertToCategoryObject(c);
-                    all_categories.add(category);
-                    System.out.println("Added category: " + category.name());
-                    Thread.sleep(sleep);
-                    System.out.println("Slept: " + sleep + " ms");
-                    counter++;
-                    addedCategories.append(category.name());
-                } else {
-                    System.out.println("Category already in database");
-                    Thread.sleep(sleep);
-                    System.out.println("Slept: " + sleep + " ms");
-                }
+        if (temp.exists()) {
+            List<Category> allCategories = deSerializeAllQuestions();
+            decodeHtmlFromAllQuestions(allCategories);
+            System.out.println("Categories in database:");
+            for (Category category : all_categories) {
+                System.out.println(category.name());
             }
-            decodeHtmlFromAllQuestions(all_categories);
-            serializeAllQuestions();
-            System.out.println("All questions saved.");
-            return (all_categories);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
+        else {
+            try {
+                List<Category> newCategories = new ArrayList<>();
+
+                int sleep = 6500;
+                int counter = 0;
+
+                while (counter < amountNewCategories) {
+                    QuestionsByCategory c = getQuestionByCategory();
+                    if (!addedCategories.toString().contains(c.results().getFirst().category())) {
+                        Category category = convertToCategoryObject(c);
+                        newCategories.add(category);
+                        System.out.println("Added category: " + category.name());
+                        Thread.sleep(sleep);
+                        System.out.println("Slept: " + sleep + " ms");
+                        counter++;
+                        addedCategories.append(category.name());
+                    } else {
+                        System.out.println("Category already in database");
+                        Thread.sleep(sleep);
+                        System.out.println("Slept: " + sleep + " ms");
+                    }
+                }
+                decodeHtmlFromAllQuestions(newCategories);
+                serializeAllQuestions();
+                System.out.println("All questions saved.");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return (all_categories);
     }
 
     private Category convertToCategoryObject(QuestionsByCategory original) {
