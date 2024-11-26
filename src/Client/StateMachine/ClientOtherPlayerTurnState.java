@@ -1,6 +1,6 @@
 package Client.StateMachine;
 
-import Client.ClientGUI;
+
 import Client.Client;
 import Client.GUI.MainFrameGUI;
 import Responses.PlayerJoinedResponse;
@@ -26,15 +26,14 @@ public class ClientOtherPlayerTurnState  implements ClientState {
 
     @Override
     public void updateGUI() {
-        System.out.println("Updating GUI");
         guiMainFrame.disablePlayButton();
-        guiMainFrame.setOtherPlayerTurn();
-        guiMainFrame.setScoreBoardView();
+        guiMainFrame.setPlayerTurnLabelToOtherPlayer();
+        guiMainFrame.showScoreBoardView();
     }
 
 
     @Override
     public void handlePlayerJoined(PlayerJoinedResponse response) {
-        guiMainFrame.setOtherPlayerLabel(response.getUsername());
+        guiMainFrame.setOtherPlayerUserName(response.getUsername());
     }
 }

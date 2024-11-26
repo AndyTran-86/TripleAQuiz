@@ -115,10 +115,6 @@ public class MainFrameGUI {
         lobbyBoard = new LobbyBoard(cardLayout, midPanel);
         addBoard(lobbyBoard.getBoard(), "Lobby");
 
-        //WaitingBoard
-        //TODO: remove
-        WaitingBoard waitingBoard = new WaitingBoard();
-        addBoard(waitingBoard.getBoard(),"WaitingBoard");
 
         //CategoryBoard
         categoryBoard = new CategoryBoard();
@@ -153,10 +149,6 @@ public class MainFrameGUI {
         midPanel.add(board, name);
     }
 
-    public void setOtherPlayerLabel(String username) {
-        otherPlayerLabel.setText(username);
-    }
-
 
 
     private void hideHeaderContent() {
@@ -175,21 +167,33 @@ public class MainFrameGUI {
     }
 
 
-    public void setLobbyView() {
+    public void showLobbyView() {
         cardLayout.show(midPanel,"Lobby");
     }
 
-    public void setScoreBoardView() {
+    public void showScoreBoardView() {
         cardLayout.show(midPanel, "ScoreBoard");
     }
 
+    public void showCategoryBoardView() {
+        cardLayout.show(midPanel, "CategoryBoard");
+    }
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() ->{
-//            MainFrameGUI game = new MainFrameGUI();
-//            game.init();
-//        });
-//    }
+    public void showQuizGameView() {
+        cardLayout.show(midPanel, "QuizGameBoard");
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public JButton getScoreBoardPlayButton() {
+        return scoreBoard.getPlayButton();
+    }
+
+    public JButton[] getCategoryButtons() {
+        return categoryBoard.getCategoryButtons();
+    }
 
     public JButton getLobbyStartGameButton() {
         return lobbyBoard.getLobbyStartButton();
@@ -199,22 +203,29 @@ public class MainFrameGUI {
         return lobbyBoard.getInputUserName();
     }
 
+    public void setPlayerUserName(String username) {
+        scoreBoard.getPlayerLabel().setText(username);
+    }
+
+    public void setOtherPlayerUserName(String username) {
+        scoreBoard.getOtherPlayerLabel().setText(username);
+    }
+
+    public void setPlayerTurnLabelToPlayer() {
+        scoreBoard.getPlayerTurnLabel().setText("         Your turn");
+    }
+
+    public void setPlayerTurnLabelToOtherPlayer() {
+        scoreBoard.getPlayerTurnLabel().setText("         Their turn");
+    }
+
 
     public void disablePlayButton() {
-        System.out.println("disable play button");
+        scoreBoard.getPlayButton().setEnabled(false);
     }
 
     public void enablePlayButton() {
-        System.out.println("disable play button");
+        scoreBoard.getPlayButton().setEnabled(true);
     }
-
-    public void setPlayerTurn() {
-        System.out.println("player turn");
-    }
-
-    public void setOtherPlayerTurn() {
-        System.out.println("other player turn");
-    }
-
 
 }

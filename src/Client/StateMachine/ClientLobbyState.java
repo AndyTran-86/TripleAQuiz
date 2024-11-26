@@ -1,13 +1,13 @@
 package Client.StateMachine;
 
-import Client.ClientGUI;
+
 import Client.Client;
 import Client.GUI.MainFrameGUI;
 import Responses.ListeningResponse;
 import Responses.PlayerJoinedResponse;
 import Responses.Response;
 
-import javax.swing.*;
+
 import java.io.IOException;
 
 public class ClientLobbyState implements ClientState {
@@ -25,15 +25,13 @@ public class ClientLobbyState implements ClientState {
         if (response instanceof ListeningResponse listeningResponse) {
             long id = listeningResponse.getClientID();
             client.setClientID(id);
-            //TODO handle question data here and integrate into client
-            JOptionPane.showMessageDialog(null, "Listening connection established with clientID: " + client.getClientID());
+
         }
     }
 
     @Override
     public void updateGUI() {
-        guiMainFrame.setLobbyView();
-        System.out.println("Updating GUI");
+        guiMainFrame.showLobbyView();
     }
 
     @Override

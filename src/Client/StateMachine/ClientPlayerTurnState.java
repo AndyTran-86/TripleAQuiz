@@ -1,6 +1,6 @@
 package Client.StateMachine;
 
-import Client.ClientGUI;
+
 import Client.Client;
 import Client.GUI.MainFrameGUI;
 import Responses.PlayerJoinedResponse;
@@ -26,16 +26,14 @@ public class ClientPlayerTurnState implements ClientState {
 
     @Override
     public void updateGUI() {
-        System.out.println("Updating GUI");
         guiMainFrame.enablePlayButton();
-        guiMainFrame.setPlayerTurn();
-        guiMainFrame.setScoreBoardView();
+        guiMainFrame.setPlayerTurnLabelToPlayer();
+        guiMainFrame.showScoreBoardView();
     }
 
     @Override
     public void handlePlayerJoined(PlayerJoinedResponse response) {
-        guiMainFrame.setOtherPlayerLabel(response.getUsername());
-        JOptionPane.showMessageDialog(null, response.getUsername() + " joined the game");
-        //TODO add getUserName to data in client, then update gui with it?
+        guiMainFrame.setOtherPlayerUserName(response.getUsername());
+
     }
 }

@@ -39,6 +39,10 @@ public class CategoryBoard extends AbstractBoard {
         }
     }
 
+    public JButton[] getCategoryButtons() {
+        return categoryButtons;
+    }
+
     /*public void setCategoryBoard(List<QuestionsByCategory> questionsByCategories) {
         for (int i = 0; i < categoryButtons.length; i++) {
             categoryButtons[i].setText(questionsByCategories.get(i).results().getFirst().category());

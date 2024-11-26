@@ -21,7 +21,6 @@ public class Client implements Runnable {
 
     ObjectOutputStream out;
     ObjectInputStream in;
-//    ClientGUI gui;
     MainFrameGUI guiMainFrame;
     int port;
     InetAddress ip;
@@ -46,7 +45,6 @@ public class Client implements Runnable {
 
 
         ip = InetAddress.getLoopbackAddress();
-//        gui = new ClientGUI();
         guiMainFrame = new MainFrameGUI();
 
         lobbyState = new ClientLobbyState(this, guiMainFrame);
@@ -61,7 +59,6 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
-//        gui.init();
         guiMainFrame.init();
         connectToServer();
         addEventListeners();
@@ -142,36 +139,33 @@ public class Client implements Runnable {
     }
 
     public void addEventListeners() {
-//        gui.getLobbyStartNewGameButton().addActionListener(event -> {
-//            System.out.println("pressed start new game button");
-//            try (Socket socket = new Socket(ip, port);
-//                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-//
-//                out.writeObject(new StartNewGameRequest(clientID));
-//            } catch (IOException exception) {
-//                exception.printStackTrace();
-//            }
-//
-//
-//
-//        });
+
+        guiMainFrame.getScoreBoardPlayButton().addActionListener((e) -> {
+            guiMainFrame.showCategoryBoardView();
+        });
+
+        for (JButton categoryButton : guiMainFrame.getCategoryButtons()) {
+            categoryButton.addActionListener((e) -> {
+                guiMainFrame.showQuizGameView();
+            });
+        }
 
         guiMainFrame.getLobbyStartGameButton().addActionListener(e -> {
             //TODO replace with mainframe gui
             String userName = guiMainFrame.getInputUsername();
             if (!userName.isEmpty()) {
-                System.out.println("User name: " + userName);
                 username = userName;
+                guiMainFrame.setPlayerUserName(username);
 
                 try (Socket socket = new Socket(ip, port);
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-
                 out.writeObject(new StartNewGameRequest(clientID, username));
+
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
 
-            }else {JOptionPane.showMessageDialog(null, "Please enter a username!", "Error", JOptionPane.ERROR_MESSAGE);
+            }else {JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Please enter a username!", "Error", JOptionPane.ERROR_MESSAGE);
 
             }
 
