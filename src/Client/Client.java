@@ -96,9 +96,6 @@ public class Client implements Runnable {
 
                         case PlayerJoinedResponse playerJoinedResponse -> {
                             state.handlePlayerJoined(playerJoinedResponse);
-                            if (state instanceof ClientOtherPlayerTurnState) {
-                                state.updateGUI();
-                            }
                         }
 
                         case RoundPlayedResponse roundPlayedResponse -> {
