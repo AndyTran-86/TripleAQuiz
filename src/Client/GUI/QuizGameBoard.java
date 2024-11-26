@@ -2,6 +2,8 @@ package Client.GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QuizGameBoard extends  AbstractBoard {
 
@@ -11,21 +13,27 @@ public class QuizGameBoard extends  AbstractBoard {
     private JTextArea questionTextArea;
     private JLabel timerLabel;
 
-    private JButton[] answerButtons;
+    private List<JButton> answerButtons;
 
 
     public QuizGameBoard() {
         super();
     }
 
+    public JTextArea getQuestionTextArea() {
+        return questionTextArea;
+    }
+
+    public List<JButton> getAnswerButtons() {
+        return answerButtons;
+    }
 
     @Override
     protected void initComponents(){
         questionPanel = new JPanel();
         answerPanel = new JPanel();
 
-        questionTextArea = new JTextArea("Question will be here, I hope its okay to put the question here. " +
-                "I write some just to fill it and see how it looks");
+        questionTextArea = new JTextArea("Question will be here");
         questionTextArea.setFont(new Font("Arial",Font.PLAIN, 24));
         questionTextArea.setLineWrap(true);
         questionTextArea.setWrapStyleWord(true);
@@ -37,10 +45,10 @@ public class QuizGameBoard extends  AbstractBoard {
 
 
 
-        answerButtons = new JButton[4];
-        for (int i = 0; i < answerButtons.length; i++) {
-            answerButtons[i] = new JButton("Answer " + (i + 1));
-            answerButtons[i].setFont(new Font("Arial", Font.BOLD, 16));
+        answerButtons = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            answerButtons.add(new JButton("Answer " + (i + 1)));
+            answerButtons.get(i).setFont(new Font("Arial", Font.BOLD, 16));
         }
 
     }

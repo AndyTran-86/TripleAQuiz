@@ -56,9 +56,14 @@ public class ClientQuestionData implements Serializable {
         return (correctAnswer.equals(answer));
     }
 
-    public void selectCategory(Category category) {
-        this.selectedCategory = category;
-        this.remainingCategories.remove(category);
+    public void selectCategory(String categoryName) {
+        for (Category c : threeRandomCategories) {
+            if (c.name().equals(categoryName)) {
+                this.selectedCategory = c;
+                this.remainingCategories.remove(c);
+                break;
+            }
+        }
         setSelectedCategoryQuestions();
     }
 
@@ -76,8 +81,8 @@ public class ClientQuestionData implements Serializable {
         this.selectedCategoryQuestions = questions;
     }
 
-    public List<Question> getSelectedCategoryQuestions() {
-        return selectedCategoryQuestions;
+    public Question getSelectedCategoryQuestion() {
+        return selectedCategoryQuestions.get(questionsPlayed);
     }
 
     public void setThreeRandomCategories() {

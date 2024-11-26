@@ -1,9 +1,11 @@
 package Client.GUI;
 
 import Server.QuizDatabase.Category;
+import Server.QuizDatabase.Question;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
 import java.util.List;
 
 public class MainFrameGUI {
@@ -239,4 +241,11 @@ public class MainFrameGUI {
         scoreBoard.getPlayButton().setEnabled(true);
     }
 
+    public void setGameBoard(Question selectedQuestion) {
+        quizGameBoard.getQuestionTextArea().setText(selectedQuestion.question());
+        quizGameBoard.getAnswerButtons().getFirst().setText(selectedQuestion.correct_answer());
+        for (int i = 1; i < 4; i++)
+            quizGameBoard.getAnswerButtons().get(i).setText(selectedQuestion.incorrect_answers().get(i-1));
+        Collections.shuffle(quizGameBoard.getAnswerButtons());
+    }
 }

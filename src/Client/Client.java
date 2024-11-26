@@ -147,6 +147,9 @@ public class Client implements Runnable {
 
         for (JButton categoryButton : guiMainFrame.getCategoryButtons()) {
             categoryButton.addActionListener((e) -> {
+                //Todo add question, correct_answer and incorrect_answers to QuizGameBoard
+                questionData.selectCategory(categoryButton.getText());
+                guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                 guiMainFrame.showQuizGameView();
             });
         }
