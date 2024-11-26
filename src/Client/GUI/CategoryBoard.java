@@ -1,10 +1,7 @@
 package Client.GUI;
 
-import Server.QuizDatabase.QuestionsByCategory;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class CategoryBoard extends AbstractBoard {
 
