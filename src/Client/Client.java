@@ -141,7 +141,6 @@ public class Client implements Runnable {
     public void addEventListeners() {
 
         guiMainFrame.getScoreBoardPlayButton().addActionListener((e) -> {
-            //TODO add logic for getting categories.
             guiMainFrame.setCategoryBoardNames(questionData.getThreeRandomCategories());
             guiMainFrame.showCategoryBoardView();
         });

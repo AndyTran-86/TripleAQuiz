@@ -81,12 +81,12 @@ public class ClientQuestionData implements Serializable {
     }
 
     public void setThreeRandomCategories() {
-        //Todo make sure no category is picked twice
-
         if (!threeRandomCategories.isEmpty())
             threeRandomCategories.clear();
         for(int i = 0; i < 3; i++) {
             int randomIndex = random.nextInt(allCategories.size());
+            while (threeRandomCategories.contains(allCategories.get(randomIndex)))
+                randomIndex = random.nextInt(allCategories.size());
             threeRandomCategories.add(remainingCategories.get(randomIndex));
         }
     }
