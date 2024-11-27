@@ -5,6 +5,7 @@ import Client.Client;
 import Client.GUI.MainFrameGUI;
 import Responses.PlayerJoinedResponse;
 import Responses.Response;
+import Responses.RoundPlayedResponse;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -21,8 +22,12 @@ public class ClientPlayerTurnState implements ClientState {
 
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
-        client.updateRoundCounter();
-        JOptionPane.showMessageDialog(null, "Round played response received with THIS PLAYER TURN");
+        if (response instanceof RoundPlayedResponse roundPlayedResponse) {
+            client.updateRoundCounter();
+            guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-1].setText(String.valueOf(roundPlayedResponse.getResult().stream().reduce(0, Integer::sum)));
+            client.getQuestionData().setSelectedCategoryFromOpponent(roundPlayedResponse.getSelectedCategory(), roundPlayedResponse.getAnsweredQuestions());
+        }
+        
     }
 
     @Override

@@ -162,7 +162,7 @@ public class Client implements Runnable {
             answerButton.addActionListener((e) -> {
                 if (questionData.checkAnswer(answerButton.getText())) {
                     int currentScore = questionData.getResultsPerRound().stream().reduce(0, Integer::sum);
-                    guiMainFrame.getPlayerScoreLabels()[currentRound-1].setText(String.valueOf(currentScore));
+                    guiMainFrame.getPlayerScoreLabels()[getCurrentRound()-1].setText(String.valueOf(currentScore));
                     answerButton.setBackground(Color.GREEN);
                     System.out.println("Correct answer");
                 } else {
@@ -250,4 +250,9 @@ public class Client implements Runnable {
     public void updateRoundCounter() {
         currentRound++;
     }
+
+    public int getCurrentRound() {
+        return currentRound/2;
+    }
+
 }
