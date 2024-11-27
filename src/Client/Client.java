@@ -169,37 +169,42 @@ public class Client implements Runnable {
 
         for (JButton answerButton : guiMainFrame.getAnswerButtons()) {
             answerButton.addActionListener((e) -> {
+                guiMainFrame.disableAnswerButtons();
+                guiMainFrame.getNextQuestionButton().setEnabled(true);
                 if (questionData.checkAnswer(answerButton.getText())) {
                     int currentScore = questionData.getResultsPerRound().stream().reduce(0, Integer::sum);
                     guiMainFrame.getPlayerScoreLabels()[getCurrentRound()-1].setText(String.valueOf(currentScore));
                     answerButton.setBackground(Color.GREEN);
+                    answerButton.setOpaque(true);
                     System.out.println("Correct answer");
                 } else {
                     answerButton.setBackground(Color.RED);
+                    answerButton.setOpaque(true);
                     System.out.println("Wrong answer");
                 }
-                try {
-                    Thread.sleep(3000);
-                    if (questionData.getQuestionsPlayed() >= 3 && isRespondingTurn) {
-                        setRespondingTurn(false);
-                        sendRespondingAnswers();
-                        questionData.getResultsPerRound().clear();
-                        guiMainFrame.showScoreBoardView();
-                    }
-                    else if (questionData.getQuestionsPlayed() >= 3) {
-                        sendRoundPlayed();
-                        questionData.getResultsPerRound().clear();
-                    }else {
-                        guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
-                    }
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-
+                if (questionData.getQuestionsPlayed() >= 3)
+                    guiMainFrame.getNextQuestionButton().setText("End Turn");
             });
         }
 
+        guiMainFrame.getNextQuestionButton().addActionListener((e) -> {
+            if (questionData.getQuestionsPlayed() >= 3 && isRespondingTurn) {
+                setRespondingTurn(false);
+                sendRespondingAnswers();
+                questionData.getResultsPerRound().clear();
+                guiMainFrame.showScoreBoardView();
+            }
+            else if (questionData.getQuestionsPlayed() >= 3) {
+                sendRoundPlayed();
+                questionData.getResultsPerRound().clear();
+            } else {
+                guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
+            }
+            guiMainFrame.getNextQuestionButton().setEnabled(false);
+        });
+
         guiMainFrame.getLobbyStartGameButton().addActionListener(e -> {
+            guiMainFrame.getNextQuestionButton().setVisible(true); //TODO choose where to call..
             //TODO replace with mainframe gui
             String userName = guiMainFrame.getInputUsername();
             if (!userName.isEmpty()) {
