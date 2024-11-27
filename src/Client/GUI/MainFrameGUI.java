@@ -25,7 +25,6 @@ public class MainFrameGUI {
     JLabel homeIconLabel;
     JLabel friendIconLabel;
     JButton surrenderButton;
-    JButton nextQuestionButton;
 
     //Spacers
     JLabel spacer;
@@ -65,7 +64,6 @@ public class MainFrameGUI {
         homeIconLabel = new JLabel(new ImageIcon("icons/lobby/home.png"));
         friendIconLabel = new JLabel(new ImageIcon("icons/lobby/friends.png"));
         surrenderButton = new JButton("Surrender");
-        nextQuestionButton = new JButton("Next Question");
 
 
         spacer = new JLabel(" ", SwingConstants.CENTER) {{
@@ -104,20 +102,18 @@ public class MainFrameGUI {
 
 
         //Footer
-        //footerPanel.add(new JLabel());
-        //footerPanel.add(new JLabel());
-        //footerPanel.add(new JLabel());
-        //footerPanel.add(new JLabel());
+        footerPanel.add(new JLabel());
+        footerPanel.add(new JLabel());
+        footerPanel.add(new JLabel());
+        footerPanel.add(new JLabel());
         mainFramePanel.add(footerPanel, BorderLayout.SOUTH);
-        footerPanel.add(surrenderButton);
-        nextQuestionButton.setEnabled(false);
-        footerPanel.add(nextQuestionButton);
         footerPanel.add(homeIconLabel);
-        //footerPanel.add(new JLabel());
+        footerPanel.add(surrenderButton);
+        footerPanel.add(new JLabel());
         footerPanel.add(friendIconLabel);
         footerPanel.add(new JLabel("Home", SwingConstants.CENTER));
-        //footerPanel.add(new JLabel());
-        //footerPanel.add(new JLabel());
+        footerPanel.add(new JLabel());
+        footerPanel.add(new JLabel());
         footerPanel.add(new JLabel("Friends", SwingConstants.CENTER));
 
 
@@ -234,10 +230,6 @@ public class MainFrameGUI {
         return surrenderButton;
     }
 
-    public JButton getNextQuestionButton() {
-        return nextQuestionButton;
-    }
-
     public void setPlayerUserName(String username) {
         scoreBoard.getPlayerLabel().setText(username);
     }
@@ -263,10 +255,8 @@ public class MainFrameGUI {
     }
 
     public void setGameBoard(Question selectedQuestion) {
-        nextQuestionButton.setText("Next Question");
         for (JButton b : quizGameBoard.getAnswerButtons()) {
             b.setBackground(Color.WHITE);
-            b.setEnabled(true);
         }
         quizGameBoard.getQuestionTextArea().setText(selectedQuestion.category() + "\n" +selectedQuestion.question());
         quizGameBoard.getAnswerButtons().getFirst().setText(selectedQuestion.correct_answer());
@@ -277,11 +267,5 @@ public class MainFrameGUI {
 
     public List<JButton> getAnswerButtons() {
         return quizGameBoard.getAnswerButtons();
-    }
-
-    public void disableAnswerButtons() {
-        for (JButton b : quizGameBoard.getAnswerButtons()) {
-            b.setEnabled(false);
-        }
     }
 }
