@@ -9,6 +9,7 @@ import Responses.*;
 import Server.QuizDatabase.Category;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -151,6 +152,29 @@ public class Client implements Runnable {
                 questionData.selectCategory(categoryButton.getText());
                 guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                 guiMainFrame.showQuizGameView();
+            });
+        }
+
+        for (JButton answerButton : guiMainFrame.getAnswerButtons()) {
+            answerButton.addActionListener((e) -> {
+                if (questionData.checkAnswer(answerButton.getText())) {
+                    answerButton.setBackground(Color.GREEN);
+                    System.out.println("Correct answer");
+                } else {
+                    answerButton.setBackground(Color.RED);
+                    System.out.println("Wrong answer");
+                }
+                try {
+                    Thread.sleep(3000);
+                    if (questionData.getQuestionsPlayed() >= 3) {
+                        sendRoundPlayed();
+                    } else {
+                        guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
+                    }
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+
             });
         }
 

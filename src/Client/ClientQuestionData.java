@@ -28,6 +28,10 @@ public class ClientQuestionData implements Serializable {
         this.random = new Random();
     }
 
+    public List<Question> getAnsweredQuestions() {
+        return selectedCategoryQuestions;
+    }
+
     public List<Category> getThreeRandomCategories() {
         return threeRandomCategories;
     }
@@ -100,4 +104,7 @@ public class ClientQuestionData implements Serializable {
         }
     }
 
+    public int getQuestionsPlayed() {
+        return questionsPlayed;
+    }
 }
