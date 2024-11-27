@@ -64,6 +64,7 @@ public class GameInstance {
         int totalScoreBeforeRound = players.get(callingPlayer);
         int scoreThisRound = result.stream().reduce(0, Integer::sum);
         players.replace(callingPlayer, totalScoreBeforeRound, totalScoreBeforeRound+scoreThisRound);
+        System.out.println("Server: score: " + players);
     }
 
     public Map<ClientConnection, Integer> getPlayers() {
@@ -75,6 +76,9 @@ public class GameInstance {
     }
 
     public void notifyRoundPlayed(List<Integer> result, Category selectedCategory, List<Question> answeredQuestions) throws IOException {
+        System.out.println(result);
+        System.out.println(selectedCategory);
+        System.out.println(answeredQuestions);
         callingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.OTHER_PLAYER_TURN, result, selectedCategory, answeredQuestions));
         nonCallingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.PLAYER_TURN, result, selectedCategory, answeredQuestions));
     }
@@ -96,6 +100,10 @@ public class GameInstance {
             callingPlayer.out.writeObject(new VictoryResponse(VictoryType.DRAW));
             nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.DRAW));
         }
+    }
+
+    public void notifyRespondedAnsweredQuestions(List<Integer> result) throws IOException {
+        nonCallingPlayer.out.writeObject(new RespondingAnswersResponse(result));
     }
 
     public void notifySurrender() throws IOException {

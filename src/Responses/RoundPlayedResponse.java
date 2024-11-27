@@ -16,6 +16,8 @@ public class RoundPlayedResponse extends Response implements Serializable {
     public RoundPlayedResponse(RoundTurn turnToPlay, List<Integer> result, Category selectedCategory, List<Question> answeredQuestions) {
         this.turnToPlay = turnToPlay;
         this.result = result;
+        this.selectedCategory = selectedCategory;
+        this.answeredQuestions = answeredQuestions;
     }
 
     public RoundTurn getTurnToPlay() {

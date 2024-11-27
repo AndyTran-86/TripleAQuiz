@@ -28,6 +28,10 @@ public class ClientQuestionData implements Serializable {
         this.random = new Random();
     }
 
+    public List<Question> getAnsweredQuestions() {
+        return selectedCategoryQuestions;
+    }
+
     public List<Category> getThreeRandomCategories() {
         return threeRandomCategories;
     }
@@ -70,9 +74,9 @@ public class ClientQuestionData implements Serializable {
 
     public void setSelectedCategoryQuestions() {
         this.questionsPlayed = 0;
+        selectedCategoryQuestions.clear();
         for (int i = 0; i < 3; i++) {
             int randomIndex = random.nextInt(selectedCategory.questions().size());
-            System.out.println(selectedCategory.name());
             selectedCategoryQuestions.add(selectedCategory.questions().remove(randomIndex));
             System.out.println(selectedCategoryQuestions.getLast().question());
         }
@@ -100,4 +104,7 @@ public class ClientQuestionData implements Serializable {
         }
     }
 
+    public int getQuestionsPlayed() {
+        return questionsPlayed;
+    }
 }

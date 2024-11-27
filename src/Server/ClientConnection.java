@@ -1,9 +1,6 @@
 package Server;
 
-import Requests.ListeningRequest;
-import Requests.RoundPlayedRequest;
-import Requests.StartNewGameRequest;
-import Requests.SurrenderRequest;
+import Requests.*;
 import Server.StateMachine.*;
 
 import java.io.IOException;
@@ -24,6 +21,7 @@ public class ClientConnection implements Runnable {
     ServerState handleListeningRequestState;
     ServerState handleNewGameRequestState;
     ServerState handleRoundPlayedRequestState;
+    ServerState respondingAnswersRequestState;
     ServerState handleSurrenderRequestState;
 
     public ClientConnection(Socket socket, GameInstanceManager gameInstanceManager) {
@@ -33,6 +31,7 @@ public class ClientConnection implements Runnable {
         handleListeningRequestState = new ListeningRequestHandlingState(this, this.gameInstanceManager);
         handleNewGameRequestState = new NewGameRequestHandlingState(this, this.gameInstanceManager);
         handleRoundPlayedRequestState = new RoundPlayedRequestHandlingState(this, this.gameInstanceManager);
+        respondingAnswersRequestState = new RespondingAnswersRequestHandlingState(this, this.gameInstanceManager);
         handleSurrenderRequestState = new SurrenderRequestHandlingState(this, this.gameInstanceManager);
     }
 
@@ -59,6 +58,10 @@ public class ClientConnection implements Runnable {
                 case SurrenderRequest surrenderRequest -> {
                     state = handleSurrenderRequestState;
                     state.handleRequest(surrenderRequest);
+                }
+                case RespondingAnswersRequest respondingAnswersRequest -> {
+                    state = respondingAnswersRequestState;
+                    state.handleRequest(respondingAnswersRequest);
                 }
                 default -> throw new UnsupportedOperationException("Unknown request!");
             }

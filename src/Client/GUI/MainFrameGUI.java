@@ -198,6 +198,14 @@ public class MainFrameGUI {
         cardLayout.show(midPanel, "QuizGameBoard");
     }
 
+    public JLabel[] getPlayerScoreLabels() {
+        return scoreBoard.getPlayerScoreLabels();
+    }
+
+    public JLabel[] getOtherPlayerScoreLabels() {
+        return scoreBoard.getOtherPlayerScoreLabels();
+    }
+
     public JFrame getFrame() {
         return frame;
     }
@@ -247,10 +255,17 @@ public class MainFrameGUI {
     }
 
     public void setGameBoard(Question selectedQuestion) {
+        for (JButton b : quizGameBoard.getAnswerButtons()) {
+            b.setBackground(Color.WHITE);
+        }
         quizGameBoard.getQuestionTextArea().setText(selectedQuestion.category() + "\n" +selectedQuestion.question());
         quizGameBoard.getAnswerButtons().getFirst().setText(selectedQuestion.correct_answer());
         for (int i = 1; i < 4; i++)
             quizGameBoard.getAnswerButtons().get(i).setText(selectedQuestion.incorrect_answers().get(i-1));
         Collections.shuffle(quizGameBoard.getAnswerButtons());
+    }
+
+    public List<JButton> getAnswerButtons() {
+        return quizGameBoard.getAnswerButtons();
     }
 }

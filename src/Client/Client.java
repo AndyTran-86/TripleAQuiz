@@ -2,13 +2,12 @@ package Client;
 
 import Client.GUI.MainFrameGUI;
 import Client.StateMachine.*;
-import Requests.ListeningRequest;
-import Requests.StartNewGameRequest;
-import Requests.SurrenderRequest;
+import Requests.*;
 import Responses.*;
 import Server.QuizDatabase.Category;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -28,6 +27,8 @@ public class Client implements Runnable {
     String username;
     long clientID;
     long gameInstanceID;
+    int currentRound;
+    boolean isRespondingTurn;
 
     ClientState state;
     ClientState lobbyState;
@@ -43,6 +44,8 @@ public class Client implements Runnable {
         this.questionData = new ClientQuestionData();
         this.port = port;
         this.username = username;
+
+        currentRound = 0;
 
 
 
@@ -78,6 +81,7 @@ public class Client implements Runnable {
                 Object unknownResponseFromServer;
 
                 while ((unknownResponseFromServer = in.readObject()) != null) {
+                    System.out.println(unknownResponseFromServer.getClass().getName());
                     switch (unknownResponseFromServer) {
                         case ListeningResponse listeningResponse -> {
                             state = lobbyState;
@@ -107,6 +111,10 @@ public class Client implements Runnable {
                             }
                             state.handleResponse(roundPlayedResponse);
                             state.updateGUI();
+                        }
+
+                        case RespondingAnswersResponse respondingAnswersResponse -> {
+                            state.handleResponse(respondingAnswersResponse);
                         }
 
                         case VictoryResponse victoryResponse -> {
@@ -141,16 +149,53 @@ public class Client implements Runnable {
     public void addEventListeners() {
 
         guiMainFrame.getScoreBoardPlayButton().addActionListener((e) -> {
-            guiMainFrame.setCategoryBoardNames(questionData.getThreeRandomCategories());
-            guiMainFrame.showCategoryBoardView();
+            if (isRespondingTurn) {
+                guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
+                guiMainFrame.showQuizGameView();
+            } else {
+                guiMainFrame.setCategoryBoardNames(questionData.getThreeRandomCategories());
+                guiMainFrame.showCategoryBoardView();
+            }
+
         });
 
         for (JButton categoryButton : guiMainFrame.getCategoryButtons()) {
             categoryButton.addActionListener((e) -> {
-                //Todo add question, correct_answer and incorrect_answers to QuizGameBoard
                 questionData.selectCategory(categoryButton.getText());
                 guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                 guiMainFrame.showQuizGameView();
+            });
+        }
+
+        for (JButton answerButton : guiMainFrame.getAnswerButtons()) {
+            answerButton.addActionListener((e) -> {
+                if (questionData.checkAnswer(answerButton.getText())) {
+                    int currentScore = questionData.getResultsPerRound().stream().reduce(0, Integer::sum);
+                    guiMainFrame.getPlayerScoreLabels()[getCurrentRound()-1].setText(String.valueOf(currentScore));
+                    answerButton.setBackground(Color.GREEN);
+                    System.out.println("Correct answer");
+                } else {
+                    answerButton.setBackground(Color.RED);
+                    System.out.println("Wrong answer");
+                }
+                try {
+                    Thread.sleep(3000);
+                    if (questionData.getQuestionsPlayed() >= 3 && isRespondingTurn) {
+                        setRespondingTurn(false);
+                        sendRespondingAnswers();
+                        questionData.getResultsPerRound().clear();
+                        guiMainFrame.showScoreBoardView();
+                    }
+                    else if (questionData.getQuestionsPlayed() >= 3) {
+                        sendRoundPlayed();
+                        questionData.getResultsPerRound().clear();
+                    }else {
+                        guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
+                    }
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+
             });
         }
 
@@ -186,6 +231,28 @@ public class Client implements Runnable {
     }
 
 
+
+
+    private void sendRoundPlayed() {
+        try (Socket socket = new Socket(ip, port);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+
+            out.writeObject(new RoundPlayedRequest(clientID, gameInstanceID, questionData.getResultsPerRound(), questionData.getSelectedCategory(), questionData.getAnsweredQuestions()));
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void sendRespondingAnswers() {
+        try (Socket socket = new Socket(ip, port);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+            out.writeObject(new RespondingAnswersRequest(clientID, gameInstanceID, questionData.getResultsPerRound()));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
     public boolean checkAnswer(String answer) {
         return questionData.checkAnswer(answer);
     }
@@ -204,7 +271,20 @@ public class Client implements Runnable {
         this.gameInstanceID = gameInstanceID;
     }
 
+    public void setRespondingTurn(boolean respondingTurn) {
+        isRespondingTurn = respondingTurn;
+    }
+
     public void setAllCategories(List<Category> questionsToClient) {
         questionData.setAllCategories(questionsToClient);
     }
+
+    public void updateRoundCounter() {
+        currentRound++;
+    }
+
+    public int getCurrentRound() {
+        return currentRound/2;
+    }
+
 }

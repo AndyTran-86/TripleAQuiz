@@ -4,7 +4,9 @@ package Client.StateMachine;
 import Client.Client;
 import Client.GUI.MainFrameGUI;
 import Responses.PlayerJoinedResponse;
+import Responses.RespondingAnswersResponse;
 import Responses.Response;
+import Responses.RoundPlayedResponse;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -21,7 +23,15 @@ public class ClientOtherPlayerTurnState  implements ClientState {
 
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
-        JOptionPane.showMessageDialog(null, "Round played response received with OTHER PLAYER TURN");
+        if (response instanceof RoundPlayedResponse roundPlayedResponse) {
+            client.updateRoundCounter();
+        }
+
+        if (response instanceof RespondingAnswersResponse respondingAnswersResponse) {
+            System.out.println("got to other player state and changing text");
+            System.out.println(respondingAnswersResponse.getResult());
+            guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-1].setText(String.valueOf(respondingAnswersResponse.getResult().stream().reduce(0, Integer::sum)));
+        }
     }
 
     @Override

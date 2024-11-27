@@ -27,6 +27,8 @@ public class ClientNewGameState  implements ClientState {
                     client.setGameInstanceID(newGameResponse.getGameInstanceID());
                     client.setAllCategories(newGameResponse.getCategoriesToClient());
                     client.getQuestionData().setThreeRandomCategories();
+                    client.updateRoundCounter();
+                    client.updateRoundCounter();
                 }
 
                 case OTHER_PLAYER_TURN -> {
@@ -34,6 +36,8 @@ public class ClientNewGameState  implements ClientState {
                     client.setGameInstanceID(newGameResponse.getGameInstanceID());
                     client.setAllCategories(newGameResponse.getCategoriesToClient());
                     client.getQuestionData().setThreeRandomCategories();
+                    client.updateRoundCounter();
+                    client.updateRoundCounter();
                 }
             }
         }
