@@ -78,7 +78,7 @@ public class ClientQuestionData implements Serializable {
         for (int i = 0; i < 3; i++) {
             int randomIndex = random.nextInt(selectedCategory.questions().size());
             selectedCategoryQuestions.add(selectedCategory.questions().remove(randomIndex));
-            System.out.println(selectedCategoryQuestions.getLast().question());
+//            System.out.println(selectedCategoryQuestions.getLast().question());
         }
     }
 
@@ -89,7 +89,7 @@ public class ClientQuestionData implements Serializable {
     }
 
     public Question getSelectedCategoryQuestion() {
-        System.out.println(selectedCategoryQuestions.get(questionsPlayed).question());
+//        System.out.println(selectedCategoryQuestions.get(questionsPlayed).question());
         return selectedCategoryQuestions.get(questionsPlayed);
     }
 

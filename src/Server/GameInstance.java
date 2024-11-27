@@ -75,6 +75,10 @@ public class GameInstance {
         return (currentRoundPerPlayer/2) == maxRounds;
     }
 
+    public void printCurrentRound() {
+        System.out.println((currentRoundPerPlayer/2));
+    }
+
     public void notifyRoundPlayed(List<Integer> result, Category selectedCategory, List<Question> answeredQuestions) throws IOException {
         System.out.println(result);
         System.out.println(selectedCategory);
