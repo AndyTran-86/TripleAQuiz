@@ -64,7 +64,7 @@ public class GameInstance {
         int totalScoreBeforeRound = players.get(callingPlayer);
         int scoreThisRound = result.stream().reduce(0, Integer::sum);
         players.replace(callingPlayer, totalScoreBeforeRound, totalScoreBeforeRound+scoreThisRound);
-        System.out.println("Server: score: " + players);
+//        System.out.println("Server: score: " + players);
     }
 
     public Map<ClientConnection, Integer> getPlayers() {
@@ -72,11 +72,11 @@ public class GameInstance {
     }
 
     public boolean finalRoundPlayed() {
-        return (currentRoundPerPlayer/2) == maxRounds;
+        return (currentRoundPerPlayer/2) >= maxRounds;
     }
 
     public void printCurrentRound() {
-        System.out.println((currentRoundPerPlayer/2));
+        System.out.println((currentRoundPerPlayer));
     }
 
     public void notifyRoundPlayed(List<Integer> result, Category selectedCategory, List<Question> answeredQuestions) throws IOException {
