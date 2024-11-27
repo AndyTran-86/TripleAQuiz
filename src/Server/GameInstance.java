@@ -64,6 +64,7 @@ public class GameInstance {
         int totalScoreBeforeRound = players.get(callingPlayer);
         int scoreThisRound = result.stream().reduce(0, Integer::sum);
         players.replace(callingPlayer, totalScoreBeforeRound, totalScoreBeforeRound+scoreThisRound);
+        System.out.println("Server: score: " + players);
     }
 
     public Map<ClientConnection, Integer> getPlayers() {

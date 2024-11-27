@@ -3,6 +3,7 @@ package Client;
 import Client.GUI.MainFrameGUI;
 import Client.StateMachine.*;
 import Requests.ListeningRequest;
+import Requests.RoundPlayedRequest;
 import Requests.StartNewGameRequest;
 import Requests.SurrenderRequest;
 import Responses.*;
@@ -209,6 +210,16 @@ public class Client implements Runnable {
         });
     }
 
+
+    private void sendRoundPlayed() {
+        try (Socket socket = new Socket(ip, port);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+            out.writeObject(new RoundPlayedRequest(clientID, gameInstanceID, questionData.getResultsPerRound(), questionData.getSelectedCategory(), questionData.getAnsweredQuestions()));
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
 
     public boolean checkAnswer(String answer) {
         return questionData.checkAnswer(answer);
