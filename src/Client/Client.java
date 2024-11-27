@@ -183,6 +183,9 @@ public class Client implements Runnable {
                     if (questionData.getQuestionsPlayed() >= 3 && isRespondingTurn) {
                         setRespondingTurn(false);
                         sendRespondingAnswers();
+                        guiMainFrame.getPlayerScoreLabels()[getCurrentRound()-1].setText(String.valueOf(questionData.getResultsPerRound().stream().reduce(0, Integer::sum)));
+                        updateRoundCounter();
+                        System.out.println("PLAYER CURRENT ROUND: " + getCurrentRound());
                         questionData.getResultsPerRound().clear();
                         guiMainFrame.showScoreBoardView();
                     }

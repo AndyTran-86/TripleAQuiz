@@ -29,6 +29,7 @@ public class ClientPlayerTurnState implements ClientState {
             client.getQuestionData().setSelectedCategoryFromOpponent(roundPlayedResponse.getSelectedCategory(), roundPlayedResponse.getAnsweredQuestions());
             client.getQuestionData().setThreeRandomCategories();
             guiMainFrame.setCategoryBoardNames(client.getQuestionData().getThreeRandomCategories());
+            System.out.println("PLAYER CURRENT ROUND: " + client.getCurrentRound());
         }
 
     }
