@@ -30,6 +30,7 @@ public class Client implements Runnable {
     String username;
     long clientID;
     long gameInstanceID;
+    int currentRound;
 
     ClientState state;
     ClientState lobbyState;
@@ -45,6 +46,8 @@ public class Client implements Runnable {
         this.questionData = new ClientQuestionData();
         this.port = port;
         this.username = username;
+
+        currentRound = 0;
 
 
 
@@ -242,5 +245,9 @@ public class Client implements Runnable {
 
     public void setAllCategories(List<Category> questionsToClient) {
         questionData.setAllCategories(questionsToClient);
+    }
+
+    public void updateRoundCounter() {
+        currentRound++;
     }
 }

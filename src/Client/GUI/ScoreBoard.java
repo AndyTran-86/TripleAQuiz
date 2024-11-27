@@ -9,6 +9,9 @@ public class ScoreBoard extends AbstractBoard {
     JLabel playerLabel;
     JLabel otherPlayerLabel;
 
+    JLabel[] playerScoreLabels;
+    JLabel[] otherPlayerScoreLabels;
+
     JLabel playerTurnLabel;
 
     private JPanel midPanel;
@@ -36,9 +39,11 @@ public class ScoreBoard extends AbstractBoard {
         midPanel.add(otherPlayerLabel);
 
         for (int i = 1; i <= 6; i++) {
-            midPanel.add(new JLabel("0", SwingConstants.CENTER));
+            playerScoreLabels[i-1] = new JLabel("0", SwingConstants.CENTER);
+            otherPlayerScoreLabels[i-1] = new JLabel("0", SwingConstants.CENTER);
+            midPanel.add(playerScoreLabels[i-1]);
             midPanel.add(new JLabel("Round " + i, SwingConstants.CENTER));
-            midPanel.add(new JLabel("0", SwingConstants.CENTER));
+            midPanel.add(otherPlayerScoreLabels[i-1]);
         }
         playButton = new JButton("Play");
         midPanel.add(new JLabel());
@@ -78,6 +83,8 @@ public class ScoreBoard extends AbstractBoard {
     public JButton getPlayButton() {
         return playButton;
     }
+
+
 }
 
 

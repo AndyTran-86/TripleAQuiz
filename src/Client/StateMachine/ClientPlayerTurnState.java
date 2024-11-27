@@ -21,6 +21,7 @@ public class ClientPlayerTurnState implements ClientState {
 
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
+        client.updateRoundCounter();
         JOptionPane.showMessageDialog(null, "Round played response received with THIS PLAYER TURN");
     }
 
