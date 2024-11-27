@@ -81,7 +81,6 @@ public class Client implements Runnable {
                 Object unknownResponseFromServer;
 
                 while ((unknownResponseFromServer = in.readObject()) != null) {
-//                    System.out.println(unknownResponseFromServer.getClass().getName());
                     switch (unknownResponseFromServer) {
                         case ListeningResponse listeningResponse -> {
                             state = lobbyState;
@@ -173,20 +172,14 @@ public class Client implements Runnable {
                     int currentScore = questionData.getResultsPerRound().stream().reduce(0, Integer::sum);
                     guiMainFrame.getPlayerScoreLabels()[getCurrentRound()-1].setText(String.valueOf(currentScore));
                     answerButton.setBackground(Color.GREEN);
-//                    System.out.println("Correct answer");
                 } else {
                     answerButton.setBackground(Color.RED);
-//                    System.out.println("Wrong answer");
                 }
-//                try {
-//                    Thread.sleep(3000);
                     if (questionData.getQuestionsPlayed() >= 3 && isRespondingTurn) {
                         setRespondingTurn(false);
                         sendRespondingAnswers();
                         guiMainFrame.getPlayerScoreLabels()[getCurrentRound()-1].setText(String.valueOf(questionData.getResultsPerRound().stream().reduce(0, Integer::sum)));
                         updateRoundCounter();
-                        System.out.println(username + "PLAYER CURRENT ROUND: " + getCurrentRound());
-                        System.out.println(username + "PLAYER ALL ROUNDS: " + getAllCurrentRounds());
                         questionData.getResultsPerRound().clear();
                         guiMainFrame.showScoreBoardView();
                     }
@@ -196,10 +189,6 @@ public class Client implements Runnable {
                     }else {
                         guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                     }
-//                } catch (InterruptedException ex) {
-//                    throw new RuntimeException(ex);
-//                }
-
             });
         }
 

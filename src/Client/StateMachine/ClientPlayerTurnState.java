@@ -7,7 +7,6 @@ import Responses.PlayerJoinedResponse;
 import Responses.Response;
 import Responses.RoundPlayedResponse;
 
-import javax.swing.*;
 import java.io.IOException;
 
 public class ClientPlayerTurnState implements ClientState {
@@ -29,8 +28,6 @@ public class ClientPlayerTurnState implements ClientState {
             client.getQuestionData().setSelectedCategoryFromOpponent(roundPlayedResponse.getSelectedCategory(), roundPlayedResponse.getAnsweredQuestions());
             client.getQuestionData().setThreeRandomCategories();
             guiMainFrame.setCategoryBoardNames(client.getQuestionData().getThreeRandomCategories());
-            System.out.println(client.username + " CURRENT ROUND: " + client.getCurrentRound());
-            System.out.println(client.username + " ALL ROUNDS: " + client.getAllCurrentRounds());
         }
 
     }

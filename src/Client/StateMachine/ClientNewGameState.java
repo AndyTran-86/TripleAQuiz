@@ -29,7 +29,6 @@ public class ClientNewGameState  implements ClientState {
                     client.getQuestionData().setThreeRandomCategories();
                     client.updateRoundCounter();
                     client.updateRoundCounter();
-                    System.out.println("PLAYER CURRENT ROUND: " + client.getCurrentRound());
                 }
 
                 case OTHER_PLAYER_TURN -> {
@@ -39,7 +38,6 @@ public class ClientNewGameState  implements ClientState {
                     client.getQuestionData().setThreeRandomCategories();
                     client.updateRoundCounter();
                     client.updateRoundCounter();
-                    System.out.println("OTHER PLAYER CURRENT ROUND: " + client.getCurrentRound());
                 }
             }
         }

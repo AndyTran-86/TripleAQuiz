@@ -25,17 +25,11 @@ public class ClientOtherPlayerTurnState  implements ClientState {
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
         if (response instanceof RoundPlayedResponse roundPlayedResponse) {
             client.updateRoundCounter();
-            System.out.println(client.username + " CURRENT ROUND: " + client.getCurrentRound());
-            System.out.println(client.username + " ALL ROUNDS: " + client.getAllCurrentRounds());
         }
 
         if (response instanceof RespondingAnswersResponse respondingAnswersResponse) {
-
-            System.out.println(respondingAnswersResponse.getResult());
             guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-1].setText(String.valueOf(respondingAnswersResponse.getResult().stream().reduce(0, Integer::sum)));
             client.updateRoundCounter();
-            System.out.println(client.username + " CURRENT ROUND: " + client.getCurrentRound());
-            System.out.println(client.username + " ALL ROUNDS: " + client.getAllCurrentRounds());
         }
     }
 
