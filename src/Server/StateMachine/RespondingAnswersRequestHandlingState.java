@@ -27,7 +27,7 @@ public class RespondingAnswersRequestHandlingState implements ServerState {
             GameInstance gameInstance = gameInstanceManager.getGameInstanceByID(respondingAnswersRequest.getGameInstanceID());
 
             gameInstance.findCallingPlayer(respondingAnswersRequest.getClientID());
-            gameInstance.addRoundToCounter();
+//            gameInstance.addRoundToCounter();
             gameInstance.updateGameScore(respondingAnswersRequest.getResult());
 
             gameInstance.notifyRespondedAnsweredQuestions(respondingAnswersRequest.getResult());

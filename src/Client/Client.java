@@ -114,7 +114,6 @@ public class Client implements Runnable {
                         }
 
                         case RespondingAnswersResponse respondingAnswersResponse -> {
-                            System.out.println("got to switch for answers response");
                             state.handleResponse(respondingAnswersResponse);
                         }
 
