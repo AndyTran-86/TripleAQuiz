@@ -74,6 +74,7 @@ public class ClientQuestionData implements Serializable {
 
     public void setSelectedCategoryQuestions() {
         this.questionsPlayed = 0;
+        selectedCategoryQuestions.clear(); // THIS FIXED THAT NEW CATEGORIES WORKED
         for (int i = 0; i < 3; i++) {
             int randomIndex = random.nextInt(selectedCategory.questions().size());
             System.out.println(selectedCategory.name());

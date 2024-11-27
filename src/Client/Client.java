@@ -184,10 +184,12 @@ public class Client implements Runnable {
                     if (questionData.getQuestionsPlayed() >= 3 && isRespondingTurn) {
                         setRespondingTurn(false);
                         sendRespondingAnswers();
+                        questionData.getResultsPerRound().clear();
                         guiMainFrame.showScoreBoardView();
                     }
                     else if (questionData.getQuestionsPlayed() >= 3) {
                         sendRoundPlayed();
+                        questionData.getResultsPerRound().clear();
                     }else {
                         guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                     }
