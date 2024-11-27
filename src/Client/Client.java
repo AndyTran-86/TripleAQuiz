@@ -31,6 +31,7 @@ public class Client implements Runnable {
     long clientID;
     long gameInstanceID;
     int currentRound;
+    boolean isRespondingTurn;
 
     ClientState state;
     ClientState lobbyState;
@@ -146,8 +147,14 @@ public class Client implements Runnable {
     public void addEventListeners() {
 
         guiMainFrame.getScoreBoardPlayButton().addActionListener((e) -> {
-            guiMainFrame.setCategoryBoardNames(questionData.getThreeRandomCategories());
-            guiMainFrame.showCategoryBoardView();
+            if (isRespondingTurn) {
+                guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
+                guiMainFrame.showQuizGameView();
+            } else {
+                guiMainFrame.setCategoryBoardNames(questionData.getThreeRandomCategories());
+                guiMainFrame.showCategoryBoardView();
+            }
+
         });
 
         for (JButton categoryButton : guiMainFrame.getCategoryButtons()) {
@@ -218,6 +225,8 @@ public class Client implements Runnable {
     private void sendRoundPlayed() {
         try (Socket socket = new Socket(ip, port);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+            System.out.println(questionData.getSelectedCategory());
+            System.out.println(questionData.getAnsweredQuestions());
             out.writeObject(new RoundPlayedRequest(clientID, gameInstanceID, questionData.getResultsPerRound(), questionData.getSelectedCategory(), questionData.getAnsweredQuestions()));
 
         } catch (IOException exception) {
@@ -241,6 +250,10 @@ public class Client implements Runnable {
 
     public void setGameInstanceID(long gameInstanceID) {
         this.gameInstanceID = gameInstanceID;
+    }
+
+    public void setRespondingTurn(boolean respondingTurn) {
+        isRespondingTurn = respondingTurn;
     }
 
     public void setAllCategories(List<Category> questionsToClient) {
