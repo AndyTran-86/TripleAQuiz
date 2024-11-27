@@ -102,6 +102,10 @@ public class GameInstance {
         }
     }
 
+    public void notifyRespondedAnsweredQuestions(List<Integer> result) throws IOException {
+        nonCallingPlayer.out.writeObject(new RespondingAnswersResponse(result));
+    }
+
     public void notifySurrender() throws IOException {
         callingPlayer.out.writeObject(new DefeatResponse(DefeatType.SURRENDER));
         nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.SURRENDER));

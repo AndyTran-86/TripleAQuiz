@@ -2,10 +2,7 @@ package Client;
 
 import Client.GUI.MainFrameGUI;
 import Client.StateMachine.*;
-import Requests.ListeningRequest;
-import Requests.RoundPlayedRequest;
-import Requests.StartNewGameRequest;
-import Requests.SurrenderRequest;
+import Requests.*;
 import Responses.*;
 import Server.QuizDatabase.Category;
 
@@ -84,6 +81,7 @@ public class Client implements Runnable {
                 Object unknownResponseFromServer;
 
                 while ((unknownResponseFromServer = in.readObject()) != null) {
+                    System.out.println(unknownResponseFromServer.getClass().getName());
                     switch (unknownResponseFromServer) {
                         case ListeningResponse listeningResponse -> {
                             state = lobbyState;
@@ -113,6 +111,11 @@ public class Client implements Runnable {
                             }
                             state.handleResponse(roundPlayedResponse);
                             state.updateGUI();
+                        }
+
+                        case RespondingAnswersResponse respondingAnswersResponse -> {
+                            System.out.println("got to switch for answers response");
+                            state.handleResponse(respondingAnswersResponse);
                         }
 
                         case VictoryResponse victoryResponse -> {
@@ -178,9 +181,14 @@ public class Client implements Runnable {
                 }
                 try {
                     Thread.sleep(3000);
-                    if (questionData.getQuestionsPlayed() >= 3) {
+                    if (questionData.getQuestionsPlayed() >= 3 && isRespondingTurn) {
+                        setRespondingTurn(false);
+                        sendRespondingAnswers();
+                        guiMainFrame.showScoreBoardView();
+                    }
+                    else if (questionData.getQuestionsPlayed() >= 3) {
                         sendRoundPlayed();
-                    } else {
+                    }else {
                         guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                     }
                 } catch (InterruptedException ex) {
@@ -222,13 +230,23 @@ public class Client implements Runnable {
     }
 
 
+
+
     private void sendRoundPlayed() {
         try (Socket socket = new Socket(ip, port);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-            System.out.println(questionData.getSelectedCategory());
-            System.out.println(questionData.getAnsweredQuestions());
+
             out.writeObject(new RoundPlayedRequest(clientID, gameInstanceID, questionData.getResultsPerRound(), questionData.getSelectedCategory(), questionData.getAnsweredQuestions()));
 
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void sendRespondingAnswers() {
+        try (Socket socket = new Socket(ip, port);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+            out.writeObject(new RespondingAnswersRequest(clientID, gameInstanceID, questionData.getResultsPerRound()));
         } catch (IOException exception) {
             exception.printStackTrace();
         }
