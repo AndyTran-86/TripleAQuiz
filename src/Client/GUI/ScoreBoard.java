@@ -16,6 +16,8 @@ public class ScoreBoard extends AbstractBoard {
 
     @Override
     protected void initComponents() {
+        playerScoreLabels = new JLabel[6];
+        otherPlayerScoreLabels = new JLabel[6];
 
         playerTurnLabel = new JLabel("         Your turn");
         playerTurnLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -51,6 +53,14 @@ public class ScoreBoard extends AbstractBoard {
     protected void buildLayout() {
         board.setLayout(new BorderLayout());
         board.add(midPanel, BorderLayout.CENTER);
+    }
+
+    public JLabel[] getPlayerScoreLabels() {
+        return playerScoreLabels;
+    }
+
+    public JLabel[] getOtherPlayerScoreLabels() {
+        return otherPlayerScoreLabels;
     }
 
     public JLabel getPlayerLabel() {

@@ -149,7 +149,6 @@ public class Client implements Runnable {
 
         for (JButton categoryButton : guiMainFrame.getCategoryButtons()) {
             categoryButton.addActionListener((e) -> {
-                //Todo add question, correct_answer and incorrect_answers to QuizGameBoard
                 questionData.selectCategory(categoryButton.getText());
                 guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                 guiMainFrame.showQuizGameView();
@@ -159,6 +158,8 @@ public class Client implements Runnable {
         for (JButton answerButton : guiMainFrame.getAnswerButtons()) {
             answerButton.addActionListener((e) -> {
                 if (questionData.checkAnswer(answerButton.getText())) {
+                    int currentScore = questionData.getResultsPerRound().stream().reduce(0, Integer::sum);
+                    guiMainFrame.getPlayerScoreLabels()[currentRound-1].setText(String.valueOf(currentScore));
                     answerButton.setBackground(Color.GREEN);
                     System.out.println("Correct answer");
                 } else {

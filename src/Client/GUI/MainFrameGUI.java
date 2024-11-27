@@ -198,6 +198,14 @@ public class MainFrameGUI {
         cardLayout.show(midPanel, "QuizGameBoard");
     }
 
+    public JLabel[] getPlayerScoreLabels() {
+        return scoreBoard.getPlayerScoreLabels();
+    }
+
+    public JLabel[] getOtherPlayerScoreLabels() {
+        return scoreBoard.getOtherPlayerScoreLabels();
+    }
+
     public JFrame getFrame() {
         return frame;
     }
