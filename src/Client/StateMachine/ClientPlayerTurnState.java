@@ -24,6 +24,9 @@ public class ClientPlayerTurnState implements ClientState {
         if (response instanceof RoundPlayedResponse roundPlayedResponse) {
             client.updateRoundCounter();
             client.setRespondingTurn(true);
+            if (client.getCurrentRound()>1) {
+                guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-2].setText(String.valueOf(client.getOpponentScorePreviousRound()));
+            }
             guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-1].setText(String.valueOf(roundPlayedResponse.getResult().stream().reduce(0, Integer::sum)));
             client.getQuestionData().setSelectedCategoryFromOpponent(roundPlayedResponse.getSelectedCategory(), roundPlayedResponse.getAnsweredQuestions());
             client.getQuestionData().setThreeRandomCategories();

@@ -29,6 +29,7 @@ public class Client implements Runnable {
     long gameInstanceID;
     int currentRound;
     boolean isRespondingTurn;
+    int opponentScorePreviousRound;
 
     ClientState state;
     ClientState lobbyState;
@@ -46,6 +47,7 @@ public class Client implements Runnable {
         this.username = username;
 
         currentRound = 0;
+        opponentScorePreviousRound = 0;
 
 
 
@@ -268,6 +270,13 @@ public class Client implements Runnable {
     }
 
 
+    public int getOpponentScorePreviousRound() {
+        return opponentScorePreviousRound;
+    }
+
+    public void setOpponentScorePreviousRound(int opponentScorePreviousRound) {
+        this.opponentScorePreviousRound = opponentScorePreviousRound;
+    }
 
     public long getClientID() {
         return clientID;

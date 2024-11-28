@@ -5,6 +5,8 @@ import Client.Client;
 import Client.GUI.MainFrameGUI;
 import Responses.PlayerJoinedResponse;
 import Responses.Response;
+import Responses.VictoryResponse;
+import Responses.VictoryType;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -21,8 +23,14 @@ public class ClientVictoryState implements ClientState {
 
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
-        guiMainFrame.showScoreBoardView();
-        JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Victory response received");
+        if (response instanceof VictoryResponse victoryResponse) {
+            if (victoryResponse.getVictoryType() == VictoryType.WIN) {
+                guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-2].setText(String.valueOf(client.getOpponentScorePreviousRound()));
+            }
+            guiMainFrame.showScoreBoardView();
+            JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Victory response received");
+        }
+
     }
 
     @Override

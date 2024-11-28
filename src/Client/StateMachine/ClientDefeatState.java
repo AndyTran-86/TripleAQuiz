@@ -3,6 +3,8 @@ package Client.StateMachine;
 
 import Client.Client;
 import Client.GUI.MainFrameGUI;
+import Responses.DefeatResponse;
+import Responses.DefeatType;
 import Responses.PlayerJoinedResponse;
 import Responses.Response;
 
@@ -21,8 +23,14 @@ public class ClientDefeatState implements ClientState {
 
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
-        guiMainFrame.showScoreBoardView();
-        JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Defeat response received");
+        if (response instanceof DefeatResponse defeatResponse) {
+            if (defeatResponse.getDefeatType() == DefeatType.LOSS) {
+                guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-2].setText(String.valueOf(client.getOpponentScorePreviousRound()));
+            }
+            guiMainFrame.showScoreBoardView();
+            JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Defeat response received");
+        }
+
     }
 
     @Override
