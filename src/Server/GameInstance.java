@@ -94,15 +94,15 @@ public class GameInstance {
         }
 
         if (players.get(callingPlayer) > players.get(nonCallingPlayer)) {
-            callingPlayer.out.writeObject(new VictoryResponse(VictoryType.WIN));
-            nonCallingPlayer.out.writeObject(new DefeatResponse(DefeatType.LOSS));
+            callingPlayer.out.writeObject(new VictoryResponse(VictoryType.WIN, players.get(callingPlayer), players.get(nonCallingPlayer)));
+            nonCallingPlayer.out.writeObject(new DefeatResponse(DefeatType.LOSS, players.get(nonCallingPlayer), players.get(callingPlayer)));
         }
         else if (players.get(callingPlayer) < players.get(nonCallingPlayer)) {
-            callingPlayer.out.writeObject(new DefeatResponse(DefeatType.LOSS));
-            nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.WIN));
+            callingPlayer.out.writeObject(new DefeatResponse(DefeatType.LOSS, players.get(callingPlayer), players.get(nonCallingPlayer)));
+            nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.WIN, players.get(nonCallingPlayer), players.get(callingPlayer)));
         } else {
-            callingPlayer.out.writeObject(new VictoryResponse(VictoryType.DRAW));
-            nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.DRAW));
+            callingPlayer.out.writeObject(new VictoryResponse(VictoryType.DRAW, players.get(callingPlayer), players.get(nonCallingPlayer)));
+            nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.DRAW, players.get(nonCallingPlayer), players.get(callingPlayer)));
         }
     }
 
@@ -111,8 +111,8 @@ public class GameInstance {
     }
 
     public void notifySurrender() throws IOException {
-        callingPlayer.out.writeObject(new DefeatResponse(DefeatType.SURRENDER));
-        nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.SURRENDER));
+        callingPlayer.out.writeObject(new DefeatResponse(DefeatType.SURRENDER, players.get(callingPlayer), players.get(nonCallingPlayer)));
+        nonCallingPlayer.out.writeObject(new VictoryResponse(VictoryType.SURRENDER, players.get(nonCallingPlayer), players.get(callingPlayer)));
     }
 
 

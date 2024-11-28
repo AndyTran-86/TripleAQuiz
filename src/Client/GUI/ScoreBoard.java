@@ -13,6 +13,8 @@ public class ScoreBoard extends AbstractBoard {
     JLabel[] otherPlayerScoreLabels;
 
     JLabel playerTurnLabel;
+    JLabel finalScorePlayer;
+    JLabel finalScoreOtherPlayer;
 
     private JPanel midPanel;
     private JButton playButton;
@@ -22,13 +24,18 @@ public class ScoreBoard extends AbstractBoard {
         playerScoreLabels = new JLabel[8];
         otherPlayerScoreLabels = new JLabel[8];
 
+        finalScorePlayer = new JLabel("", SwingConstants.CENTER);
+        finalScorePlayer.setFont(new Font("Arial", Font.BOLD, 20));
+        finalScoreOtherPlayer = new JLabel("", SwingConstants.CENTER);
+        finalScoreOtherPlayer.setFont(new Font("Arial", Font.BOLD, 20));
+
         playerTurnLabel = new JLabel("         Your turn");
         playerTurnLabel.setFont(new Font("Arial", Font.BOLD, 20));
         midPanel = new JPanel(new GridLayout(11, 3, 10, 10));
 
-        midPanel.add(new JLabel());
+        midPanel.add(finalScorePlayer);
         midPanel.add(playerTurnLabel);
-        midPanel.add(new JLabel());
+        midPanel.add(finalScoreOtherPlayer);
 
         playerLabel = new JLabel(" Player 1", SwingConstants.CENTER);
         headerLabel = new JLabel("Question Theme", SwingConstants.CENTER);
@@ -78,6 +85,14 @@ public class ScoreBoard extends AbstractBoard {
 
     public JLabel getPlayerTurnLabel() {
         return playerTurnLabel;
+    }
+
+    public JLabel getFinalScorePlayer() {
+        return finalScorePlayer;
+    }
+
+    public JLabel getFinalScoreOtherPlayer() {
+        return finalScoreOtherPlayer;
     }
 
     public JButton getPlayButton() {

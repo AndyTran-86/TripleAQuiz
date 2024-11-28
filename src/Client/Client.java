@@ -29,6 +29,8 @@ public class Client implements Runnable {
     long gameInstanceID;
     int currentRound;
     boolean isRespondingTurn;
+    int opponentScorePreviousRound;
+    boolean awaitingPlayer;
 
     ClientState state;
     ClientState lobbyState;
@@ -46,6 +48,8 @@ public class Client implements Runnable {
         this.username = username;
 
         currentRound = 0;
+        opponentScorePreviousRound = 0;
+        awaitingPlayer = true;
 
 
 
@@ -197,14 +201,18 @@ public class Client implements Runnable {
                         questionData.getResultsPerRound().clear();
                         guiMainFrame.showScoreBoardView();
                     }
+                    else if (questionData.getQuestionsPlayed() >= 3 && awaitingPlayer) {
+                        JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Cannot end turn until another player joins");
+                    }
                     else if (questionData.getQuestionsPlayed() >= 3) {
                         sendRoundPlayed();
                         questionData.getResultsPerRound().clear();
                     }else {
                         guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                     }
-
-            guiMainFrame.getNextQuestionButton().setEnabled(false);
+            if (!awaitingPlayer) {
+                guiMainFrame.getNextQuestionButton().setEnabled(false);
+            }
             });
 
 
@@ -268,6 +276,13 @@ public class Client implements Runnable {
     }
 
 
+    public int getOpponentScorePreviousRound() {
+        return opponentScorePreviousRound;
+    }
+
+    public void setOpponentScorePreviousRound(int opponentScorePreviousRound) {
+        this.opponentScorePreviousRound = opponentScorePreviousRound;
+    }
 
     public long getClientID() {
         return clientID;
@@ -301,4 +316,11 @@ public class Client implements Runnable {
         return currentRound;
     }
 
+    public boolean isAwaitingPlayer() {
+        return awaitingPlayer;
+    }
+
+    public void setAwaitingPlayer(boolean awaitingPlayer) {
+        this.awaitingPlayer = awaitingPlayer;
+    }
 }

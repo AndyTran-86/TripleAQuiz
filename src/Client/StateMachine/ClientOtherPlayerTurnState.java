@@ -28,8 +28,10 @@ public class ClientOtherPlayerTurnState  implements ClientState {
         }
 
         if (response instanceof RespondingAnswersResponse respondingAnswersResponse) {
-            guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-1].setText(String.valueOf(respondingAnswersResponse.getResult().stream().reduce(0, Integer::sum)));
+            client.setOpponentScorePreviousRound(respondingAnswersResponse.getResult().stream().reduce(0, Integer::sum));
+//            guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-1].setText(String.valueOf(respondingAnswersResponse.getResult().stream().reduce(0, Integer::sum)));
             client.updateRoundCounter();
+
         }
     }
 
@@ -44,6 +46,7 @@ public class ClientOtherPlayerTurnState  implements ClientState {
 
     @Override
     public void handlePlayerJoined(PlayerJoinedResponse response) {
+        client.setAwaitingPlayer(false);
         guiMainFrame.setOtherPlayerUserName(response.getUsername());
     }
 }
