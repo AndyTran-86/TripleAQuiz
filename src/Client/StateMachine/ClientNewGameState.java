@@ -22,6 +22,7 @@ public class ClientNewGameState  implements ClientState {
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
         if (response instanceof NewGameResponse newGameResponse) {
+            guiMainFrame.resetScoreBoard();
             switch (newGameResponse.getTurnToPlay()) {
                 case PLAYER_TURN -> {
                     client.setGameInstanceID(newGameResponse.getGameInstanceID());
@@ -45,6 +46,7 @@ public class ClientNewGameState  implements ClientState {
 
     @Override
     public void updateGUI() {
+
         guiMainFrame.getSurrenderButton().setVisible(true);
         guiMainFrame.showScoreBoardView();
         guiMainFrame.getFrame().repaint();

@@ -31,6 +31,7 @@ public class Client implements Runnable {
     boolean isRespondingTurn;
     int opponentScorePreviousRound;
     boolean awaitingPlayer;
+    boolean gameOver;
 
     ClientState state;
     ClientState lobbyState;
@@ -50,6 +51,7 @@ public class Client implements Runnable {
         currentRound = 0;
         opponentScorePreviousRound = 0;
         awaitingPlayer = true;
+        gameOver = false;
 
 
 
@@ -153,12 +155,26 @@ public class Client implements Runnable {
     public void addEventListeners() {
 
         guiMainFrame.getScoreBoardPlayButton().addActionListener((e) -> {
+            if (gameOver) {
+                try (Socket socket = new Socket(ip, port);
+                     ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+                    out.writeObject(new StartNewGameRequest(clientID, username));
+
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+
+            }
             if (isRespondingTurn) {
                 guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                 guiMainFrame.showQuizGameView();
+                guiMainFrame.getNextQuestionButton().setVisible(true);
+                guiMainFrame.getNextQuestionButton().setText("Next Question");
             } else {
                 guiMainFrame.setCategoryBoardNames(questionData.getThreeRandomCategories());
                 guiMainFrame.showCategoryBoardView();
+                guiMainFrame.getNextQuestionButton().setVisible(true);
+                guiMainFrame.getNextQuestionButton().setText("Next Question");
             }
 
         });
@@ -323,5 +339,13 @@ public class Client implements Runnable {
 
     public void setAwaitingPlayer(boolean awaitingPlayer) {
         this.awaitingPlayer = awaitingPlayer;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }

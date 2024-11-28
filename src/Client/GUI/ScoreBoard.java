@@ -81,6 +81,19 @@ public class ScoreBoard extends AbstractBoard {
         board.add(midPanel, BorderLayout.CENTER);
     }
 
+    public void resetScoreBoard() {
+        otherPlayerLabel.setText("Player 2 ");
+        for (JLabel label : playerScoreLabels) {
+            label.setText("0");
+        }
+        for (JLabel label : otherPlayerScoreLabels) {
+            label.setText("0");
+        }
+        finalScorePlayer.setText("");
+        finalScoreOtherPlayer.setText("");
+        playButton.setText("Play");
+    }
+
     public JLabel[] getPlayerScoreLabels() {
         return playerScoreLabels;
     }

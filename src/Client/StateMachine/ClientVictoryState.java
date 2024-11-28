@@ -37,6 +37,7 @@ public class ClientVictoryState implements ClientState {
                 guiMainFrame.getPlayerTurnLabel().setText("         DRAW");
             }
             guiMainFrame.showScoreBoardView();
+            client.setGameOver(true);
 //            JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Victory response received");
         }
 
@@ -45,6 +46,9 @@ public class ClientVictoryState implements ClientState {
     @Override
     public void updateGUI() {
         guiMainFrame.getSurrenderButton().setVisible(false);
+        guiMainFrame.getNextQuestionButton().setVisible(false);
+        guiMainFrame.getScoreBoardPlayButton().setEnabled(true);
+        guiMainFrame.getScoreBoardPlayButton().setText("Start New Game");
         System.out.println("Updating GUI");
     }
 
