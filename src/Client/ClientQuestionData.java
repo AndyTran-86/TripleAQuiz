@@ -45,7 +45,6 @@ public class ClientQuestionData implements Serializable {
     }
 
     public void setAllCategories(List<Category> allCategories) {
-
         this.allCategories = allCategories;
         this.remainingCategories = allCategories;
     }
@@ -78,18 +77,21 @@ public class ClientQuestionData implements Serializable {
         for (int i = 0; i < 3; i++) {
             int randomIndex = random.nextInt(selectedCategory.questions().size());
             selectedCategoryQuestions.add(selectedCategory.questions().remove(randomIndex));
-//            System.out.println(selectedCategoryQuestions.getLast().question());
         }
     }
 
     public void setSelectedCategoryFromOpponent(Category category, List<Question> questions) {
         this.questionsPlayed = 0;
-        this.remainingCategories.remove(category);
+        for (Category c : remainingCategories) {
+            if (c.name().equals(category.name())) {
+                remainingCategories.remove(c);
+                break;
+            }
+        }
         this.selectedCategoryQuestions = questions;
     }
 
     public Question getSelectedCategoryQuestion() {
-//        System.out.println(selectedCategoryQuestions.get(questionsPlayed).question());
         return selectedCategoryQuestions.get(questionsPlayed);
     }
 
@@ -97,9 +99,9 @@ public class ClientQuestionData implements Serializable {
         if (!threeRandomCategories.isEmpty())
             threeRandomCategories.clear();
         for(int i = 0; i < 3; i++) {
-            int randomIndex = random.nextInt(allCategories.size());
-            while (threeRandomCategories.contains(allCategories.get(randomIndex)))
-                randomIndex = random.nextInt(allCategories.size());
+            int randomIndex = random.nextInt(remainingCategories.size());
+            while (threeRandomCategories.contains(remainingCategories.get(randomIndex)))
+                randomIndex = random.nextInt(remainingCategories.size());
             threeRandomCategories.add(remainingCategories.get(randomIndex));
         }
     }

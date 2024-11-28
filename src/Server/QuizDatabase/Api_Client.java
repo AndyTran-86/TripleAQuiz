@@ -4,31 +4,26 @@ import com.google.gson.Gson;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Api_Client {
     private StringBuilder addedCategories;
-    List<String> categoryNames;
-    private List<Category> all_categories;
+    private List<String> categoryNames;
     private List<Category> sorted_categories;
     private List<Boolean> fullCategories;
-
-    private final String categories_url = "https://opentdb.com/api_category.php";
-    private final String url_a = "https://opentdb.com/api.php?amount=50&category=";
-    private final String url_b = "&type=multiple";
     private final String url_any50category = "https://opentdb.com/api.php?amount=50&type=multiple";
     private final HttpClient client;
     private final Gson gson;
     private final File temp;
+    private int totalCategories;
+    private int totalQuestionsPerCategory;
 
-    public Api_Client() {
+    public Api_Client(int totalCategories, int totalQuestionsPerCategory) {
         this.client = HttpClient.newHttpClient();
         this.gson = new Gson();
         this.sorted_categories = new ArrayList<>();
@@ -36,10 +31,24 @@ public class Api_Client {
         this.temp = new File("src/Server/QuizDatabase/questions.ser");
         this.fullCategories = new ArrayList<>();
         this.categoryNames = new ArrayList<>();
+        setTotalCategoriesAndQuestions(totalCategories, totalQuestionsPerCategory);
     }
 
-    public List<Category> getAll_categories() {
-        return all_categories;
+    private void setTotalCategoriesAndQuestions(int totalCategories, int totalQuestionsPerCategory) {
+        if (totalCategories >= 1 && totalCategories <= 8)
+            this.totalCategories = totalCategories;
+        else if (totalCategories < 1)
+            this.totalCategories = 1;
+        else if (totalCategories > 8)
+            this.totalCategories = 8;
+
+        if (totalQuestionsPerCategory == 2)
+            this.totalQuestionsPerCategory = 2;
+        else if (totalQuestionsPerCategory <= 1)
+            this.totalQuestionsPerCategory = 1;
+        else if (totalQuestionsPerCategory >= 3) {
+            this.totalQuestionsPerCategory = 3;
+        }
     }
 
     public QuestionsFromApi getQuestionFromApi() throws Exception {
@@ -49,20 +58,6 @@ public class Api_Client {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return deSerializeQuestionCategory(response.body());
-    }
-
-    public QuestionsFromApi getQuestionsByCategoryId(int categoryId) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url_a + categoryId + url_b))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return deSerializeQuestionCategory(response.body());
-    }
-
-    public All_Categories deSerializeCategories(String s) throws MalformedURLException {
-        return gson.fromJson(s, All_Categories.class);
     }
 
     public QuestionsFromApi deSerializeQuestionCategory(String s) throws Exception {
@@ -118,16 +113,6 @@ public class Api_Client {
         }
     }
 
-    private void serializeValidCategories(List<Category> validCategories) {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("validIds.ser", true))) {
-            for (Category c : validCategories) {
-                out.writeObject(c);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public List<Category> getNewCategories() {
 
         if (temp.exists()) {
@@ -141,7 +126,7 @@ public class Api_Client {
             try {
                 int sleep = 6500;
 
-                while (sorted_categories.size() < 8 || !isAllFull()) {
+                while (sorted_categories.size() < totalCategories || !isAllFull()) {
                     QuestionsFromApi questions = getQuestionFromApi();
                     sortQuestionsToCategory(questions);
 
@@ -164,17 +149,17 @@ public class Api_Client {
     private void sortQuestionsToCategory(QuestionsFromApi q) {
 
             for (Question question : q.results()) {
-                if (sorted_categories.size() == 8 && isAllFull()) {
+                if (sorted_categories.size() == totalCategories && isAllFull()) {
                     break;
                 }
                 if (addedCategories.toString().contains(question.category())) {
                     int index = categoryNames.indexOf(question.category());
-                    if (sorted_categories.get(index).questions().size() < 3) {
+                    if (sorted_categories.get(index).questions().size() < totalQuestionsPerCategory) {
                         sorted_categories.get(index).questions().add(question);
                     } else {
                         fullCategories.set(index, true);
                     }
-                } else if (sorted_categories.size() < 8) {
+                } else if (sorted_categories.size() < totalCategories) {
                     sorted_categories.add(new Category(question.category(), new ArrayList<>()));
                     categoryNames.add(question.category());
                     addedCategories.append(question.category());
@@ -190,31 +175,6 @@ public class Api_Client {
                 return false;
         }
         return true;
-    }
-
-    private Category convertToCategoryObject(QuestionsFromApi original) {
-        List<Question> questions = new ArrayList<>();
-        String name = original.results().getFirst().category();
-        questions.addAll(original.results());
-        return new Category(name, questions);
-    }
-
-    private List<Category> deSerializeValidCategories() {
-        List<Category> ids = new ArrayList<>();
-
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("validIds.ser"))) {
-            while (true) {
-                try {
-                    Category c = (Category) in.readObject();
-                    ids.add(c);
-                } catch (IOException | ClassNotFoundException e) {
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return ids;
     }
 }
 
