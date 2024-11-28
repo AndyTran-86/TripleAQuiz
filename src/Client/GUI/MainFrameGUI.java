@@ -14,10 +14,6 @@ public class MainFrameGUI {
 
     //Header
     JPanel headerPanel;
-    JLabel headerLabel;
-    JLabel playerLabel;
-    JLabel otherPlayerLabel;
-
     JLabel headerSpacer;
 
     //Footer
@@ -51,10 +47,6 @@ public class MainFrameGUI {
 
         //Header
         headerPanel = new JPanel(new BorderLayout());
-        headerLabel = new JLabel("Question Theme", SwingConstants.CENTER);
-        playerLabel = new JLabel(" Player 1", SwingConstants.CENTER);
-        otherPlayerLabel = new JLabel("Player 2 ", SwingConstants.CENTER);
-
         headerSpacer = new JLabel();
         headerSpacer.setPreferredSize(new Dimension(0, 50));
 
@@ -64,7 +56,7 @@ public class MainFrameGUI {
         footerPanel = new JPanel(new GridLayout(3,2,10,10));
         homeIconLabel = new JLabel(new ImageIcon("icons/lobby/home.png"));
         friendIconLabel = new JLabel(new ImageIcon("icons/lobby/friends.png"));
-        surrenderButton = new JButton("Surrender");
+        surrenderButton = new JButton(new ImageIcon("icons/lobby/surrender.png"));
         nextQuestionButton = new JButton("Next Question");
 
         spacer = new JLabel(" ", SwingConstants.CENTER) {{
@@ -75,7 +67,6 @@ public class MainFrameGUI {
         }};
 
         //midSection
-        //all code for STATE should be here. -CardLayout? -Revalidate? -Repaint?
         midPanel = new JPanel();
         cardLayout = new CardLayout();
         midPanel.setLayout(cardLayout);
@@ -93,9 +84,6 @@ public class MainFrameGUI {
 
         //Header
         mainFramePanel.add(headerPanel, BorderLayout.NORTH);
-        headerPanel.add(playerLabel, BorderLayout.WEST);
-        headerPanel.add(headerLabel, BorderLayout.CENTER);
-        headerPanel.add(otherPlayerLabel, BorderLayout.EAST);
         headerPanel.add(spacer, BorderLayout.NORTH);
         headerPanel.add(spacer1, BorderLayout.SOUTH);
 
@@ -131,20 +119,9 @@ public class MainFrameGUI {
         scoreBoard = new ScoreBoard();
         addBoard(scoreBoard.getBoard(),"ScoreBoard");
 
-//        cardLayout.show(midPanel,"Lobby");
-
-        //cardLayout.show(midPanel, "WaitingBoard");
-
-        //cardLayout.show(midPanel, "CategoryBoard");
-
-        //cardLayout.show(midPanel, "QuizGameBoard");
-
-
 
         frame.setVisible(true);
 
-        //Hide header
-        hideHeaderContent();
 
     }
 
@@ -152,22 +129,6 @@ public class MainFrameGUI {
         midPanel.add(board, name);
     }
 
-
-
-    private void hideHeaderContent() {
-        headerLabel.setVisible(false);
-        playerLabel.setVisible(false);
-        otherPlayerLabel.setVisible(false);
-        headerPanel.revalidate();
-        headerPanel.repaint();
-    }
-    private void showHeaderContent() {
-        headerLabel.setVisible(true);
-        playerLabel.setVisible(true);
-        otherPlayerLabel.setVisible(true);
-        headerPanel.revalidate();
-        headerPanel.repaint();
-    }
 
 
     public void showLobbyView() {
