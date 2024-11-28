@@ -168,13 +168,27 @@ public class Client implements Runnable {
 
         for (JButton answerButton : guiMainFrame.getAnswerButtons()) {
             answerButton.addActionListener((e) -> {
+                guiMainFrame.disableAnswerButtons();
+                guiMainFrame.getNextQuestionButton().setEnabled(true);
                 if (questionData.checkAnswer(answerButton.getText())) {
                     int currentScore = questionData.getResultsPerRound().stream().reduce(0, Integer::sum);
                     guiMainFrame.getPlayerScoreLabels()[getCurrentRound()-1].setText(String.valueOf(currentScore));
                     answerButton.setBackground(Color.GREEN);
+                    answerButton.setOpaque(true);
                 } else {
                     answerButton.setBackground(Color.RED);
+                    answerButton.setOpaque(true);
                 }
+
+                if (questionData.getQuestionsPlayed() >= 3) {
+                    //TODO Disable if other play not connected?
+                    guiMainFrame.getNextQuestionButton().setText("End Turn");
+                }
+            });
+        }
+
+
+        guiMainFrame.getNextQuestionButton().addActionListener((e) -> {
                     if (questionData.getQuestionsPlayed() >= 3 && isRespondingTurn) {
                         setRespondingTurn(false);
                         sendRespondingAnswers();
@@ -189,10 +203,13 @@ public class Client implements Runnable {
                     }else {
                         guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                     }
+
+            guiMainFrame.getNextQuestionButton().setEnabled(false);
             });
-        }
+
 
         guiMainFrame.getLobbyStartGameButton().addActionListener(e -> {
+            guiMainFrame.getNextQuestionButton().setVisible(true); //TODO choose where to call..
             //TODO replace with mainframe gui
             String userName = guiMainFrame.getInputUsername();
             if (!userName.isEmpty()) {
