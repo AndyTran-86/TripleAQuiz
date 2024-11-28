@@ -17,7 +17,9 @@ public class Server implements Runnable{
 
     public Server(int port) {
         this.port = port;
-        apiClient = new Api_Client();
+        //TODO get int totalRounds and totalQuestionsPerCategory from properties, bound 1-8 and 1-3
+        //TODO save totalRounds and totalQuestionsPerCategory to properties, compare, if they are the same, deserialize..
+        apiClient = new Api_Client(8, 3);
         getAllQuestions();
         try {
             this.serverSocket = new ServerSocket(port);

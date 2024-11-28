@@ -187,7 +187,6 @@ public class MainFrameGUI {
         for (JButton b : categoryBoard.getCategoryButtons()) {
             b.setText(categories.get(counter++).name());
         }
-
     }
 
     public void showQuizGameView() {
