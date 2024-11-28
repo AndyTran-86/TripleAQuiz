@@ -276,4 +276,16 @@ public class MainFrameGUI {
             b.setEnabled(false);
         }
     }
+
+    public JLabel getPlayerTurnLabel() {
+        return scoreBoard.getPlayerTurnLabel();
+    }
+
+    public JLabel getFinalScorePlayer() {
+        return scoreBoard.finalScorePlayer;
+    }
+
+    public JLabel getFinalScoreOtherPlayer() {
+        return scoreBoard.finalScoreOtherPlayer;
+    }
 }
