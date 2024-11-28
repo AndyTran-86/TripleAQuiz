@@ -27,9 +27,13 @@ public class ClientDefeatState implements ClientState {
             if (defeatResponse.getDefeatType() == DefeatType.LOSS) {
                 guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-2].setText(String.valueOf(client.getOpponentScorePreviousRound()));
             }
-            guiMainFrame.getPlayerTurnLabel().setText("            DEFEAT");
-            guiMainFrame.getFinalScorePlayer().setText("5");
-            guiMainFrame.getFinalScoreOtherPlayer().setText("4");
+            guiMainFrame.getPlayerTurnLabel().setText("            LOSS");
+            if (defeatResponse.getDefeatType() == DefeatType.LOSS) {
+                guiMainFrame.getFinalScorePlayer().setText(String.valueOf(defeatResponse.getPlayerScore()));
+                guiMainFrame.getFinalScoreOtherPlayer().setText(String.valueOf(defeatResponse.getOtherPlayerScore()));
+            } else {
+            guiMainFrame.getPlayerTurnLabel().setText("LOSS-SURRENDER");
+        }
             guiMainFrame.showScoreBoardView();
 //            JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Defeat response received");
 
