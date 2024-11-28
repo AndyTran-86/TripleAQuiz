@@ -2,6 +2,9 @@ package Client.GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
 
 public class ScoreBoard extends AbstractBoard {
 
@@ -18,11 +21,22 @@ public class ScoreBoard extends AbstractBoard {
 
     private JPanel midPanel;
     private JButton playButton;
+    private int totalRounds;
 
     @Override
     protected void initComponents() {
-        playerScoreLabels = new JLabel[8];
-        otherPlayerScoreLabels = new JLabel[8];
+        Properties properties = new Properties();
+        try {
+            properties.load(new FileReader("src/Server/Config.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        totalRounds = Integer.parseInt(properties.getProperty("numRounds",""));
+
+
+        playerScoreLabels = new JLabel[totalRounds];
+        otherPlayerScoreLabels = new JLabel[totalRounds];
 
         finalScorePlayer = new JLabel("", SwingConstants.CENTER);
         finalScorePlayer.setFont(new Font("Arial", Font.BOLD, 20));
@@ -31,7 +45,7 @@ public class ScoreBoard extends AbstractBoard {
 
         playerTurnLabel = new JLabel("         Your turn");
         playerTurnLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        midPanel = new JPanel(new GridLayout(11, 3, 10, 10));
+        midPanel = new JPanel(new GridLayout(totalRounds+3, 3, 10, 10));
 
         midPanel.add(finalScorePlayer);
         midPanel.add(playerTurnLabel);
@@ -45,7 +59,7 @@ public class ScoreBoard extends AbstractBoard {
         midPanel.add(headerLabel);
         midPanel.add(otherPlayerLabel);
 
-        for (int i = 1; i <= 8; i++) {
+        for (int i = 1; i <= totalRounds; i++) {
             playerScoreLabels[i-1] = new JLabel("0", SwingConstants.CENTER);
             otherPlayerScoreLabels[i-1] = new JLabel("0", SwingConstants.CENTER);
             midPanel.add(playerScoreLabels[i-1]);
@@ -65,6 +79,19 @@ public class ScoreBoard extends AbstractBoard {
     protected void buildLayout() {
         board.setLayout(new BorderLayout());
         board.add(midPanel, BorderLayout.CENTER);
+    }
+
+    public void resetScoreBoard() {
+        otherPlayerLabel.setText("Player 2 ");
+        for (JLabel label : playerScoreLabels) {
+            label.setText("0");
+        }
+        for (JLabel label : otherPlayerScoreLabels) {
+            label.setText("0");
+        }
+        finalScorePlayer.setText("");
+        finalScoreOtherPlayer.setText("");
+        playButton.setText("Play");
     }
 
     public JLabel[] getPlayerScoreLabels() {

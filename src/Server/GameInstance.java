@@ -24,7 +24,7 @@ public class GameInstance {
         this.gameInstanceID = gameInstanceIDIncrementor++;
         this.gameInstanceManager = gameInstanceManager;
         this.players = new HashMap<>();
-        maxRounds = 8;
+        maxRounds = gameInstanceManager.getNumRounds();
         currentRoundPerPlayer = 0;
         categoriesReady = false;;
     }
@@ -83,8 +83,8 @@ public class GameInstance {
         System.out.println(result);
         System.out.println(selectedCategory);
         System.out.println(answeredQuestions);
-        callingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.OTHER_PLAYER_TURN, result, selectedCategory, answeredQuestions));
         nonCallingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.PLAYER_TURN, result, selectedCategory, answeredQuestions));
+        callingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.OTHER_PLAYER_TURN, result, selectedCategory, answeredQuestions));
     }
 
 

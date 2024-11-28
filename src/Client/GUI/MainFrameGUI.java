@@ -129,7 +129,9 @@ public class MainFrameGUI {
         midPanel.add(board, name);
     }
 
-
+    public void resetScoreBoard() {
+        scoreBoard.resetScoreBoard();
+    }
 
     public void showLobbyView() {
         cardLayout.show(midPanel,"Lobby");

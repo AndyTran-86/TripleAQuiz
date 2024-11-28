@@ -13,13 +13,15 @@ public class GameInstanceManager {
     GameInstance currentOpenGameInstance;
     boolean gameInstanceOpenForNewPlayer;
     private List<Category> allCategories;
+    int numRounds;
 
-    public GameInstanceManager(List<Category> allCategories) {
+    public GameInstanceManager(List<Category> allCategories, int numRounds) {
         clientsInLobbyByID = new HashMap<>();
         questionsByCategory = new HashMap<>();
         gameInstancesMapByID = new HashMap<>();
         this.allCategories = allCategories;
         gameInstanceOpenForNewPlayer = false;
+        this.numRounds = numRounds;
     }
 
 
@@ -69,5 +71,9 @@ public class GameInstanceManager {
 
     public List<Category> getAllCategories() {
         return allCategories;
+    }
+
+    public int getNumRounds() {
+        return numRounds;
     }
 }

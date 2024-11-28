@@ -31,10 +31,13 @@ public class ClientVictoryState implements ClientState {
             if (victoryResponse.getVictoryType() == VictoryType.WIN) {
                 guiMainFrame.getFinalScorePlayer().setText(String.valueOf(victoryResponse.getPlayerScore()));
                 guiMainFrame.getFinalScoreOtherPlayer().setText(String.valueOf(victoryResponse.getOtherPlayerScore()));
-            } else {
+            } else if (victoryResponse.getVictoryType() == VictoryType.SURRENDER){
                 guiMainFrame.getPlayerTurnLabel().setText("WIN-SURRENDER");
+            } else if (victoryResponse.getVictoryType() == VictoryType.DRAW) {
+                guiMainFrame.getPlayerTurnLabel().setText("         DRAW");
             }
             guiMainFrame.showScoreBoardView();
+            client.setGameOver(true);
 //            JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Victory response received");
         }
 
@@ -43,6 +46,9 @@ public class ClientVictoryState implements ClientState {
     @Override
     public void updateGUI() {
         guiMainFrame.getSurrenderButton().setVisible(false);
+        guiMainFrame.getNextQuestionButton().setVisible(false);
+        guiMainFrame.getScoreBoardPlayButton().setEnabled(true);
+        guiMainFrame.getScoreBoardPlayButton().setText("Start New Game");
         System.out.println("Updating GUI");
     }
 

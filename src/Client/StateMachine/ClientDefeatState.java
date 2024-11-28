@@ -31,10 +31,11 @@ public class ClientDefeatState implements ClientState {
             if (defeatResponse.getDefeatType() == DefeatType.LOSS) {
                 guiMainFrame.getFinalScorePlayer().setText(String.valueOf(defeatResponse.getPlayerScore()));
                 guiMainFrame.getFinalScoreOtherPlayer().setText(String.valueOf(defeatResponse.getOtherPlayerScore()));
-            } else {
+            } else if (defeatResponse.getDefeatType() == DefeatType.SURRENDER){
             guiMainFrame.getPlayerTurnLabel().setText("LOSS-SURRENDER");
         }
             guiMainFrame.showScoreBoardView();
+            client.setGameOver(true);
 //            JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Defeat response received");
 
         }
@@ -44,6 +45,9 @@ public class ClientDefeatState implements ClientState {
     @Override
     public void updateGUI() {
         guiMainFrame.getSurrenderButton().setVisible(false);
+        guiMainFrame.getNextQuestionButton().setVisible(false);
+        guiMainFrame.getScoreBoardPlayButton().setEnabled(true);
+        guiMainFrame.getScoreBoardPlayButton().setText("Start New Game");
         System.out.println("Updating GUI");
     }
 

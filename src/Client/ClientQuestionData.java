@@ -17,6 +17,7 @@ public class ClientQuestionData implements Serializable {
     private List<Category> threeRandomCategories;
     private int questionsPlayed;
     private List<Question> selectedCategoryQuestions;
+    private int maxQuestions, maxRounds;
 
     public ClientQuestionData() {
         this.resultsPerRound = new ArrayList<>();
@@ -26,6 +27,14 @@ public class ClientQuestionData implements Serializable {
         this.selectedCategoryQuestions = new ArrayList<>();
         this.selectedCategory = new Category(null, null);
         this.random = new Random();
+    }
+
+    public int getMaxQuestions() {
+        return maxQuestions;
+    }
+
+    public int getMaxRounds() {
+        return maxRounds;
     }
 
     public List<Question> getAnsweredQuestions() {
@@ -45,6 +54,8 @@ public class ClientQuestionData implements Serializable {
     }
 
     public void setAllCategories(List<Category> allCategories) {
+        this.maxRounds = allCategories.size() - 2;
+        this.maxQuestions = allCategories.getFirst().questions().size();
         this.allCategories = allCategories;
         this.remainingCategories = allCategories;
     }
@@ -71,10 +82,10 @@ public class ClientQuestionData implements Serializable {
         setSelectedCategoryQuestions();
     }
 
-    public void setSelectedCategoryQuestions() {
+    public void setSelectedCategoryQuestions() { //onödig???!
         this.questionsPlayed = 0;
         selectedCategoryQuestions.clear();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < maxQuestions; i++) {
             int randomIndex = random.nextInt(selectedCategory.questions().size());
             selectedCategoryQuestions.add(selectedCategory.questions().remove(randomIndex));
         }
@@ -82,12 +93,13 @@ public class ClientQuestionData implements Serializable {
 
     public void setSelectedCategoryFromOpponent(Category category, List<Question> questions) {
         this.questionsPlayed = 0;
-        for (Category c : remainingCategories) {
-            if (c.name().equals(category.name())) {
-                remainingCategories.remove(c);
-                break;
-            }
-        }
+        this.remainingCategories.remove(category);
+//        for (Category c : remainingCategories) {
+//            if (c.name().equals(category.name())) {
+//                remainingCategories.remove(c);
+//                break;
+//            }
+//        }
         this.selectedCategoryQuestions = questions;
     }
 
@@ -99,14 +111,18 @@ public class ClientQuestionData implements Serializable {
         if (!threeRandomCategories.isEmpty())
             threeRandomCategories.clear();
         for(int i = 0; i < 3; i++) {
-            int randomIndex = random.nextInt(remainingCategories.size());
-            while (threeRandomCategories.contains(remainingCategories.get(randomIndex)))
-                randomIndex = random.nextInt(remainingCategories.size());
+            int randomIndex = random.nextInt(allCategories.size());
+            while (threeRandomCategories.contains(allCategories.get(randomIndex)))
+                randomIndex = random.nextInt(allCategories.size());
             threeRandomCategories.add(remainingCategories.get(randomIndex));
         }
     }
 
     public int getQuestionsPlayed() {
         return questionsPlayed;
+    }
+
+    public void setQuestionsPlayed(int questionsPlayed) {
+        this.questionsPlayed = questionsPlayed;
     }
 }

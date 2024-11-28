@@ -32,8 +32,10 @@ public class RoundPlayedRequestHandlingState implements ServerState {
             if (gameInstance.finalRoundPlayed()) {
                 gameInstance.notifyGameOverResult();
                 gameInstanceManager.terminateGameInstance(gameInstance.getGameInstanceID());
+                System.out.println("Server sent game over response");
             } else {
                 gameInstance.notifyRoundPlayed(roundPlayedRequest.getResult(), roundPlayedRequest.getSelectedCategory(), roundPlayedRequest.getAnsweredQuestions());
+                System.out.println("Server sent round played response");
             }
         }
     }

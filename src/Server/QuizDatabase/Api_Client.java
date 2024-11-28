@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Api_Client {
-    private StringBuilder addedCategories;
     private List<String> categoryNames;
     private List<Category> sorted_categories;
     private List<Boolean> fullCategories;
@@ -27,7 +26,6 @@ public class Api_Client {
         this.client = HttpClient.newHttpClient();
         this.gson = new Gson();
         this.sorted_categories = new ArrayList<>();
-        this.addedCategories = new StringBuilder();
         this.temp = new File("src/Server/QuizDatabase/questions.ser");
         this.fullCategories = new ArrayList<>();
         this.categoryNames = new ArrayList<>();
@@ -36,11 +34,11 @@ public class Api_Client {
 
     private void setTotalCategoriesAndQuestions(int totalCategories, int totalQuestionsPerCategory) {
         if (totalCategories >= 1 && totalCategories <= 8)
-            this.totalCategories = totalCategories;
+            this.totalCategories = totalCategories + 2;
         else if (totalCategories < 1)
-            this.totalCategories = 1;
+            this.totalCategories = 3;
         else if (totalCategories > 8)
-            this.totalCategories = 8;
+            this.totalCategories = 10;
 
         if (totalQuestionsPerCategory == 2)
             this.totalQuestionsPerCategory = 2;
@@ -152,7 +150,8 @@ public class Api_Client {
                 if (sorted_categories.size() == totalCategories && isAllFull()) {
                     break;
                 }
-                if (addedCategories.toString().contains(question.category())) {
+                String cat = question.category();
+                if (categoryNames.stream().anyMatch(str -> str.equals(cat))) {
                     int index = categoryNames.indexOf(question.category());
                     if (sorted_categories.get(index).questions().size() < totalQuestionsPerCategory) {
                         sorted_categories.get(index).questions().add(question);
@@ -162,7 +161,6 @@ public class Api_Client {
                 } else if (sorted_categories.size() < totalCategories) {
                     sorted_categories.add(new Category(question.category(), new ArrayList<>()));
                     categoryNames.add(question.category());
-                    addedCategories.append(question.category());
                     fullCategories.add(false);
                     sorted_categories.getLast().questions().add(question);
                 }

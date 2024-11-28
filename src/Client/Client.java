@@ -31,6 +31,7 @@ public class Client implements Runnable {
     boolean isRespondingTurn;
     int opponentScorePreviousRound;
     boolean awaitingPlayer;
+    boolean gameOver;
 
     ClientState state;
     ClientState lobbyState;
@@ -50,6 +51,7 @@ public class Client implements Runnable {
         currentRound = 0;
         opponentScorePreviousRound = 0;
         awaitingPlayer = true;
+        gameOver = false;
 
 
 
@@ -108,6 +110,7 @@ public class Client implements Runnable {
                         }
 
                         case RoundPlayedResponse roundPlayedResponse -> {
+                            System.out.println("received round played response");
                             switch (roundPlayedResponse.getTurnToPlay()) {
                                 case PLAYER_TURN -> state = playerTurnState;
                                 case OTHER_PLAYER_TURN -> state = otherPlayerTurnState;
@@ -152,12 +155,26 @@ public class Client implements Runnable {
     public void addEventListeners() {
 
         guiMainFrame.getScoreBoardPlayButton().addActionListener((e) -> {
+            if (gameOver) {
+                try (Socket socket = new Socket(ip, port);
+                     ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+                    out.writeObject(new StartNewGameRequest(clientID, username));
+
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+
+            }
             if (isRespondingTurn) {
                 guiMainFrame.setGameBoard(questionData.getSelectedCategoryQuestion());
                 guiMainFrame.showQuizGameView();
+                guiMainFrame.getNextQuestionButton().setVisible(true);
+                guiMainFrame.getNextQuestionButton().setText("Next Question");
             } else {
                 guiMainFrame.setCategoryBoardNames(questionData.getThreeRandomCategories());
                 guiMainFrame.showCategoryBoardView();
+                guiMainFrame.getNextQuestionButton().setVisible(true);
+                guiMainFrame.getNextQuestionButton().setText("Next Question");
             }
 
         });
@@ -184,7 +201,7 @@ public class Client implements Runnable {
                     answerButton.setOpaque(true);
                 }
 
-                if (questionData.getQuestionsPlayed() >= 3) {
+                if (questionData.getQuestionsPlayed() >= questionData.getMaxQuestions()) {
                     //TODO Disable if other play not connected?
                     guiMainFrame.getNextQuestionButton().setText("End Turn");
                 }
@@ -193,7 +210,7 @@ public class Client implements Runnable {
 
 
         guiMainFrame.getNextQuestionButton().addActionListener((e) -> {
-                    if (questionData.getQuestionsPlayed() >= 3 && isRespondingTurn) {
+                    if (questionData.getQuestionsPlayed() >= questionData.getMaxQuestions() && isRespondingTurn) {
                         setRespondingTurn(false);
                         sendRespondingAnswers();
                         guiMainFrame.getPlayerScoreLabels()[getCurrentRound()-1].setText(String.valueOf(questionData.getResultsPerRound().stream().reduce(0, Integer::sum)));
@@ -201,10 +218,10 @@ public class Client implements Runnable {
                         questionData.getResultsPerRound().clear();
                         guiMainFrame.showScoreBoardView();
                     }
-                    else if (questionData.getQuestionsPlayed() >= 3 && awaitingPlayer) {
+                    else if (questionData.getQuestionsPlayed() >= questionData.getMaxQuestions() && awaitingPlayer) {
                         JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Cannot end turn until another player joins");
                     }
-                    else if (questionData.getQuestionsPlayed() >= 3) {
+                    else if (questionData.getQuestionsPlayed() >= questionData.getMaxQuestions()) {
                         sendRoundPlayed();
                         questionData.getResultsPerRound().clear();
                     }else {
@@ -312,15 +329,19 @@ public class Client implements Runnable {
         return currentRound/2;
     }
 
-    public int getAllCurrentRounds() {
-        return currentRound;
-    }
-
-    public boolean isAwaitingPlayer() {
-        return awaitingPlayer;
-    }
+   public void setCurrentRound(int currentRound) {
+        this.currentRound = currentRound;
+   }
 
     public void setAwaitingPlayer(boolean awaitingPlayer) {
         this.awaitingPlayer = awaitingPlayer;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }
