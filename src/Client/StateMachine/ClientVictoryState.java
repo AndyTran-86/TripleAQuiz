@@ -31,8 +31,10 @@ public class ClientVictoryState implements ClientState {
             if (victoryResponse.getVictoryType() == VictoryType.WIN) {
                 guiMainFrame.getFinalScorePlayer().setText(String.valueOf(victoryResponse.getPlayerScore()));
                 guiMainFrame.getFinalScoreOtherPlayer().setText(String.valueOf(victoryResponse.getOtherPlayerScore()));
-            } else {
+            } else if (victoryResponse.getVictoryType() == VictoryType.SURRENDER){
                 guiMainFrame.getPlayerTurnLabel().setText("WIN-SURRENDER");
+            } else if (victoryResponse.getVictoryType() == VictoryType.DRAW) {
+                guiMainFrame.getPlayerTurnLabel().setText("         DRAW");
             }
             guiMainFrame.showScoreBoardView();
 //            JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Victory response received");
