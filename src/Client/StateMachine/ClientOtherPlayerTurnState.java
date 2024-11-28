@@ -31,6 +31,7 @@ public class ClientOtherPlayerTurnState  implements ClientState {
             client.setOpponentScorePreviousRound(respondingAnswersResponse.getResult().stream().reduce(0, Integer::sum));
 //            guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-1].setText(String.valueOf(respondingAnswersResponse.getResult().stream().reduce(0, Integer::sum)));
             client.updateRoundCounter();
+            
 
         }
     }
