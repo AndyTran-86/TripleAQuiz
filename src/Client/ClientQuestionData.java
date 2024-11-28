@@ -121,4 +121,8 @@ public class ClientQuestionData implements Serializable {
     public int getQuestionsPlayed() {
         return questionsPlayed;
     }
+
+    public void setQuestionsPlayed(int questionsPlayed) {
+        this.questionsPlayed = questionsPlayed;
+    }
 }

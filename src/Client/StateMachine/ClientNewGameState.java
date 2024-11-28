@@ -23,6 +23,9 @@ public class ClientNewGameState  implements ClientState {
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
         if (response instanceof NewGameResponse newGameResponse) {
             guiMainFrame.resetScoreBoard();
+            client.getQuestionData().setQuestionsPlayed(0);
+            client.setCurrentRound(0);
+
             switch (newGameResponse.getTurnToPlay()) {
                 case PLAYER_TURN -> {
                     client.setGameInstanceID(newGameResponse.getGameInstanceID());

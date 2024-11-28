@@ -329,13 +329,9 @@ public class Client implements Runnable {
         return currentRound/2;
     }
 
-    public int getAllCurrentRounds() {
-        return currentRound;
-    }
-
-    public boolean isAwaitingPlayer() {
-        return awaitingPlayer;
-    }
+   public void setCurrentRound(int currentRound) {
+        this.currentRound = currentRound;
+   }
 
     public void setAwaitingPlayer(boolean awaitingPlayer) {
         this.awaitingPlayer = awaitingPlayer;
