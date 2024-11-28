@@ -22,6 +22,7 @@ public class ClientPlayerTurnState implements ClientState {
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
         if (response instanceof RoundPlayedResponse roundPlayedResponse) {
+            System.out.println("Current round: " + client.getCurrentRound());
             client.updateRoundCounter();
             client.setRespondingTurn(true);
             if (client.getCurrentRound()>1) {
@@ -31,6 +32,7 @@ public class ClientPlayerTurnState implements ClientState {
             client.getQuestionData().setSelectedCategoryFromOpponent(roundPlayedResponse.getSelectedCategory(), roundPlayedResponse.getAnsweredQuestions());
             client.getQuestionData().setThreeRandomCategories();
             guiMainFrame.setCategoryBoardNames(client.getQuestionData().getThreeRandomCategories());
+            System.out.println("handled round played response");
         }
 
     }

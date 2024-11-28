@@ -108,6 +108,7 @@ public class Client implements Runnable {
                         }
 
                         case RoundPlayedResponse roundPlayedResponse -> {
+                            System.out.println("received round played response");
                             switch (roundPlayedResponse.getTurnToPlay()) {
                                 case PLAYER_TURN -> state = playerTurnState;
                                 case OTHER_PLAYER_TURN -> state = otherPlayerTurnState;

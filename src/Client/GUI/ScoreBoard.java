@@ -2,6 +2,9 @@ package Client.GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
 
 public class ScoreBoard extends AbstractBoard {
 
@@ -31,7 +34,7 @@ public class ScoreBoard extends AbstractBoard {
 
         playerTurnLabel = new JLabel("         Your turn");
         playerTurnLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        midPanel = new JPanel(new GridLayout(11, 3, 10, 10));
+        midPanel = new JPanel(new GridLayout(totalRounds+3, 3, 10, 10));
 
         midPanel.add(finalScorePlayer);
         midPanel.add(playerTurnLabel);
