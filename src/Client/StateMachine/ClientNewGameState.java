@@ -46,7 +46,6 @@ public class ClientNewGameState  implements ClientState {
     @Override
     public void updateGUI() {
         guiMainFrame.getSurrenderButton().setVisible(true);
-        guiMainFrame.getNextQuestionButton().setVisible(true); //TODO - make work, it doesn't
         guiMainFrame.showScoreBoardView();
         guiMainFrame.getFrame().repaint();
         guiMainFrame.getFrame().revalidate();
