@@ -29,8 +29,13 @@ public class RespondingAnswersRequestHandlingState implements ServerState {
             gameInstance.findCallingPlayer(respondingAnswersRequest.getClientID());
 //            gameInstance.addRoundToCounter();
             gameInstance.updateGameScore(respondingAnswersRequest.getResult());
-
+            gameInstance.addRoundToCounter();
+            gameInstance.printCurrentRound();
             gameInstance.notifyRespondedAnsweredQuestions(respondingAnswersRequest.getResult());
+            if (gameInstance.finalRoundPlayed()) {
+                gameInstance.notifyGameOverResult();
+                gameInstanceManager.terminateGameInstance(gameInstance.getGameInstanceID());
+            }
         }
     }
 }

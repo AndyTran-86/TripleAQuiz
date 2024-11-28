@@ -28,9 +28,8 @@ public class ClientOtherPlayerTurnState  implements ClientState {
         }
 
         if (response instanceof RespondingAnswersResponse respondingAnswersResponse) {
-            System.out.println("got to other player state and changing text");
-            System.out.println(respondingAnswersResponse.getResult());
             guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-1].setText(String.valueOf(respondingAnswersResponse.getResult().stream().reduce(0, Integer::sum)));
+            client.updateRoundCounter();
         }
     }
 

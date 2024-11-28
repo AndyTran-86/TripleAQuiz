@@ -28,7 +28,7 @@ public class RoundPlayedRequestHandlingState implements ServerState {
             gameInstance.findCallingPlayer(roundPlayedRequest.getClientID());
             gameInstance.addRoundToCounter();
             gameInstance.updateGameScore(roundPlayedRequest.getResult());
-
+            gameInstance.printCurrentRound();
             if (gameInstance.finalRoundPlayed()) {
                 gameInstance.notifyGameOverResult();
                 gameInstanceManager.terminateGameInstance(gameInstance.getGameInstanceID());

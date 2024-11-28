@@ -21,7 +21,8 @@ public class ClientVictoryState implements ClientState {
 
     @Override
     public void handleResponse(Response response) throws IOException, ClassNotFoundException {
-        JOptionPane.showMessageDialog(null, "Victory response received");
+        guiMainFrame.showScoreBoardView();
+        JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Victory response received");
     }
 
     @Override
