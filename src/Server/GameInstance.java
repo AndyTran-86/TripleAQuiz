@@ -83,8 +83,8 @@ public class GameInstance {
         System.out.println(result);
         System.out.println(selectedCategory);
         System.out.println(answeredQuestions);
-        callingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.OTHER_PLAYER_TURN, result, selectedCategory, answeredQuestions));
         nonCallingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.PLAYER_TURN, result, selectedCategory, answeredQuestions));
+        callingPlayer.out.writeObject(new RoundPlayedResponse(RoundTurn.OTHER_PLAYER_TURN, result, selectedCategory, answeredQuestions));
     }
 
 
