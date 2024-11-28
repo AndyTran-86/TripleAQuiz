@@ -54,7 +54,7 @@ public class Server implements Runnable{
 
     private void getAllQuestions() {
         allCategories = apiClient.getNewCategories();
-        gameInstanceManager = new GameInstanceManager(allCategories);
+        gameInstanceManager = new GameInstanceManager(allCategories, numRounds);
     }
 
     @Override

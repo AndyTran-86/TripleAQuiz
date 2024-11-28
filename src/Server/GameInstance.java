@@ -24,7 +24,7 @@ public class GameInstance {
         this.gameInstanceID = gameInstanceIDIncrementor++;
         this.gameInstanceManager = gameInstanceManager;
         this.players = new HashMap<>();
-        maxRounds = 8;
+        maxRounds = gameInstanceManager.getNumRounds();
         currentRoundPerPlayer = 0;
         categoriesReady = false;;
     }

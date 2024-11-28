@@ -184,7 +184,7 @@ public class Client implements Runnable {
                     answerButton.setOpaque(true);
                 }
 
-                if (questionData.getQuestionsPlayed() >= 3) {
+                if (questionData.getQuestionsPlayed() >= questionData.getMaxQuestions()) {
                     //TODO Disable if other play not connected?
                     guiMainFrame.getNextQuestionButton().setText("End Turn");
                 }
