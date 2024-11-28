@@ -193,7 +193,7 @@ public class Client implements Runnable {
 
 
         guiMainFrame.getNextQuestionButton().addActionListener((e) -> {
-                    if (questionData.getQuestionsPlayed() >= 3 && isRespondingTurn) {
+                    if (questionData.getQuestionsPlayed() >= questionData.getMaxQuestions() && isRespondingTurn) {
                         setRespondingTurn(false);
                         sendRespondingAnswers();
                         guiMainFrame.getPlayerScoreLabels()[getCurrentRound()-1].setText(String.valueOf(questionData.getResultsPerRound().stream().reduce(0, Integer::sum)));
@@ -201,10 +201,10 @@ public class Client implements Runnable {
                         questionData.getResultsPerRound().clear();
                         guiMainFrame.showScoreBoardView();
                     }
-                    else if (questionData.getQuestionsPlayed() >= 3 && awaitingPlayer) {
+                    else if (questionData.getQuestionsPlayed() >= questionData.getMaxQuestions() && awaitingPlayer) {
                         JOptionPane.showMessageDialog(guiMainFrame.getFrame(), "Cannot end turn until another player joins");
                     }
-                    else if (questionData.getQuestionsPlayed() >= 3) {
+                    else if (questionData.getQuestionsPlayed() >= questionData.getMaxQuestions()) {
                         sendRoundPlayed();
                         questionData.getResultsPerRound().clear();
                     }else {

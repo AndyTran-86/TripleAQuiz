@@ -17,6 +17,7 @@ public class ClientQuestionData implements Serializable {
     private List<Category> threeRandomCategories;
     private int questionsPlayed;
     private List<Question> selectedCategoryQuestions;
+    private int maxQuestions, maxRounds;
 
     public ClientQuestionData() {
         this.resultsPerRound = new ArrayList<>();
@@ -26,6 +27,14 @@ public class ClientQuestionData implements Serializable {
         this.selectedCategoryQuestions = new ArrayList<>();
         this.selectedCategory = new Category(null, null);
         this.random = new Random();
+    }
+
+    public int getMaxQuestions() {
+        return maxQuestions;
+    }
+
+    public int getMaxRounds() {
+        return maxRounds;
     }
 
     public List<Question> getAnsweredQuestions() {
@@ -45,6 +54,8 @@ public class ClientQuestionData implements Serializable {
     }
 
     public void setAllCategories(List<Category> allCategories) {
+        this.maxRounds = allCategories.size() - 2;
+        this.maxQuestions = allCategories.getFirst().questions().size();
         this.allCategories = allCategories;
         this.remainingCategories = allCategories;
     }
@@ -71,10 +82,10 @@ public class ClientQuestionData implements Serializable {
         setSelectedCategoryQuestions();
     }
 
-    public void setSelectedCategoryQuestions() {
+    public void setSelectedCategoryQuestions() { //onödig???!
         this.questionsPlayed = 0;
         selectedCategoryQuestions.clear();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < maxQuestions; i++) {
             int randomIndex = random.nextInt(selectedCategory.questions().size());
             selectedCategoryQuestions.add(selectedCategory.questions().remove(randomIndex));
         }
