@@ -5,40 +5,32 @@ import Server.QuizDatabase.Question;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class ClientQuestionData implements Serializable {
-    private Random random;
     private List<Integer> resultsPerRound;
     private List<Category> allCategories;
     private List<Category> remainingCategories;
     private Category selectedCategory;
     private List<Category> threeRandomCategories;
     private int questionsPlayed;
-    private List<Question> selectedCategoryQuestions;
-    private int maxQuestions, maxRounds;
+    private int maxQuestions;
 
     public ClientQuestionData() {
         this.resultsPerRound = new ArrayList<>();
         this.remainingCategories = new ArrayList<>();
         this.allCategories = new ArrayList<>();
         this.threeRandomCategories = new ArrayList<>();
-        this.selectedCategoryQuestions = new ArrayList<>();
         this.selectedCategory = new Category(null, null);
-        this.random = new Random();
     }
 
     public int getMaxQuestions() {
         return maxQuestions;
     }
 
-    public int getMaxRounds() {
-        return maxRounds;
-    }
-
     public List<Question> getAnsweredQuestions() {
-        return selectedCategoryQuestions;
+        return selectedCategory.questions();
     }
 
     public List<Category> getThreeRandomCategories() {
@@ -54,14 +46,13 @@ public class ClientQuestionData implements Serializable {
     }
 
     public void setAllCategories(List<Category> allCategories) {
-        this.maxRounds = allCategories.size() - 2;
         this.maxQuestions = allCategories.getFirst().questions().size();
         this.allCategories = allCategories;
         this.remainingCategories = allCategories;
     }
 
     public boolean checkAnswer(String answer) {
-        String correctAnswer = selectedCategoryQuestions.get(questionsPlayed).correct_answer();
+        String correctAnswer = selectedCategory.questions().get(questionsPlayed).correct_answer();
         if (correctAnswer.equals(answer)) {
             resultsPerRound.add(1);
         } else {
@@ -72,50 +63,39 @@ public class ClientQuestionData implements Serializable {
     }
 
     public void selectCategory(String categoryName) {
-      for (Category c : threeRandomCategories) {
+        this.questionsPlayed = 0;
+        for (Category c : threeRandomCategories) {
             if (c.name().equals(categoryName)) {
                 this.selectedCategory = c;
                 this.remainingCategories.remove(c);
                 break;
                 }
             }
-        setSelectedCategoryQuestions();
     }
 
-    public void setSelectedCategoryQuestions() { //onödig???!
+    public void setSelectedCategoryFromOpponent(Category category) {
         this.questionsPlayed = 0;
-        selectedCategoryQuestions.clear();
-        for (int i = 0; i < maxQuestions; i++) {
-            int randomIndex = random.nextInt(selectedCategory.questions().size());
-            selectedCategoryQuestions.add(selectedCategory.questions().remove(randomIndex));
-        }
-    }
-
-    public void setSelectedCategoryFromOpponent(Category category, List<Question> questions) {
-        this.questionsPlayed = 0;
-        this.remainingCategories.remove(category);
-//        for (Category c : remainingCategories) {
-//            if (c.name().equals(category.name())) {
-//                remainingCategories.remove(c);
-//                break;
-//            }
-//        }
-        this.selectedCategoryQuestions = questions;
+        for (Category c : allCategories) {
+           if (c.name().equals(category.name())) {
+               this.selectedCategory = c;
+               if (remainingCategories.size() > 3)
+                   remainingCategories.remove(c);
+               break;
+           }
+       }
     }
 
     public Question getSelectedCategoryQuestion() {
-        return selectedCategoryQuestions.get(questionsPlayed);
+        return selectedCategory.questions().get(questionsPlayed);
     }
 
     public void setThreeRandomCategories() {
         if (!threeRandomCategories.isEmpty())
             threeRandomCategories.clear();
-        for(int i = 0; i < 3; i++) {
-            int randomIndex = random.nextInt(allCategories.size());
-            while (threeRandomCategories.contains(allCategories.get(randomIndex)))
-                randomIndex = random.nextInt(allCategories.size());
-            threeRandomCategories.add(remainingCategories.get(randomIndex));
-        }
+
+        Collections.shuffle(remainingCategories);
+        for (int i = 0; i < 3; i++)
+            threeRandomCategories.add(remainingCategories.get(i));
     }
 
     public int getQuestionsPlayed() {

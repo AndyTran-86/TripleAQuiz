@@ -29,7 +29,7 @@ public class ClientPlayerTurnState implements ClientState {
                 guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-2].setText(String.valueOf(client.getOpponentScorePreviousRound()));
             }
             guiMainFrame.getOtherPlayerScoreLabels()[client.getCurrentRound()-1].setText(String.valueOf(roundPlayedResponse.getResult().stream().reduce(0, Integer::sum)));
-            client.getQuestionData().setSelectedCategoryFromOpponent(roundPlayedResponse.getSelectedCategory(), roundPlayedResponse.getAnsweredQuestions());
+            client.getQuestionData().setSelectedCategoryFromOpponent(roundPlayedResponse.getSelectedCategory());
             client.getQuestionData().setThreeRandomCategories();
             guiMainFrame.setCategoryBoardNames(client.getQuestionData().getThreeRandomCategories());
             System.out.println("handled round played response");
